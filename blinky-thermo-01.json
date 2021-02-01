@@ -1,21 +1,81 @@
 {
-  "deviceType": "blinky-basic",
+  "deviceType": "blinky-thermo",
   "name": "01",
   "arcPeriod": 60000,
   "timeStamp": 1610962831200,
   "lastArchive": 1610962777220,
-  "ledState": {
+  "mAX31855_A": {
     "action": "reading",
     "type": "scalar",
     "value": 0,
-    "unit": "unit",
+    "unit": "C",
     "alarm": {
       "value": 0,
       "limits": {
-        "lolo": -2,
-        "low": -1,
-        "high": 2,
-        "hihi": 3
+        "lolo": -20,
+        "low": -20,
+        "high": 200,
+        "hihi": 200
+      },
+      "notify": {
+        "name": "",
+        "number": "",
+        "time": 0
+      }
+    }
+  },
+  "mAX31855_B": {
+    "action": "reading",
+    "type": "scalar",
+    "value": 0,
+    "unit": "C",
+    "alarm": {
+      "value": 0,
+      "limits": {
+        "lolo": -20,
+        "low": -20,
+        "high": 200,
+        "hihi": 200
+      },
+      "notify": {
+        "name": "",
+        "number": "",
+        "time": 0
+      }
+    }
+  },
+  "dS18B20_A": {
+    "action": "reading",
+    "type": "scalar",
+    "value": 0,
+    "unit": "C",
+    "alarm": {
+      "value": 0,
+      "limits": {
+        "lolo": -20,
+        "low": -20,
+        "high": 150,
+        "hihi": 150
+      },
+      "notify": {
+        "name": "",
+        "number": "",
+        "time": 0
+      }
+    }
+  },
+  "dS18B20_B": {
+    "action": "reading",
+    "type": "scalar",
+    "value": 0,
+    "unit": "C",
+    "alarm": {
+      "value": 0,
+      "limits": {
+        "lolo": -20,
+        "low": -20,
+        "high": 150,
+        "hihi": 150
       },
       "notify": {
         "name": "",
@@ -56,66 +116,6 @@
         "low": -60,
         "high": 0,
         "hihi": 30
-      },
-      "notify": {
-        "name": "",
-        "number": "",
-        "time": 0
-      }
-    }
-  },
-  "ledOn": {
-    "action": "setting",
-    "type": "scalar",
-    "value": 0,
-    "unit": "unit",
-    "alarm": {
-      "value": 0,
-      "limits": {
-        "lolo": -2,
-        "low": -1,
-        "high": 2,
-        "hihi": 3
-      },
-      "notify": {
-        "name": "",
-        "number": "",
-        "time": 0
-      }
-    }
-  },
-  "ledToggle": {
-    "action": "setting",
-    "type": "scalar",
-    "value": 0,
-    "unit": "unit",
-    "alarm": {
-      "value": 0,
-      "limits": {
-        "lolo": -2,
-        "low": -1,
-        "high": 2,
-        "hihi": 3
-      },
-      "notify": {
-        "name": "",
-        "number": "",
-        "time": 0
-      }
-    }
-  },
-  "loopDelay": {
-    "action": "setting",
-    "type": "scalar",
-    "value": 1000,
-    "unit": "unit",
-    "alarm": {
-      "value": 0,
-      "limits": {
-        "lolo": 0,
-        "low": 0,
-        "high": 20000,
-        "hihi": 30000
       },
       "notify": {
         "name": "",
