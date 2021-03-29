@@ -1,6 +1,6 @@
 {
   "deviceType": "blinky-thermo",
-  "name": "01",
+  "name": "03",
   "arcPeriod": 60000,
   "timeStamp": 1610962831200,
   "lastArchive": 1610962777220,
