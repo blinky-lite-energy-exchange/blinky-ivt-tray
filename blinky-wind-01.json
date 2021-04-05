@@ -1,89 +1,9 @@
 {
-  "deviceType": "blinky-thermo",
-  "name": "03",
+  "deviceType": "blinky-wind",
+  "name": "01",
   "arcPeriod": 60000,
   "timeStamp": 1610962831200,
   "lastArchive": 1610962777220,
-  "mAX31855_A": {
-    "action": "reading",
-    "type": "scalar",
-    "value": 0,
-    "unit": "C",
-    "alarm": {
-      "value": 0,
-      "limits": {
-        "lolo": -20,
-        "low": -20,
-        "high": 200,
-        "hihi": 200
-      },
-      "notify": {
-        "name": "",
-        "number": "",
-        "time": 0
-      }
-    }
-  },
-  "mAX31855_B": {
-    "action": "reading",
-    "type": "scalar",
-    "value": 0,
-    "unit": "C",
-    "alarm": {
-      "value": 0,
-      "limits": {
-        "lolo": -20,
-        "low": -20,
-        "high": 200,
-        "hihi": 200
-      },
-      "notify": {
-        "name": "",
-        "number": "",
-        "time": 0
-      }
-    }
-  },
-  "dS18B20_A": {
-    "action": "reading",
-    "type": "scalar",
-    "value": 0,
-    "unit": "C",
-    "alarm": {
-      "value": 0,
-      "limits": {
-        "lolo": -20,
-        "low": -20,
-        "high": 150,
-        "hihi": 150
-      },
-      "notify": {
-        "name": "",
-        "number": "",
-        "time": 0
-      }
-    }
-  },
-  "dS18B20_B": {
-    "action": "reading",
-    "type": "scalar",
-    "value": 0,
-    "unit": "C",
-    "alarm": {
-      "value": 0,
-      "limits": {
-        "lolo": -20,
-        "low": -20,
-        "high": 150,
-        "hihi": 150
-      },
-      "notify": {
-        "name": "",
-        "number": "",
-        "time": 0
-      }
-    }
-  },
   "linkQuality": {
     "action": "reading",
     "type": "scalar",
@@ -136,6 +56,106 @@
         "low": -1,
         "high": 2,
         "hihi": 2
+      },
+      "notify": {
+        "name": "",
+        "number": "",
+        "time": 0
+      }
+    }
+  },
+  "loopDelay": {
+    "action": "setting",
+    "type": "scalar",
+    "value": 100,
+    "unit": "mS",
+    "alarm": {
+      "value": 0,
+      "limits": {
+        "lolo": 50,
+        "low": 50,
+        "high": 10000,
+        "hihi": 10000
+      },
+      "notify": {
+        "name": "",
+        "number": "",
+        "time": 0
+      }
+    }
+  },
+  "faverageSamples": {
+    "action": "setting",
+    "type": "scalar",
+    "value": 16,
+    "unit": "unit",
+    "alarm": {
+      "value": 0,
+      "limits": {
+        "lolo": 1,
+        "low": 1,
+        "high": 100,
+        "hihi": 100
+      },
+      "notify": {
+        "name": "",
+        "number": "",
+        "time": 0
+      }
+    }
+  },
+  "windSpeed": {
+    "action": "reading",
+    "type": "scalar",
+    "value": 0.85,
+    "unit": "m/S",
+    "alarm": {
+      "value": 0,
+      "limits": {
+        "lolo": -1,
+        "low": -1,
+        "high": 100,
+        "hihi": 100
+      },
+      "notify": {
+        "name": "",
+        "number": "",
+        "time": 0
+      }
+    }
+  },
+  "windDirection": {
+    "action": "reading",
+    "type": "scalar",
+    "value": 315,
+    "unit": "degrees",
+    "alarm": {
+      "value": 0,
+      "limits": {
+        "lolo": -1,
+        "low": -1,
+        "high": 400,
+        "hihi": 400
+      },
+      "notify": {
+        "name": "",
+        "number": "",
+        "time": 0
+      }
+    }
+  },
+  "temperature": {
+    "action": "reading",
+    "type": "scalar",
+    "value": 23.25,
+    "unit": "degrees",
+    "alarm": {
+      "value": 0,
+      "limits": {
+        "lolo": -20,
+        "low": -20,
+        "high": 40,
+        "hihi": 40
       },
       "notify": {
         "name": "",
