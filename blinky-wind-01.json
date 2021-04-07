@@ -2,12 +2,12 @@
   "deviceType": "blinky-wind",
   "name": "01",
   "arcPeriod": 60000,
-  "timeStamp": 1610962831200,
-  "lastArchive": 1610962777220,
+  "timeStamp": 1617736565836,
+  "lastArchive": 1617736537654,
   "linkQuality": {
     "action": "reading",
     "type": "scalar",
-    "value": 50,
+    "value": 40,
     "unit": "/70",
     "alarm": {
       "value": 0,
@@ -27,35 +27,15 @@
   "signalLevel": {
     "action": "reading",
     "type": "scalar",
-    "value": -60,
+    "value": -70,
     "unit": "dBm",
     "alarm": {
-      "value": 0,
+      "value": 1,
       "limits": {
         "lolo": -70,
         "low": -60,
         "high": 0,
         "hihi": 30
-      },
-      "notify": {
-        "name": "",
-        "number": "",
-        "time": 0
-      }
-    }
-  },
-  "reset": {
-    "action": "setting",
-    "type": "scalar",
-    "value": 0,
-    "unit": "unit",
-    "alarm": {
-      "value": 0,
-      "limits": {
-        "lolo": -1,
-        "low": -1,
-        "high": 2,
-        "hihi": 2
       },
       "notify": {
         "name": "",
@@ -84,18 +64,58 @@
       }
     }
   },
+  "reset": {
+    "action": "setting",
+    "type": "scalar",
+    "value": 0,
+    "unit": "unit",
+    "alarm": {
+      "value": 0,
+      "limits": {
+        "lolo": -1,
+        "low": -1,
+        "high": 2,
+        "hihi": 2
+      },
+      "notify": {
+        "name": "",
+        "number": "",
+        "time": 0
+      }
+    }
+  },
   "faverageSamples": {
     "action": "setting",
     "type": "scalar",
-    "value": 16,
+    "value": 128,
     "unit": "unit",
     "alarm": {
       "value": 0,
       "limits": {
         "lolo": 1,
         "low": 1,
-        "high": 100,
-        "hihi": 100
+        "high": 256,
+        "hihi": 256
+      },
+      "notify": {
+        "name": "",
+        "number": "",
+        "time": 0
+      }
+    }
+  },
+  "northAngle": {
+    "action": "setting",
+    "type": "scalar",
+    "value": 180,
+    "unit": "degrees",
+    "alarm": {
+      "value": 0,
+      "limits": {
+        "lolo": 0,
+        "low": 0,
+        "high": 360,
+        "hihi": 360
       },
       "notify": {
         "name": "",
@@ -107,15 +127,55 @@
   "windSpeed": {
     "action": "reading",
     "type": "scalar",
-    "value": 0.85,
+    "value": 6.06,
     "unit": "m/S",
     "alarm": {
-      "value": 0,
+      "value": 1,
       "limits": {
-        "lolo": -1,
-        "low": -1,
-        "high": 100,
-        "hihi": 100
+        "lolo": 0,
+        "low": 7,
+        "high": 14,
+        "hihi": 21
+      },
+      "notify": {
+        "name": "",
+        "number": "",
+        "time": 0
+      }
+    }
+  },
+  "windSpeed1": {
+    "action": "reading",
+    "type": "scalar",
+    "value": 6.06,
+    "unit": "m/S",
+    "alarm": {
+      "value": 1,
+      "limits": {
+        "lolo": 0,
+        "low": 7,
+        "high": 14,
+        "hihi": 21
+      },
+      "notify": {
+        "name": "",
+        "number": "",
+        "time": 0
+      }
+    }
+  },
+  "windSpeed2": {
+    "action": "reading",
+    "type": "scalar",
+    "value": 6.06,
+    "unit": "m/S",
+    "alarm": {
+      "value": 1,
+      "limits": {
+        "lolo": 0,
+        "low": 7,
+        "high": 14,
+        "hihi": 21
       },
       "notify": {
         "name": "",
@@ -127,15 +187,55 @@
   "windDirection": {
     "action": "reading",
     "type": "scalar",
-    "value": 315,
+    "value": 0,
     "unit": "degrees",
     "alarm": {
-      "value": 0,
+      "value": 1,
       "limits": {
-        "lolo": -1,
-        "low": -1,
-        "high": 400,
-        "hihi": 400
+        "lolo": 0,
+        "low": 120,
+        "high": 240,
+        "hihi": 360
+      },
+      "notify": {
+        "name": "",
+        "number": "",
+        "time": 0
+      }
+    }
+  },
+  "windDirection1": {
+    "action": "reading",
+    "type": "scalar",
+    "value": 0,
+    "unit": "degrees",
+    "alarm": {
+      "value": 1,
+      "limits": {
+        "lolo": 0,
+        "low": 120,
+        "high": 240,
+        "hihi": 360
+      },
+      "notify": {
+        "name": "",
+        "number": "",
+        "time": 0
+      }
+    }
+  },
+  "windDirection2": {
+    "action": "reading",
+    "type": "scalar",
+    "value": 0,
+    "unit": "degrees",
+    "alarm": {
+      "value": 1,
+      "limits": {
+        "lolo": 0,
+        "low": 120,
+        "high": 240,
+        "hihi": 360
       },
       "notify": {
         "name": "",
@@ -147,15 +247,15 @@
   "temperature": {
     "action": "reading",
     "type": "scalar",
-    "value": 23.25,
+    "value": 4.13,
     "unit": "degrees",
     "alarm": {
-      "value": 0,
+      "value": 1,
       "limits": {
-        "lolo": -20,
-        "low": -20,
-        "high": 40,
-        "hihi": 40
+        "lolo": 0,
+        "low": 12,
+        "high": 24,
+        "hihi": 36
       },
       "notify": {
         "name": "",
