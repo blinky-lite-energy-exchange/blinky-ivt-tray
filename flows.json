@@ -218,7 +218,7 @@
     {
         "id": "21ff842d.62f36c",
         "type": "serial-port",
-        "serialport": "/dev/ttyS0",
+        "serialport": "/dev/rfcomm0",
         "serialbaud": "57600",
         "databits": "8",
         "parity": "none",
@@ -269,7 +269,7 @@
         "z": "5f562f66.a301e",
         "name": "",
         "serial": "21ff842d.62f36c",
-        "x": 80,
+        "x": 90,
         "y": 400,
         "wires": [
             [
@@ -296,7 +296,7 @@
         "z": "5f562f66.a301e",
         "name": "",
         "serial": "21ff842d.62f36c",
-        "x": 760,
+        "x": 780,
         "y": 460,
         "wires": []
     },
