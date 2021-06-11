@@ -263,5 +263,25 @@
         "time": 0
       }
     }
+  },
+  "vbat": {
+    "action": "reading",
+    "type": "scalar",
+    "value": 4.13,
+    "unit": "Volts",
+    "alarm": {
+      "value": 1,
+      "limits": {
+        "lolo": 3.3,
+        "low": 3.5,
+        "high": 4.5,
+        "hihi": 5
+      },
+      "notify": {
+        "name": "",
+        "number": "",
+        "time": 0
+      }
+    }
   }
 }
