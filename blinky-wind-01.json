@@ -2,15 +2,15 @@
   "deviceType": "blinky-wind",
   "name": "01",
   "arcPeriod": 60000,
-  "timeStamp": 1617736565836,
-  "lastArchive": 1617736537654,
+  "timeStamp": 1623905285795,
+  "lastArchive": 1623905273811,
   "linkQuality": {
     "action": "reading",
     "type": "scalar",
-    "value": 40,
+    "value": 33,
     "unit": "/70",
     "alarm": {
-      "value": 0,
+      "value": 1,
       "limits": {
         "lolo": 30,
         "low": 40,
@@ -27,10 +27,10 @@
   "signalLevel": {
     "action": "reading",
     "type": "scalar",
-    "value": -70,
+    "value": -77,
     "unit": "dBm",
     "alarm": {
-      "value": 1,
+      "value": 3,
       "limits": {
         "lolo": -70,
         "low": -60,
@@ -107,7 +107,7 @@
   "northAngle": {
     "action": "setting",
     "type": "scalar",
-    "value": 180,
+    "value": 225,
     "unit": "degrees",
     "alarm": {
       "value": 0,
@@ -127,7 +127,7 @@
   "windSpeed": {
     "action": "reading",
     "type": "scalar",
-    "value": 6.06,
+    "value": 1.9,
     "unit": "m/S",
     "alarm": {
       "value": 1,
@@ -147,7 +147,7 @@
   "windSpeed1": {
     "action": "reading",
     "type": "scalar",
-    "value": 6.06,
+    "value": 1.9,
     "unit": "m/S",
     "alarm": {
       "value": 1,
@@ -167,7 +167,7 @@
   "windSpeed2": {
     "action": "reading",
     "type": "scalar",
-    "value": 6.06,
+    "value": 1.8,
     "unit": "m/S",
     "alarm": {
       "value": 1,
@@ -187,7 +187,7 @@
   "windDirection": {
     "action": "reading",
     "type": "scalar",
-    "value": 0,
+    "value": 90,
     "unit": "degrees",
     "alarm": {
       "value": 1,
@@ -207,7 +207,7 @@
   "windDirection1": {
     "action": "reading",
     "type": "scalar",
-    "value": 0,
+    "value": 68.6,
     "unit": "degrees",
     "alarm": {
       "value": 1,
@@ -227,7 +227,7 @@
   "windDirection2": {
     "action": "reading",
     "type": "scalar",
-    "value": 0,
+    "value": 70.9,
     "unit": "degrees",
     "alarm": {
       "value": 1,
@@ -247,13 +247,13 @@
   "temperature": {
     "action": "reading",
     "type": "scalar",
-    "value": 4.13,
+    "value": 15.5,
     "unit": "degrees",
     "alarm": {
-      "value": 1,
+      "value": 0,
       "limits": {
         "lolo": 0,
-        "low": 12,
+        "low": 15,
         "high": 24,
         "hihi": 36
       },
@@ -267,10 +267,10 @@
   "vbat": {
     "action": "reading",
     "type": "scalar",
-    "value": 4.13,
+    "value": 4.16,
     "unit": "Volts",
     "alarm": {
-      "value": 1,
+      "value": 0,
       "limits": {
         "lolo": 3.3,
         "low": 3.5,
