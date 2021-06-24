@@ -1,6 +1,6 @@
 {
   "deviceType": "blinky-wind",
-  "name": "01",
+  "name": "Brantevik",
   "arcPeriod": 60000,
   "timeStamp": 1623905285795,
   "lastArchive": 1623905273811,
@@ -276,6 +276,26 @@
         "low": 3.5,
         "high": 4.5,
         "hihi": 5
+      },
+      "notify": {
+        "name": "",
+        "number": "",
+        "time": 0
+      }
+    }
+  },
+  "lora": {
+    "action": "reading",
+    "type": "scalar",
+    "value": 0,
+    "unit": "dBm",
+    "alarm": {
+      "value": 0,
+      "limits": {
+        "lolo": -100,
+        "low": -100,
+        "high": 0,
+        "hihi": 0
       },
       "notify": {
         "name": "",
