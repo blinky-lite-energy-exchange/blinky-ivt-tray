@@ -350,7 +350,7 @@
         "y": 400,
         "wires": [
             [
-                "d6a8ff2a.f4acd"
+                "d00f1aba.763b38"
             ],
             [
                 "f3f3f15.081c31"
@@ -390,25 +390,6 @@
         "wires": [
             [
                 "1cdcbcd8.9514e3"
-            ]
-        ]
-    },
-    {
-        "id": "d6a8ff2a.f4acd",
-        "type": "function",
-        "z": "5f562f66.a301e",
-        "name": "Create Readings",
-        "func": "var ib;\nvar device = flow.get('device');\nvar dataView     = new DataView(new ArrayBuffer(4));\n\nfor (ib = 0; ib < 4; ++ib)   dataView.setUint8(ib, msg.payload[0 * 4 + 3 - ib]);\ndevice.windSpeed.value = Math.round(dataView.getFloat32(0) * 100) / 100;\nfor (ib = 0; ib < 4; ++ib)   dataView.setUint8(ib, msg.payload[1 * 4 + 3 - ib]);\ndevice.windDirection.value = Math.round(dataView.getFloat32(0) * 100) / 100;\nfor (ib = 0; ib < 4; ++ib)   dataView.setUint8(ib, msg.payload[2 * 4 + 3 - ib]);\ndevice.temperature.value = Math.round(dataView.getFloat32(0) * 100) / 100;\nfor (ib = 0; ib < 4; ++ib)   dataView.setUint8(ib, msg.payload[3 * 4 + 3 - ib]);\ndevice.vbat.value = Math.round(dataView.getFloat32(0) * 100) / 100;\nfor (ib = 0; ib < 4; ++ib)   dataView.setUint8(ib, msg.payload[4 * 4 + 3 - ib]);\ndevice.lora.value = dataView.getInt32(0);\n\ndevice.windDirection.value = device.windDirection.value - device.northAngle.value;\nif (device.windDirection.value < 0.0) device.windDirection.value = device.windDirection.value + 360.0;\n\nvar newSettingDoneMsg = {topic:'newSettingDone', payload:true};\nvar now = new Date().getTime();\nvar old = context.get('lastTime');\ncontext.set('lastTime',now);\n//node.warn(now - old);\n\ndevice.windSpeed.value = 0.65 * 0.65 * device.windSpeed.value; //calibration for radius and georg call\n\nvar realWind = device.windSpeed.value * Math.cos(device.windDirection.value * 0.017453293);\nvar imagWind = device.windSpeed.value * Math.sin(device.windDirection.value * 0.017453293);\n\nvar windVec1 = context.get('windVec1');\nif (windVec1 == undefined) windVec1 = {'re':0.0, 'im':0.0};\nvar windVec2 = context.get('windVec2');\nif (windVec2 == undefined) windVec2 = {'re':0.0, 'im':0.0};\nwindVec1.re = windVec1.re + (realWind - windVec1.re) / 10.2; //2 minutes for 11.75 secs per sample\nwindVec1.im = windVec1.im + (imagWind - windVec1.im) / 10.2; //2 minutes for 11.75 secs per sample\nwindVec2.re = windVec2.re + (realWind - windVec2.re) / 51.0; //10 minutes for 11.75 secs per sample\nwindVec2.im = windVec2.im + (imagWind - windVec2.im) / 51.0; //10 minutes for 11.75 secs per sample\ncontext.set('windVec1',windVec1);\ncontext.set('windVec2',windVec2);\n\nvar windMag1 = context.get('windMag1');\nif (windMag1 == undefined) windMag1 = device.windSpeed.value;\nvar windMag2 = context.get('windMag2');\nif (windMag2 == undefined) windMag2 = device.windSpeed.value;\nwindMag1 = windMag1 + (device.windSpeed.value - windMag1) / 10.2; //2 minutes for 11.75 secs per sample\nwindMag2 = windMag2 + (device.windSpeed.value - windMag2) / 51.0; //10 minutes for 11.75 secs per sample\ncontext.set('windMag1',windMag1);\ncontext.set('windMag2',windMag2);\n\ndevice.windSpeed.value = Math.round(device.windSpeed.value * 10) / 10;\ndevice.windSpeed1.value = Math.round(windMag1 * 10) / 10;\ndevice.windSpeed2.value = Math.round(windMag2 * 10) / 10;\n\ndevice.windDirection1.value = 180.0 * Math.atan2(windVec1.im,windVec1.re) / Math.PI;\nif (device.windDirection1.value < 0.0) device.windDirection1.value = device.windDirection1.value + 360.0;\ndevice.windDirection1.value = Math.round(device.windDirection1.value * 10) / 10;\n\ndevice.windDirection2.value = 180.0 * Math.atan2(windVec2.im,windVec2.re) / Math.PI;\nif (device.windDirection2.value < 0.0) device.windDirection2.value = device.windDirection2.value + 360.0;\ndevice.windDirection2.value = Math.round(device.windDirection2.value * 10) / 10;\n\nvar windBuffer = context.get('windBuffer');\nif (windBuffer == undefined) windBuffer = [];\nwindBuffer.push(device.windSpeed.value);\nif (windBuffer.length > 60) windBuffer.shift();\ndevice.gusts.value = 0;\nif (windBuffer.length > 0)\n{\n    device.gusts.value  = Math.max(...windBuffer);\n}\ncontext.set('windBuffer',windBuffer);\n\nreturn newSettingDoneMsg;\n",
-        "outputs": 1,
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "libs": [],
-        "x": 550,
-        "y": 400,
-        "wires": [
-            [
-                "9115ea87.0ca208"
             ]
         ]
     },
@@ -2320,6 +2301,44 @@
         "wires": [
             [
                 "b6eeabf9.dc65f8"
+            ]
+        ]
+    },
+    {
+        "id": "d00f1aba.763b38",
+        "type": "function",
+        "z": "5f562f66.a301e",
+        "name": "Create Readings",
+        "func": "var ib;\nvar dataView     = new DataView(new ArrayBuffer(4));\n\nvar newMsg = \n{\n    topic           : 'newData',\n    payload         :\n    {\n        windSpeed       : 0,\n        windDirection   : 0,\n        temperature     : 0,\n        vbat            : 0,\n        lora            : 0,\n        deviceType      : 0\n    }\n}\n\nfor (ib = 0; ib < 4; ++ib)   dataView.setUint8(ib, msg.payload[0 * 4 + 3 - ib]);\nnewMsg.payload.windSpeed = Math.round(dataView.getFloat32(0) * 100) / 100;\nfor (ib = 0; ib < 4; ++ib)   dataView.setUint8(ib, msg.payload[1 * 4 + 3 - ib]);\nnewMsg.payload.windDirection = Math.round(dataView.getFloat32(0) * 100) / 100;\nfor (ib = 0; ib < 4; ++ib)   dataView.setUint8(ib, msg.payload[2 * 4 + 3 - ib]);\nnewMsg.payload.temperature = dataView.getFloat32(0);\nfor (ib = 0; ib < 4; ++ib)   dataView.setUint8(ib, msg.payload[3 * 4 + 3 - ib]);\nnewMsg.payload.vbat = Math.round(dataView.getFloat32(0) * 100) / 100;\nfor (ib = 0; ib < 4; ++ib)   dataView.setUint8(ib, msg.payload[4 * 4 + 3 - ib]);\nnewMsg.payload.lora = dataView.getInt32(0);\nfor (ib = 0; ib < 4; ++ib)   dataView.setUint8(ib, msg.payload[5 * 4 + 3 - ib]);\nnewMsg.payload.deviceType = dataView.getInt32(0);\nreturn newMsg\n",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 530,
+        "y": 380,
+        "wires": [
+            [
+                "25c05c47.729f74"
+            ]
+        ]
+    },
+    {
+        "id": "25c05c47.729f74",
+        "type": "function",
+        "z": "5f562f66.a301e",
+        "name": "Calculate Wind",
+        "func": "var newSettingDoneMsg = {topic:'newSettingDone', payload:true};\nvar device = flow.get('device');\n\ndevice.windSpeed.value = msg.payload.windSpeed;\ndevice.windDirection.value = msg.payload.windDirection;\ndevice.temperature.value = msg.payload.temperature - 1.0;\ndevice.vbat.value = msg.payload.vbat;\ndevice.lora.value = msg.payload.lora;\n\n//node.warn(device.windSpeed.value);\n//node.warn(device.temperature.value);\n\nif (device.temperature.value < -40.0) return null;\n\ndevice.windDirection.value = device.windDirection.value - device.northAngle.value;\nif (device.windDirection.value < 0.0) device.windDirection.value = device.windDirection.value + 360.0;\n\nvar newSettingDoneMsg = {topic:'newSettingDone', payload:true};\nvar now = new Date().getTime();\nvar old = context.get('lastTime');\ncontext.set('lastTime',now);\n\ndevice.windSpeed.value = 0.65 * 0.500 * device.windSpeed.value; //calibration for radius and georg call\nwindArray  = context.get('windArray');\nif (windArray == undefined) windArray = [];\n\nvar realWind = device.windSpeed.value * Math.cos(device.windDirection.value * 0.017453293);\nvar imagWind = device.windSpeed.value * Math.sin(device.windDirection.value * 0.017453293);\n\nwindArray.push({speed:device.windSpeed.value, real: realWind, imag: imagWind, timestamp:now});\nwhile ((now - windArray[0].timestamp) > 600000) windArray.shift();\ncontext.set('windArray',windArray);\n\nvar speedAvg = 0.0;\nvar realAvg = 0.0;\nvar imagAvg = 0.0;\ndevice.gusts.value = 0;\n\nfor (var ii = 0; ii < windArray.length; ++ii)\n{\n    speedAvg = speedAvg + windArray[ii].speed;\n    realAvg  = realAvg  + windArray[ii].real;\n    imagAvg  = imagAvg  + windArray[ii].imag;\n    if (device.gusts.value < windArray[ii].speed) device.gusts.value = windArray[ii].speed;\n}\nspeedAvg = speedAvg  / windArray.length;\nrealAvg =  realAvg   / windArray.length;\nimagAvg =  imagAvg   / windArray.length;\n\ndevice.windSpeed.value = Math.round(device.windSpeed.value * 10) / 10;\ndevice.gusts.value = Math.round(device.gusts.value * 10) / 10;\ndevice.windSpeed1.value = Math.round(speedAvg * 10) / 10;\ndevice.windSpeed2.value = Math.round(speedAvg * 10) / 10;\n\ndevice.windDirection1.value = 180.0 * Math.atan2(imagAvg, realAvg) / Math.PI;\nif (device.windDirection1.value < 0.0) device.windDirection1.value = device.windDirection1.value + 360.0;\ndevice.windDirection1.value = Math.round(device.windDirection1.value * 10) / 10;\n\ndevice.windDirection2.value = 180.0 * Math.atan2(imagAvg, realAvg) / Math.PI;\nif (device.windDirection2.value < 0.0) device.windDirection2.value = device.windDirection2.value + 360.0;\ndevice.windDirection2.value = Math.round(device.windDirection2.value * 10) / 10;\n\nreturn newSettingDoneMsg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 540,
+        "y": 340,
+        "wires": [
+            [
+                "9115ea87.0ca208"
             ]
         ]
     }
