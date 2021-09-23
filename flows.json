@@ -1,22 +1,15 @@
 [
     {
-        "id": "5f562f66.a301e",
+        "id": "731de46a.7645fc",
         "type": "tab",
-        "label": "Device A",
+        "label": "Modbus Client",
         "disabled": false,
         "info": ""
     },
     {
-        "id": "c4285970.3276d8",
+        "id": "97a0ee667c7ea4c8",
         "type": "tab",
-        "label": "web-app",
-        "disabled": false,
-        "info": ""
-    },
-    {
-        "id": "eaa5749e.352818",
-        "type": "tab",
-        "label": "Setup Wireless SSID",
+        "label": "Init Modbus Server",
         "disabled": false,
         "info": ""
     },
@@ -216,1338 +209,29 @@
         }
     },
     {
-        "id": "21ff842d.62f36c",
-        "type": "serial-port",
-        "serialport": "/dev/rfcomm0",
-        "serialbaud": "57600",
-        "databits": "8",
-        "parity": "none",
-        "stopbits": "1",
-        "waitfor": "",
-        "newline": "64",
-        "bin": "bin",
-        "out": "count",
-        "addchar": "",
-        "responsetimeout": "1000"
-    },
-    {
-        "id": "79250bf3.365cc4",
-        "type": "mqtt-broker",
-        "name": "MQTT Broker",
-        "broker": "$(MQTTSERVERIP)",
-        "port": "1883",
-        "clientid": "$(MQTTCLIENTID)",
-        "usetls": false,
-        "compatmode": true,
-        "keepalive": "60",
-        "cleansession": true,
-        "birthTopic": "",
-        "birthQos": "0",
-        "birthPayload": "",
-        "closeTopic": "",
-        "closeQos": "0",
-        "closePayload": "",
-        "willTopic": "",
-        "willQos": "0",
-        "willPayload": ""
-    },
-    {
-        "id": "44b51478.9c022c",
-        "type": "websocket-listener",
-        "path": "/blinky-blank/websocket",
-        "wholemsg": "false"
-    },
-    {
-        "id": "c427a7cd.35f1f8",
-        "type": "websocket-listener",
-        "path": "/setup/websocket",
-        "wholemsg": "false"
-    },
-    {
-        "id": "ea743ee6.d8b55",
-        "type": "serial in",
-        "z": "5f562f66.a301e",
-        "name": "",
-        "serial": "21ff842d.62f36c",
-        "x": 90,
-        "y": 400,
-        "wires": [
-            [
-                "d5761f6c.c46e6"
-            ]
-        ]
-    },
-    {
-        "id": "93049b70.2dc5c8",
-        "type": "mqtt out",
-        "z": "5f562f66.a301e",
-        "name": "Publish Readings",
-        "topic": "",
-        "qos": "0",
-        "retain": "false",
-        "broker": "79250bf3.365cc4",
-        "x": 1290,
-        "y": 400,
-        "wires": []
-    },
-    {
-        "id": "3f988ea4.7ee392",
-        "type": "serial out",
-        "z": "5f562f66.a301e",
-        "name": "",
-        "serial": "21ff842d.62f36c",
-        "x": 740,
-        "y": 460,
-        "wires": []
-    },
-    {
-        "id": "f3f3f15.081c31",
-        "type": "function",
-        "z": "5f562f66.a301e",
-        "name": "CreateSettings",
-        "func": "var device = flow.get('device');\n//node.warn('newSetting = ' + flow.get('newSetting').toString())\nvar bufsize = 64;\nvar buffer = new ArrayBuffer(bufsize);\nvar settingsView = new DataView(buffer);\nsettingsView.setInt32(0, flow.get('newSetting'), true);\nsettingsView.setInt32(4, flow.get('bluetoothCheckSum'), true);\nsettingsView.setInt32(8, device.loopDelay.value, true);\nfor (var ii = 16; ii < bufsize; ++ii) settingsView.setUint8(ii, 0, true);\n\nflow.set('bluetoothCheckSum',64);\n\nreturn {topic:'settings',payload:Buffer.from(buffer)};\n",
-        "outputs": 1,
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "libs": [],
-        "x": 540,
-        "y": 460,
-        "wires": [
-            [
-                "3f988ea4.7ee392"
-            ]
-        ]
-    },
-    {
-        "id": "30f384ea.cf21fc",
-        "type": "function",
-        "z": "5f562f66.a301e",
-        "name": "Save device config in Memory",
-        "func": "msg.payload.reset.value = 0;\nflow.set('device', msg.payload);\nflow.set('newSetting', 1);\nreturn msg;",
-        "outputs": 1,
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "libs": [],
-        "x": 830,
-        "y": 40,
-        "wires": [
-            [
-                "89892a30.598e28"
-            ]
-        ]
-    },
-    {
-        "id": "d5761f6c.c46e6",
-        "type": "function",
-        "z": "5f562f66.a301e",
-        "name": "Read Serial Handshake",
-        "func": "if (flow.get('device') == undefined) return null;\nif (flow.get('newSetting') == undefined) return null;\nvar ib;\nvar device = flow.get('device');\nvar dataView     = new DataView(new ArrayBuffer(4));\nvar newSettingDone = 0;\nvar cubeInit = 0;\nvar checkSum = 0;\n\nfor (ib = 0; ib < 4; ++ib)   dataView.setUint8(ib, msg.payload[0 * 4 + 3 - ib]);\ncubeInit = dataView.getInt32(0);\nfor (ib = 0; ib < 4; ++ib)   dataView.setUint8(ib, msg.payload[1 * 4 + 3 - ib]);\nnewSettingDone = dataView.getInt32(0);\nfor (ib = 0; ib < 4; ++ib)   dataView.setUint8(ib, msg.payload[2 * 4 + 3 - ib]);\ncheckSum = dataView.getInt32(0);\nif (checkSum != msg.payload.length)\n{\n    node.warn(\"checkSum = \" + checkSum.toString());\n    flow.set('bluetoothCheckSum',0);\n    return [null,{topic:'restartBluetooth',payload:true}];\n}\n\nvar newMsg = {topic:'userData', payload:[]};\nfor (var ii = 12; ii < msg.payload.length; ++ii) newMsg.payload[ii - 12] = msg.payload[ii];\n\nif (newSettingDone > 0) \n{\n    flow.set('newSetting', 0);\n}\nif(cubeInit == 1) \n{\n    flow.set('newSetting', 1);\n}\n\nreturn [newMsg,{topic:'restartBluetooth',payload:false}];",
-        "outputs": 2,
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "libs": [],
-        "x": 290,
-        "y": 400,
-        "wires": [
-            [
-                "d00f1aba.763b38"
-            ],
-            [
-                "f3f3f15.081c31"
-            ]
-        ]
-    },
-    {
-        "id": "9115ea87.0ca208",
-        "type": "function",
-        "z": "5f562f66.a301e",
-        "name": "Readings Alarm Scan",
-        "func": "if (!msg.payload) return null;\nvar device = flow.get('device');\ndevice.linkQuality.value     = global.get('linkQuality');\ndevice.signalLevel.value     = global.get('signalLevel');\nscalarAlarmScan(device, 'reading');\nvar newMsg = \n{\n    topic: flow.get('deviceProps').project + '/' + flow.get('deviceProps').deviceType + '/' + flow.get('deviceProps').name + '/reading',\n    payload: JSON.stringify(device)\n}\nreturn newMsg;\n\nfunction getActionArray(device, type, actionType)\n{\n    var actionArray = [];\n    var keys = Object.keys(device);\n    for (var ii = 0; ii < keys.length; ++ii)\n    {\n        if (device[keys[ii]].hasOwnProperty('type'))\n        {\n            if (device[keys[ii]].type == type)\n            {\n                if (device[keys[ii]].action == actionType)\n                {\n                    actionArray.push(device[keys[ii]]);\n                }\n            }\n        }\n    }\n    return actionArray;\n}\nfunction scalarAlarmScan(device, actionType)\n{\n    var actionArray = getActionArray(device, 'scalar', actionType);\n    if (actionArray.length > 0)\n    {\n        for (var ii = 0; ii < actionArray.length; ++ii)\n        {\n            actionArray[ii].alarm.value = 0;\n            if (!isNaN(actionArray[ii].value))\n            {\n                if (actionArray[ii].value < actionArray[ii].alarm.limits.low)  actionArray[ii].alarm.value = 1;\n                if (actionArray[ii].value < actionArray[ii].alarm.limits.lolo) actionArray[ii].alarm.value = 3;\n                if (actionArray[ii].value > actionArray[ii].alarm.limits.high) actionArray[ii].alarm.value = 2;\n                if (actionArray[ii].value > actionArray[ii].alarm.limits.hihi) actionArray[ii].alarm.value = 4;\n            }\n        }\n    }\n}\n",
-        "outputs": 1,
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "libs": [],
-        "x": 780,
-        "y": 400,
-        "wires": [
-            [
-                "27095148.93187e"
-            ]
-        ]
-    },
-    {
-        "id": "a3ff8e5.b79de7",
-        "type": "function",
-        "z": "5f562f66.a301e",
-        "name": "Prepare MQTT topic",
-        "func": "var mqttArray = msg.topic.split('/');\nvar device = \n{\n    project     : mqttArray[0],\n    deviceType  : mqttArray[1],\n    name        : mqttArray[2],\n    prop        : mqttArray[3],\n};\nreturn {topic : msg.topic, payload:{topic:'readings', mqttDevice : device, payload:msg.payload}};",
-        "outputs": 1,
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "x": 1300,
-        "y": 460,
-        "wires": [
-            [
-                "1cdcbcd8.9514e3"
-            ]
-        ]
-    },
-    {
-        "id": "1482e22f.57fa2e",
-        "type": "http in",
-        "z": "c4285970.3276d8",
-        "name": "/blinky-blank",
-        "url": "/blinky-blank",
-        "method": "get",
-        "upload": false,
-        "swaggerDoc": "",
-        "x": 110,
-        "y": 260,
-        "wires": [
-            [
-                "732e88e1.e94a48"
-            ]
-        ]
-    },
-    {
-        "id": "70be1872.dfaf48",
-        "type": "http in",
-        "z": "c4285970.3276d8",
-        "name": "/apps",
-        "url": "/apps",
-        "method": "get",
-        "upload": false,
-        "swaggerDoc": "",
-        "x": 90,
-        "y": 180,
-        "wires": [
-            [
-                "af9642ae.0c0da"
-            ]
-        ]
-    },
-    {
-        "id": "b1885d32.8d9cc",
-        "type": "template",
-        "z": "c4285970.3276d8",
-        "name": "Body",
-        "field": "payload.body",
-        "fieldType": "msg",
-        "format": "html",
-        "syntax": "mustache",
-        "template": "<!-- Body HTML -->\n    <div class='container' width=\"100%\">\n        <div class='row vert-pad' >\n            <div class='col-md-12'>\n                <a class=\"btn jumbotron-button btn-block big-text bold-text\" width='80%' href=\"/blinky-blank?name={{{payload.deviceAName}}}\" >\n                    <table width=\"100%\" alight=\"left\">\n                        <tr>\n                            <td width=\"30%\" align='center'> <img src=\"/img/basicYellow.png\" height=\"70px\"/></td>\n                            <td width=\"70%\" align=\"left\">Blinky Blank {{{payload.deviceAName}}}</td>\n                        </tr>\n                    </table>\n                </a>\n            </div>\n        </div>\n        <div class='row vert-pad' >\n            <div class='col-md-12'>\n                <a class=\"btn jumbotron-button btn-block big-text bold-text\" width='80%' href=\"/setup\" >\n                    <table width=\"100%\" alight=\"left\">\n                        <tr>\n                            <td width=\"30%\" align='center'> <img src=\"/img/basicYellow.png\" height=\"70px\"/></td>\n                            <td width=\"70%\" align=\"left\">Setup</td>\n                        </tr>\n                    </table>\n                </a>\n            </div>\n        </div>\n    </div>",
-        "output": "str",
-        "x": 830,
-        "y": 180,
-        "wires": [
-            [
-                "c6d4dfc7.827cb"
-            ]
-        ]
-    },
-    {
-        "id": "18e277b4.8fc208",
-        "type": "template",
-        "z": "c4285970.3276d8",
-        "name": "Title",
-        "field": "payload.title",
-        "fieldType": "msg",
-        "format": "html",
-        "syntax": "mustache",
-        "template": "Blinky Blank",
-        "output": "str",
-        "x": 550,
-        "y": 180,
-        "wires": [
-            [
-                "fd81c62c.98f018"
-            ]
-        ]
-    },
-    {
-        "id": "f328fcb4.91dc",
-        "type": "template",
-        "z": "c4285970.3276d8",
-        "name": "JavaScript",
-        "field": "payload.javascript",
-        "fieldType": "msg",
-        "format": "javascript",
-        "syntax": "mustache",
-        "template": "        useWebSockets(false);\n        function onDocumentReady()\n        {\n        }\n        function onWebSocketOpen()\n        {\n        }\n        function onWebSocketClose()\n        {\n            \n        }\n        function onWebSocketMessage(msg)\n        {\n        }\n\n",
-        "output": "str",
-        "x": 410,
-        "y": 180,
-        "wires": [
-            [
-                "18e277b4.8fc208"
-            ]
-        ]
-    },
-    {
-        "id": "fd81c62c.98f018",
-        "type": "template",
-        "z": "c4285970.3276d8",
-        "name": "navBarIcon",
-        "field": "payload.navBarIcon",
-        "fieldType": "msg",
-        "format": "html",
-        "syntax": "mustache",
-        "template": "basicYellow.png",
-        "output": "str",
-        "x": 690,
-        "y": 180,
-        "wires": [
-            [
-                "b1885d32.8d9cc"
-            ]
-        ]
-    },
-    {
-        "id": "5023092b.a0fe38",
-        "type": "mqtt in",
-        "z": "5f562f66.a301e",
-        "name": "Subscribe DeviceA",
-        "topic": "$(MQTTDEVICEA)",
-        "qos": "0",
-        "datatype": "auto",
-        "broker": "79250bf3.365cc4",
-        "x": 110,
-        "y": 140,
-        "wires": [
-            [
-                "257906ae.f6991a"
-            ]
-        ]
-    },
-    {
-        "id": "49c7b59e.00e86c",
-        "type": "inject",
-        "z": "5f562f66.a301e",
-        "name": "deviceA",
-        "props": [
-            {
-                "p": "payload"
-            },
-            {
-                "p": "topic",
-                "vt": "str"
-            }
-        ],
-        "repeat": "",
-        "crontab": "",
-        "once": true,
-        "onceDelay": 0.1,
-        "topic": "deviceA",
-        "payload": "MQTTDEVICEA",
-        "payloadType": "env",
-        "x": 100,
-        "y": 40,
-        "wires": [
-            [
-                "f7b2b73c.569598"
-            ]
-        ]
-    },
-    {
-        "id": "4a8d91e8.fcb68",
-        "type": "file in",
-        "z": "5f562f66.a301e",
-        "name": "Read device config",
-        "filename": "",
-        "format": "utf8",
-        "chunk": false,
-        "sendError": false,
-        "encoding": "none",
-        "x": 470,
-        "y": 40,
-        "wires": [
-            [
-                "4b0be623.7f7b88"
-            ]
-        ]
-    },
-    {
-        "id": "4b0be623.7f7b88",
-        "type": "json",
-        "z": "5f562f66.a301e",
-        "name": "",
-        "property": "payload",
-        "action": "obj",
-        "pretty": false,
-        "x": 630,
-        "y": 40,
-        "wires": [
-            [
-                "30f384ea.cf21fc"
-            ]
-        ]
-    },
-    {
-        "id": "f7b2b73c.569598",
-        "type": "function",
-        "z": "5f562f66.a301e",
-        "name": "Init flow Variables",
-        "func": "var mqttSplit = msg.payload.split('/');\nvar deviceProps = {\n    project     :   mqttSplit[0],\n    deviceType  :   mqttSplit[1],\n    name        :   mqttSplit[2],\n    configFile  :   mqttSplit[1] + '-' + mqttSplit[2] + '.json'\n};\nflow.set('deviceProps',deviceProps);\nflow.set('newSetting',0);\nflow.set('bluetoothCheckSum',64);\nreturn {topic: 'readFile', 'filename':deviceProps.configFile};",
-        "outputs": 1,
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "libs": [],
-        "x": 270,
-        "y": 40,
-        "wires": [
-            [
-                "4a8d91e8.fcb68"
-            ]
-        ]
-    },
-    {
-        "id": "257906ae.f6991a",
-        "type": "json",
-        "z": "5f562f66.a301e",
-        "name": "",
-        "property": "payload",
-        "action": "obj",
-        "pretty": false,
-        "x": 270,
-        "y": 140,
-        "wires": [
-            [
-                "c2106663.a49658"
-            ]
-        ]
-    },
-    {
-        "id": "c2106663.a49658",
-        "type": "function",
-        "z": "5f562f66.a301e",
-        "name": "Filter MQTT",
-        "func": "return {topic:msg.topic.split('/')[3], payload:msg.payload};",
-        "outputs": 1,
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "x": 410,
-        "y": 140,
-        "wires": [
-            [
-                "9e75e21c.458df"
-            ]
-        ]
-    },
-    {
-        "id": "9e75e21c.458df",
-        "type": "switch",
-        "z": "5f562f66.a301e",
-        "name": "mqtt topic",
-        "property": "topic",
-        "propertyType": "msg",
-        "rules": [
-            {
-                "t": "eq",
-                "v": "setting",
-                "vt": "str"
-            },
-            {
-                "t": "eq",
-                "v": "ping",
-                "vt": "str"
-            }
-        ],
-        "checkall": "true",
-        "repair": false,
-        "outputs": 2,
-        "x": 600,
-        "y": 140,
-        "wires": [
-            [
-                "42c6e9ce.4932e8"
-            ],
-            [
-                "9115ea87.0ca208"
-            ]
-        ]
-    },
-    {
-        "id": "168ce872.83d788",
-        "type": "file",
-        "z": "5f562f66.a301e",
-        "name": "Init Settings",
-        "filename": "",
-        "appendNewline": true,
-        "createDir": false,
-        "overwriteFile": "true",
-        "encoding": "none",
-        "x": 1410,
-        "y": 120,
-        "wires": [
-            []
-        ]
-    },
-    {
-        "id": "89892a30.598e28",
-        "type": "function",
-        "z": "5f562f66.a301e",
-        "name": "Make Pretty",
-        "func": "var jsonPretty = JSON.stringify(msg.payload,null,2);\nreturn {topic: msg.payload, payload:jsonPretty, 'filename':flow.get('deviceProps').configFile};",
-        "outputs": 1,
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "x": 1230,
-        "y": 120,
-        "wires": [
-            [
-                "168ce872.83d788"
-            ]
-        ]
-    },
-    {
-        "id": "d2572e9a.d2ef9",
-        "type": "function",
-        "z": "5f562f66.a301e",
-        "name": "Settings Alarm Scan",
-        "func": "scalarAlarmScan(msg.payload, 'setting');\nflow.set('device', msg.payload); \nflow.set('newSetting', 1); \nreturn msg;\n\nfunction getActionArray(device, type, actionType)\n{\n    var actionArray = [];\n    var keys = Object.keys(device);\n    for (var ii = 0; ii < keys.length; ++ii)\n    {\n        if (device[keys[ii]].hasOwnProperty('type'))\n        {\n            if (device[keys[ii]].type == type)\n            {\n                if (device[keys[ii]].action == actionType)\n                {\n                    actionArray.push(device[keys[ii]]);\n                }\n            }\n        }\n    }\n    return actionArray;\n}\nfunction scalarAlarmScan(device, actionType)\n{\n    var actionArray = getActionArray(device, 'scalar', actionType);\n    if (actionArray.length > 0)\n    {\n        for (var ii = 0; ii < actionArray.length; ++ii)\n        {\n            actionArray[ii].alarm.value = 0;\n            if (!isNaN(actionArray[ii].value))\n            {\n                if (actionArray[ii].value < actionArray[ii].alarm.limits.low)  actionArray[ii].alarm.value = 1;\n                if (actionArray[ii].value < actionArray[ii].alarm.limits.lolo) actionArray[ii].alarm.value = 3;\n                if (actionArray[ii].value > actionArray[ii].alarm.limits.high) actionArray[ii].alarm.value = 2;\n                if (actionArray[ii].value > actionArray[ii].alarm.limits.hihi) actionArray[ii].alarm.value = 4;\n            }\n        }\n    }\n}\n",
-        "outputs": 1,
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "x": 1040,
-        "y": 120,
-        "wires": [
-            [
-                "89892a30.598e28",
-                "557e4f40.b904e"
-            ]
-        ]
-    },
-    {
-        "id": "27095148.93187e",
-        "type": "delay",
-        "z": "5f562f66.a301e",
-        "name": "Limit 1 Hz",
-        "pauseType": "rate",
-        "timeout": "5",
-        "timeoutUnits": "seconds",
-        "rate": "1",
-        "nbRateUnits": "1",
-        "rateUnits": "second",
-        "randomFirst": "1",
-        "randomLast": "5",
-        "randomUnits": "seconds",
-        "drop": true,
-        "x": 960,
-        "y": 400,
-        "wires": [
-            [
-                "d976b431.f90598"
-            ]
-        ]
-    },
-    {
-        "id": "ba79496e.4e42b8",
-        "type": "exec",
-        "z": "c4285970.3276d8",
-        "command": "iwconfig",
-        "addpay": false,
-        "append": "",
-        "useSpawn": "false",
-        "timer": "",
-        "oldrc": false,
-        "name": "",
-        "x": 300,
-        "y": 840,
-        "wires": [
-            [
-                "25a2b2c8.26f4ce"
-            ],
-            [],
-            []
-        ]
-    },
-    {
-        "id": "fc7d9351.a3d0a",
-        "type": "inject",
-        "z": "c4285970.3276d8",
-        "name": "",
-        "repeat": "5",
-        "crontab": "",
-        "once": true,
-        "onceDelay": 0.1,
-        "topic": "",
-        "payload": "",
-        "payloadType": "date",
-        "x": 140,
-        "y": 840,
-        "wires": [
-            [
-                "ba79496e.4e42b8"
-            ]
-        ]
-    },
-    {
-        "id": "25a2b2c8.26f4ce",
-        "type": "function",
-        "z": "c4285970.3276d8",
-        "name": "Get Signal Quality",
-        "func": "var info = msg.payload;\nvar linkStartIndex  = info.indexOf('Link Quality=');\nvar levelStartIndex = info.indexOf('Signal level=');\nvar linkQuality = Number(info.substring(linkStartIndex + 13, linkStartIndex + 15));\nvar signalLevel =  Number(info.substring(levelStartIndex + 13, levelStartIndex + 16));\nvar ssid = info.substring(info.indexOf('ESSID') + 7);\nssid = ssid.substring(0,ssid.indexOf('\"'));\nvar val = {linkQuality : linkQuality, signalLevel: signalLevel, ssid:ssid};\nglobal.set('linkQuality',linkQuality);\nglobal.set('signalLevel', signalLevel);\nglobal.set('ssid', ssid);\nreturn {topic :'test',payload : val};",
-        "outputs": 1,
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "x": 480,
-        "y": 840,
-        "wires": [
-            []
-        ]
-    },
-    {
-        "id": "cf44f6bf.8956b8",
-        "type": "websocket in",
-        "z": "c4285970.3276d8",
-        "name": "/blinky-blank/websocket",
-        "server": "44b51478.9c022c",
-        "client": "",
-        "x": 140,
-        "y": 720,
-        "wires": [
-            [
-                "ea909034.6fb25"
-            ]
-        ]
-    },
-    {
-        "id": "62aaa250.9b67dc",
-        "type": "websocket out",
-        "z": "c4285970.3276d8",
-        "name": "/blinky-blank/websocket",
-        "server": "44b51478.9c022c",
-        "client": "",
-        "x": 830,
-        "y": 720,
-        "wires": []
-    },
-    {
-        "id": "ea909034.6fb25",
-        "type": "link out",
-        "z": "c4285970.3276d8",
-        "name": "Web socket out",
-        "links": [
-            "2f289f87.fe2ff",
-            "c7f3b5bf.85c9a8"
-        ],
-        "x": 295,
-        "y": 720,
-        "wires": []
-    },
-    {
-        "id": "d033193d.436d68",
-        "type": "link in",
-        "z": "c4285970.3276d8",
-        "name": "Web socket in",
-        "links": [
-            "1cdcbcd8.9514e3",
-            "78ceea9e.d0b204"
-        ],
-        "x": 655,
-        "y": 720,
-        "wires": [
-            [
-                "62aaa250.9b67dc"
-            ]
-        ]
-    },
-    {
-        "id": "2f289f87.fe2ff",
-        "type": "link in",
-        "z": "5f562f66.a301e",
-        "name": "Device A web socket in",
-        "links": [
-            "ea909034.6fb25"
-        ],
-        "x": 35,
-        "y": 240,
-        "wires": [
-            [
-                "f812bb6a.1aec68"
-            ]
-        ]
-    },
-    {
-        "id": "f812bb6a.1aec68",
-        "type": "json",
-        "z": "5f562f66.a301e",
-        "name": "",
-        "property": "payload",
-        "action": "obj",
-        "pretty": false,
-        "x": 130,
-        "y": 240,
-        "wires": [
-            [
-                "87f08687.b6d578"
-            ]
-        ]
-    },
-    {
-        "id": "1cdcbcd8.9514e3",
-        "type": "link out",
-        "z": "5f562f66.a301e",
-        "name": "Device A web socket out",
-        "links": [
-            "d033193d.436d68"
-        ],
-        "x": 1435,
-        "y": 460,
-        "wires": []
-    },
-    {
-        "id": "d976b431.f90598",
-        "type": "gzip",
-        "z": "5f562f66.a301e",
-        "name": "",
-        "x": 1090,
-        "y": 400,
-        "wires": [
-            [
-                "93049b70.2dc5c8",
-                "a3ff8e5.b79de7"
-            ]
-        ]
-    },
-    {
-        "id": "42c6e9ce.4932e8",
-        "type": "gzip",
-        "z": "5f562f66.a301e",
-        "name": "",
-        "x": 750,
-        "y": 120,
-        "wires": [
-            [
-                "cd99fe0e.38599"
-            ]
-        ]
-    },
-    {
-        "id": "cd99fe0e.38599",
-        "type": "json",
-        "z": "5f562f66.a301e",
-        "name": "",
-        "property": "payload",
-        "action": "",
-        "pretty": false,
-        "x": 870,
-        "y": 120,
-        "wires": [
-            [
-                "d2572e9a.d2ef9"
-            ]
-        ]
-    },
-    {
-        "id": "f14573da.0a788",
-        "type": "inject",
-        "z": "c4285970.3276d8",
-        "name": "project",
-        "props": [
-            {
-                "p": "payload"
-            },
-            {
-                "p": "topic",
-                "vt": "str"
-            }
-        ],
-        "repeat": "",
-        "crontab": "",
-        "once": true,
-        "onceDelay": 0.1,
-        "topic": "project",
-        "payload": "PROJECT",
-        "payloadType": "env",
-        "x": 120,
-        "y": 920,
-        "wires": [
-            [
-                "938904a0.58d668"
-            ]
-        ]
-    },
-    {
-        "id": "938904a0.58d668",
-        "type": "function",
-        "z": "c4285970.3276d8",
-        "name": "Save global env variables",
-        "func": "global.set(msg.topic,msg.payload);\nreturn null;",
-        "outputs": 0,
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "x": 310,
-        "y": 920,
-        "wires": []
-    },
-    {
-        "id": "da43afe.8d4f85",
-        "type": "function",
-        "z": "5f562f66.a301e",
-        "name": "Filter Websocket",
-        "func": "var inputDeviceProps = msg.payload.topic.split('/');\nvar deviceProps = flow.get('deviceProps')\nif (inputDeviceProps[0] != deviceProps.project) return null;\nif (inputDeviceProps[1] != deviceProps.deviceType) return null;\nif (inputDeviceProps[2] != deviceProps.name) return null;\nreturn {topic:msg.topic, payload:msg.payload.payload};\n",
-        "outputs": 1,
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "x": 450,
-        "y": 240,
-        "wires": [
-            [
-                "9e75e21c.458df"
-            ]
-        ]
-    },
-    {
-        "id": "87f08687.b6d578",
-        "type": "function",
-        "z": "5f562f66.a301e",
-        "name": "Shift Msg",
-        "func": "return msg.payload;",
-        "outputs": 1,
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "x": 270,
-        "y": 240,
-        "wires": [
-            [
-                "da43afe.8d4f85"
-            ]
-        ]
-    },
-    {
-        "id": "c634a8d3.297848",
-        "type": "http in",
-        "z": "c4285970.3276d8",
-        "name": "/",
-        "url": "/",
-        "method": "get",
-        "upload": false,
-        "swaggerDoc": "",
-        "x": 90,
-        "y": 120,
-        "wires": [
-            [
-                "ca68de71.c19fe"
-            ]
-        ]
-    },
-    {
-        "id": "65a7590b.59a2a8",
-        "type": "template",
-        "z": "c4285970.3276d8",
-        "name": "Body",
-        "field": "payload.body",
-        "fieldType": "msg",
-        "format": "html",
-        "syntax": "mustache",
-        "template": "<!-- Body HTML -->\n",
-        "output": "str",
-        "x": 830,
-        "y": 120,
-        "wires": [
-            [
-                "a64bb02e.9692a"
-            ]
-        ]
-    },
-    {
-        "id": "9709fa69.9daac8",
-        "type": "template",
-        "z": "c4285970.3276d8",
-        "name": "Title",
-        "field": "payload.title",
-        "fieldType": "msg",
-        "format": "html",
-        "syntax": "mustache",
-        "template": "Blinky Wind",
-        "output": "str",
-        "x": 550,
-        "y": 120,
-        "wires": [
-            [
-                "a36869fc.6f5e58"
-            ]
-        ]
-    },
-    {
-        "id": "ca68de71.c19fe",
-        "type": "template",
-        "z": "c4285970.3276d8",
-        "name": "JavaScript",
-        "field": "payload.javascript",
-        "fieldType": "msg",
-        "format": "javascript",
-        "syntax": "mustache",
-        "template": "        useWebSockets(false);\n        function onDocumentReady()\n        {\n            window.location = '/apps'\n        }\n        function onWebSocketOpen()\n        {\n        }\n        function onWebSocketClose()\n        {\n            \n        }\n        function onWebSocketMessage(msg)\n        {\n        }\n\n",
-        "output": "str",
-        "x": 410,
-        "y": 120,
-        "wires": [
-            [
-                "9709fa69.9daac8"
-            ]
-        ]
-    },
-    {
-        "id": "a36869fc.6f5e58",
-        "type": "template",
-        "z": "c4285970.3276d8",
-        "name": "navBarIcon",
-        "field": "payload.navBarIcon",
-        "fieldType": "msg",
-        "format": "html",
-        "syntax": "mustache",
-        "template": "windYellow.png",
-        "output": "str",
-        "x": 690,
-        "y": 120,
-        "wires": [
-            [
-                "65a7590b.59a2a8"
-            ]
-        ]
-    },
-    {
-        "id": "6c8ad237.33ae7c",
-        "type": "inject",
-        "z": "eaa5749e.352818",
-        "name": "",
-        "repeat": "",
-        "crontab": "",
-        "once": false,
-        "onceDelay": 0.1,
-        "topic": "",
-        "payload": "",
-        "payloadType": "date",
-        "x": 860,
-        "y": 60,
-        "wires": [
-            [
-                "6d4f56e0.04a238"
-            ]
-        ]
-    },
-    {
-        "id": "6d4f56e0.04a238",
-        "type": "exec",
-        "z": "eaa5749e.352818",
-        "command": "iwconfig wlan0 | grep ESSID",
-        "addpay": false,
-        "append": "",
-        "useSpawn": "false",
-        "timer": "",
-        "oldrc": false,
-        "name": "",
-        "x": 860,
-        "y": 120,
-        "wires": [
-            [
-                "c6d2055.718baf8"
-            ],
-            [],
-            []
-        ]
-    },
-    {
-        "id": "c6d2055.718baf8",
-        "type": "function",
-        "z": "eaa5749e.352818",
-        "name": "Get SSID",
-        "func": "var ssid = msg.payload.substring(msg.payload.indexOf(\"ESSID\") + 6).split('\\n')[0];\nreturn {topic:msg.topic, payload:{topic:msg.topic ,payload:ssid, userID: msg.userID }};\n",
-        "outputs": 1,
-        "noerr": 0,
-        "x": 1060,
-        "y": 100,
-        "wires": [
-            [
-                "9bc013a4.b46c"
-            ]
-        ]
-    },
-    {
-        "id": "1e80ca53.767a96",
-        "type": "http in",
-        "z": "eaa5749e.352818",
-        "name": "/setup",
-        "url": "/setup",
-        "method": "get",
-        "upload": false,
-        "swaggerDoc": "",
-        "x": 130,
-        "y": 480,
-        "wires": [
-            [
-                "930a7a63.11bf58"
-            ]
-        ]
-    },
-    {
-        "id": "e1192fe0.96315",
-        "type": "template",
-        "z": "eaa5749e.352818",
-        "name": "Set Title",
-        "field": "payload.title",
-        "fieldType": "msg",
-        "format": "html",
-        "syntax": "mustache",
-        "template": "Wireless Setup",
-        "output": "str",
-        "x": 260,
-        "y": 520,
-        "wires": [
-            [
-                "fc3a3f22.7533"
-            ]
-        ]
-    },
-    {
-        "id": "fc3a3f22.7533",
-        "type": "template",
-        "z": "eaa5749e.352818",
-        "name": "script.global",
-        "field": "payload.script.global",
-        "fieldType": "msg",
-        "format": "javascript",
-        "syntax": "mustache",
-        "template": "// Global Javascript\n        var appStarted = false;\n        var networkList = null;\n        var selectedNetwork = -1;\n        useWebSockets(true);\n        function onDocumentReady()\n        {\n            setRemoteApp(false);\n            $('#pwDialog').hide();\n        }\n        function onWebSocketOpen()\n        {\n            if (!appStarted)\n            {\n                sendActionMsg('getConnection', 'getConnection', {});\n                appStarted = true;\n            }\n        }\n        function onWebSocketClose()\n        {\n            wsConnectC();\n        }\n        function onWebSocketMessage(msg)\n        {\n            switch(msg.topic)\n            {\n                case 'getConnection':\n                    $('#connectedSSID').text(msg.payload);\n                    sendActionMsg('getNetworks', 'getNetworks', {});\n                    break;\n                case 'connectToNetwork':\n                    sendActionMsg('getConnection', 'getConnection', {});\n                    $('#ssid').attr('disabled',false);\n                    $('#ssidkey').attr('disabled',false);\n                    $('#ssidButton').attr('disabled',false);\n                    break;\n                default:\n                // code block\n            }\n        }\n        function setSsid()\n        {\n            var ssid = $('#ssid').val();\n            var ssidkey = $('#ssidkey').val();\n            sendActionMsg('connectToNetwork', 'connectToNetwork', {ssid:ssid, key:ssidkey});\n            $('#connectedSSID').text('');\n            $('#ssid').val('');\n            $('#ssid').attr('disabled',true);\n            $('#ssidkey').val('');\n            $('#ssidkey').attr('disabled',true);\n            $('#ssidButton').attr('disabled',true);\n            \n        }\n",
-        "output": "str",
-        "x": 550,
-        "y": 480,
-        "wires": [
-            [
-                "380c1491.22fa9c"
-            ]
-        ]
-    },
-    {
-        "id": "380c1491.22fa9c",
-        "type": "template",
-        "z": "eaa5749e.352818",
-        "name": "javascript",
-        "field": "payload.javascript",
-        "fieldType": "msg",
-        "format": "javascript",
-        "syntax": "mustache",
-        "template": "{{{payload.script.global}}}\n",
-        "output": "str",
-        "x": 540,
-        "y": 520,
-        "wires": [
-            [
-                "4e6c8908.0524c8"
-            ]
-        ]
-    },
-    {
-        "id": "41d7170c.80e638",
-        "type": "template",
-        "z": "eaa5749e.352818",
-        "name": "body",
-        "field": "payload.body",
-        "fieldType": "msg",
-        "format": "html",
-        "syntax": "mustache",
-        "template": "    <div width=\"100%\">\n        <div class='row' style='padding-bottom: 10px;'>\n            <div class='col-md-12' align='center'>\n{{{payload.html.wirelessSetup}}}\n            </div>\n        </div>\n    </div>\n",
-        "output": "str",
-        "x": 790,
-        "y": 520,
-        "wires": [
-            [
-                "28f9a36b.9e7a3c"
-            ]
-        ]
-    },
-    {
-        "id": "930a7a63.11bf58",
-        "type": "template",
-        "z": "eaa5749e.352818",
-        "name": "navBarIcon",
-        "field": "payload.navBarIcon",
-        "fieldType": "msg",
-        "format": "html",
-        "syntax": "mustache",
-        "template": "basicYellow.png",
-        "output": "str",
-        "x": 270,
-        "y": 480,
-        "wires": [
-            [
-                "e1192fe0.96315"
-            ]
-        ]
-    },
-    {
-        "id": "4e6c8908.0524c8",
-        "type": "template",
-        "z": "eaa5749e.352818",
-        "name": "html.wirelessSetup",
-        "field": "payload.html.wirelessSetup",
-        "fieldType": "msg",
-        "format": "html",
-        "syntax": "mustache",
-        "template": "                <div class='card'>\n                    <div class='row'>\n                        <div class='col-md-2'>\n                        </div>\n                        <div class='col-md-8'>\n                            <p class='card-title'>Network Connection</p>\n                         </div>\n                        <div class='col-md-2'>\n                        </div>\n                    </div>\n                    <div class='card-body' align=\"center\">\n                        <div class='row' style='padding-bottom: 10px;'>\n                            <div class='col-md-6'>\n                                <span  class='card-text' >Connected to:</span>\n                            </div>\n                            <div class='col-md-6'>\n                                 <span  class='card-text' id='connectedSSID'>off/any</span>\n                            </div>\n                        </div>\n                        <div class='row' style='padding-bottom: 10px;'>\n                            <div class='col-md-4'>\n                                <span class=\"tableText\">SSID</span>\n                            </div>\n                            <div class='col-md-8'>\n                                <input class=\"form-control tableText\" id=\"ssid\" type=\"text\" value=\"\" />\n                             </div>\n                        </div>\n                        <div class='row' style='padding-bottom: 10px;'>\n                            <div class='col-md-4'>\n                                <span class=\"tableText\">KEY</span>\n                            </div>\n                            <div class='col-md-8'>\n                                <input class=\"form-control tableText\" id=\"ssidkey\" type=\"text\" value=\"\" />\n                             </div>\n                        </div>\n                        <div class='row' style='padding-bottom: 10px;'>\n                            <div class='col-md-4'>\n                            </div>\n                            <div class='col-md-6'>\n                                <button class='btn btn-block card-button big-text' id=\"ssidButton\" onclick=\"setSsid()\" >Connect & Reboot</button>\n                             </div>\n                            <div class='col-md-2'>\n                            </div>\n                        </div>\n                    </div>\n                </div>\n",
-        "output": "str",
-        "x": 830,
-        "y": 480,
-        "wires": [
-            [
-                "41d7170c.80e638"
-            ]
-        ]
-    },
-    {
-        "id": "ab64b0d5.c3fee",
-        "type": "websocket in",
-        "z": "eaa5749e.352818",
-        "name": "/setup/websocket",
-        "server": "c427a7cd.35f1f8",
-        "client": "",
-        "x": 160,
-        "y": 100,
-        "wires": [
-            [
-                "dbec0823.672678"
-            ]
-        ]
-    },
-    {
-        "id": "9bc013a4.b46c",
-        "type": "websocket out",
-        "z": "eaa5749e.352818",
-        "name": "/setup/websocket",
-        "server": "c427a7cd.35f1f8",
-        "client": "",
-        "x": 1250,
-        "y": 160,
-        "wires": []
-    },
-    {
-        "id": "dbec0823.672678",
-        "type": "json",
-        "z": "eaa5749e.352818",
-        "name": "",
-        "property": "payload",
-        "action": "",
-        "pretty": false,
-        "x": 310,
-        "y": 100,
-        "wires": [
-            [
-                "bb0701eb.a4b29"
-            ]
-        ]
-    },
-    {
-        "id": "5ead619d.4bfff",
-        "type": "switch",
-        "z": "eaa5749e.352818",
-        "name": "",
-        "property": "topic",
-        "propertyType": "msg",
-        "rules": [
-            {
-                "t": "eq",
-                "v": "getNetworks",
-                "vt": "str"
-            },
-            {
-                "t": "eq",
-                "v": "getConnection",
-                "vt": "str"
-            },
-            {
-                "t": "eq",
-                "v": "connectToNetwork",
-                "vt": "str"
-            }
-        ],
-        "checkall": "true",
-        "repair": false,
-        "outputs": 3,
-        "x": 630,
-        "y": 100,
-        "wires": [
-            [],
-            [
-                "6d4f56e0.04a238"
-            ],
-            [
-                "71a17106.a018d"
-            ]
-        ]
-    },
-    {
-        "id": "bb0701eb.a4b29",
-        "type": "function",
-        "z": "eaa5749e.352818",
-        "name": "set userId and topic",
-        "func": "return {\n    topic   : msg.payload.topic, \n    userID  : msg.payload.userID,\n    payload : msg.payload.payload};\n",
-        "outputs": 1,
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "x": 470,
-        "y": 100,
-        "wires": [
-            [
-                "5ead619d.4bfff"
-            ]
-        ]
-    },
-    {
-        "id": "71a17106.a018d",
-        "type": "function",
-        "z": "eaa5749e.352818",
-        "name": "Prepare WPA",
-        "func": "var fileContents = 'ctrl_interface=DIR=/var/run/wpa_supplicant GROUP=netdev\\nupdate_config=1\\ncountry=SE\\n';\nfileContents = fileContents + 'network={\\n   ssid=\"' + msg.payload.ssid + '\"\\n   psk=\"' + msg.payload.key + '\"\\n}\\n'\nreturn {topic:msg.topic, payload:fileContents};",
-        "outputs": 1,
-        "noerr": 0,
-        "x": 780,
-        "y": 180,
-        "wires": [
-            [
-                "3ef93a0f.951976"
-            ]
-        ]
-    },
-    {
-        "id": "3ef93a0f.951976",
-        "type": "file",
-        "z": "eaa5749e.352818",
-        "name": "Write to ssid.conf",
-        "filename": "/home/pi/ssid.conf",
-        "appendNewline": true,
-        "createDir": false,
-        "overwriteFile": "true",
-        "encoding": "none",
-        "x": 970,
-        "y": 180,
-        "wires": [
-            [
-                "4c1194c8.db057c"
-            ]
-        ]
-    },
-    {
-        "id": "4c1194c8.db057c",
-        "type": "exec",
-        "z": "eaa5749e.352818",
-        "command": "sudo mv /home/pi/ssid.conf /etc/wpa_supplicant/wpa_supplicant.conf",
-        "addpay": false,
-        "append": "",
-        "useSpawn": "false",
-        "timer": "",
-        "oldrc": false,
-        "name": "mv ssid to wpa",
-        "x": 780,
-        "y": 240,
-        "wires": [
-            [
-                "1acb5f15.919f11"
-            ],
-            [],
-            []
-        ]
-    },
-    {
-        "id": "1acb5f15.919f11",
-        "type": "delay",
-        "z": "eaa5749e.352818",
-        "name": "",
-        "pauseType": "delay",
-        "timeout": "1",
-        "timeoutUnits": "seconds",
-        "rate": "1",
-        "nbRateUnits": "1",
-        "rateUnits": "second",
-        "randomFirst": "1",
-        "randomLast": "5",
-        "randomUnits": "seconds",
-        "drop": false,
-        "x": 940,
-        "y": 240,
-        "wires": [
-            [
-                "20f7c462.3d395c"
-            ]
-        ]
-    },
-    {
-        "id": "20f7c462.3d395c",
-        "type": "exec",
-        "z": "eaa5749e.352818",
-        "command": "sudo wpa_cli -i wlan0 reconfigure",
-        "addpay": false,
-        "append": "",
-        "useSpawn": "false",
-        "timer": "",
-        "oldrc": false,
-        "name": "wlan0 reconfigure",
-        "x": 1110,
-        "y": 240,
-        "wires": [
-            [
-                "c80f01f0.2fe93"
-            ],
-            [],
-            []
-        ]
-    },
-    {
-        "id": "c80f01f0.2fe93",
-        "type": "delay",
-        "z": "eaa5749e.352818",
-        "name": "",
-        "pauseType": "delay",
-        "timeout": "5",
-        "timeoutUnits": "seconds",
-        "rate": "1",
-        "nbRateUnits": "1",
-        "rateUnits": "second",
-        "randomFirst": "1",
-        "randomLast": "5",
-        "randomUnits": "seconds",
-        "drop": false,
-        "x": 780,
-        "y": 320,
-        "wires": [
-            [
-                "fa9ce40f.c3e948"
-            ]
-        ]
-    },
-    {
-        "id": "fa9ce40f.c3e948",
-        "type": "exec",
-        "z": "eaa5749e.352818",
-        "command": "sudo reboot",
-        "addpay": false,
-        "append": "",
-        "useSpawn": "false",
-        "timer": "",
-        "oldrc": false,
-        "name": "",
-        "x": 950,
-        "y": 320,
-        "wires": [
-            [],
-            [],
-            []
-        ]
+        "id": "54dde46e.53267c",
+        "type": "modbus-client",
+        "name": "Slave",
+        "clienttype": "tcp",
+        "bufferCommands": true,
+        "stateLogEnabled": true,
+        "queueLogEnabled": false,
+        "tcpHost": "${SLAVEIP}",
+        "tcpPort": "${SLAVEPORT}",
+        "tcpType": "DEFAULT",
+        "serialPort": "/dev/ttyUSB",
+        "serialType": "RTU-BUFFERD",
+        "serialBaudrate": "9600",
+        "serialDatabits": "8",
+        "serialStopbits": "1",
+        "serialParity": "none",
+        "serialConnectionDelay": "100",
+        "unit_id": "1",
+        "commandDelay": "1",
+        "clientTimeout": "1000",
+        "reconnectOnTimeout": false,
+        "reconnectTimeout": "2000",
+        "parallelUnitIdsAllowed": false
     },
     {
         "id": "c104210d.418eb",
@@ -1759,140 +443,161 @@
         ]
     },
     {
-        "id": "c6d4dfc7.827cb",
-        "type": "subflow:8341090a.df9758",
-        "z": "c4285970.3276d8",
-        "name": "",
-        "x": 1010,
-        "y": 180,
-        "wires": []
-    },
-    {
-        "id": "28f9a36b.9e7a3c",
-        "type": "subflow:8341090a.df9758",
-        "z": "eaa5749e.352818",
-        "name": "",
-        "x": 1070,
-        "y": 520,
-        "wires": []
-    },
-    {
-        "id": "a64bb02e.9692a",
-        "type": "subflow:8341090a.df9758",
-        "z": "c4285970.3276d8",
-        "name": "",
-        "x": 1010,
-        "y": 120,
-        "wires": []
-    },
-    {
-        "id": "2e95339f.b9da0c",
-        "type": "subflow:8341090a.df9758",
-        "z": "c4285970.3276d8",
-        "name": "",
-        "x": 1150,
-        "y": 460,
-        "wires": []
-    },
-    {
-        "id": "c0939e4a.6386f",
-        "type": "exec",
-        "z": "5f562f66.a301e",
-        "command": "pm2 restart red",
-        "addpay": false,
-        "append": "",
-        "useSpawn": "false",
-        "timer": "",
-        "oldrc": false,
-        "name": "Restart",
-        "x": 1140,
-        "y": 200,
+        "id": "cf2145fe.77fbf",
+        "type": "inject",
+        "z": "731de46a.7645fc",
+        "name": "Read 16bit Integer",
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 130,
+        "y": 140,
         "wires": [
-            [],
-            [],
-            []
+            [
+                "97cea9e.2f7c2d8"
+            ]
         ]
     },
     {
-        "id": "9e290594.69c548",
-        "type": "switch",
-        "z": "5f562f66.a301e",
-        "name": "Reset Tray",
-        "property": "payload.reset.value",
-        "propertyType": "msg",
-        "rules": [
-            {
-                "t": "eq",
-                "v": "1",
-                "vt": "num"
-            },
-            {
-                "t": "eq",
-                "v": "2",
-                "vt": "num"
-            }
-        ],
-        "checkall": "true",
-        "repair": false,
-        "outputs": 2,
-        "x": 950,
-        "y": 220,
+        "id": "97cea9e.2f7c2d8",
+        "type": "function",
+        "z": "731de46a.7645fc",
+        "name": "",
+        "func": "var fc=3;\nvar sa=0;\nvar addresses=2;\n//var slave_ip=msg.payload.slave_ip;\n//msg.slave_ip=\"192.168.1.31\";\nmsg.payload={value: msg.payload, 'fc': fc, 'unitid': 1, 'address': sa , 'quantity': addresses };\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 300,
+        "y": 140,
         "wires": [
             [
-                "c0939e4a.6386f"
+                "409e22ed.adb1d4"
+            ]
+        ]
+    },
+    {
+        "id": "409e22ed.adb1d4",
+        "type": "modbus-flex-getter",
+        "z": "731de46a.7645fc",
+        "name": "local getter Flex",
+        "showStatusActivities": true,
+        "showErrors": true,
+        "logIOActivities": false,
+        "server": "54dde46e.53267c",
+        "useIOFile": false,
+        "ioFile": "",
+        "useIOForPayload": false,
+        "emptyMsgOnFail": false,
+        "keepMsgProperties": false,
+        "x": 460,
+        "y": 140,
+        "wires": [
+            [
+                "99944bece145aab7"
             ],
             [
-                "236a8168.66f7fe"
+                "a067fb1d.a06cd8"
             ]
         ]
     },
     {
-        "id": "236a8168.66f7fe",
-        "type": "exec",
-        "z": "5f562f66.a301e",
-        "command": "sudo reboot",
-        "addpay": false,
-        "append": "",
-        "useSpawn": "false",
-        "timer": "",
-        "oldrc": false,
-        "name": "Reboot",
-        "x": 1140,
-        "y": 260,
-        "wires": [
-            [],
-            [],
-            []
-        ]
-    },
-    {
-        "id": "557e4f40.b904e",
-        "type": "delay",
-        "z": "5f562f66.a301e",
+        "id": "a067fb1d.a06cd8",
+        "type": "function",
+        "z": "731de46a.7645fc",
         "name": "",
-        "pauseType": "delay",
-        "timeout": "2",
-        "timeoutUnits": "seconds",
-        "rate": "1",
-        "nbRateUnits": "1",
-        "rateUnits": "second",
-        "randomFirst": "1",
-        "randomLast": "5",
-        "randomUnits": "seconds",
-        "drop": false,
-        "x": 940,
-        "y": 180,
+        "func": "const buf= Buffer.from(msg.payload.buffer)\n//const buf = Buffer.from(msg.payload.buffer);\nconst value = buf.readUInt16BE();\nmsg.value = value;\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 640,
+        "y": 160,
         "wires": [
             [
-                "9e290594.69c548"
+                "aa2ba76.1d72fd8"
             ]
         ]
     },
     {
-        "id": "c87aa87d.aef928",
+        "id": "aa2ba76.1d72fd8",
+        "type": "debug",
+        "z": "731de46a.7645fc",
+        "name": "",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "x": 770,
+        "y": 160,
+        "wires": []
+    },
+    {
+        "id": "99944bece145aab7",
+        "type": "debug",
+        "z": "731de46a.7645fc",
+        "name": "",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 630,
+        "y": 100,
+        "wires": []
+    },
+    {
+        "id": "86d67a25dee527fe",
+        "type": "modbus-flex-write",
+        "z": "731de46a.7645fc",
+        "name": "local setter flex",
+        "showStatusActivities": false,
+        "showErrors": false,
+        "server": "54dde46e.53267c",
+        "emptyMsgOnFail": false,
+        "keepMsgProperties": false,
+        "x": 460,
+        "y": 280,
+        "wires": [
+            [
+                "1e5608aea07d32eb"
+            ],
+            [
+                "496989f01b484a66"
+            ]
+        ]
+    },
+    {
+        "id": "657b3cc8dd84872b",
+        "type": "function",
+        "z": "731de46a.7645fc",
+        "name": "",
+        "func": "var fc=6;\nvar sa=0;\nvar val = 176;\nmsg.payload = { value: val, 'fc': fc, 'unitid': 1, 'address': sa , 'quantity': 1 } ;\nreturn msg;\n",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 300,
+        "y": 280,
+        "wires": [
+            [
+                "86d67a25dee527fe"
+            ]
+        ]
+    },
+    {
+        "id": "cba2b20fe197f9b2",
         "type": "inject",
-        "z": "c4285970.3276d8",
-        "name": "deviceA",
+        "z": "731de46a.7645fc",
+        "name": "Set 16bit Integer",
         "props": [
             {
                 "p": "payload"
@@ -1904,354 +609,50 @@
         ],
         "repeat": "",
         "crontab": "",
-        "once": true,
+        "once": false,
         "onceDelay": 0.1,
-        "topic": "deviceA",
-        "payload": "MQTTDEVICEA",
-        "payloadType": "env",
+        "topic": "",
+        "payloadType": "date",
         "x": 120,
-        "y": 40,
+        "y": 280,
         "wires": [
             [
-                "fdfbcac7.35b388"
+                "657b3cc8dd84872b"
             ]
         ]
     },
     {
-        "id": "fdfbcac7.35b388",
-        "type": "function",
-        "z": "c4285970.3276d8",
-        "name": "Init device name",
-        "func": "var mqttSplit = msg.payload.split('/');\nvar deviceProps = {\n    project     :   mqttSplit[0],\n    deviceType  :   mqttSplit[1],\n    name        :   mqttSplit[2],\n};\nflow.set(msg.topic + 'Props',deviceProps);\nreturn null;",
-        "outputs": 0,
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "x": 280,
-        "y": 40,
+        "id": "1e5608aea07d32eb",
+        "type": "debug",
+        "z": "731de46a.7645fc",
+        "name": "",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 650,
+        "y": 260,
         "wires": []
     },
     {
-        "id": "af9642ae.0c0da",
-        "type": "function",
-        "z": "c4285970.3276d8",
-        "name": "Device Names",
-        "func": "msg.payload['deviceAName'] = flow.get('deviceAProps').name;\nreturn msg;",
-        "outputs": 1,
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "libs": [],
-        "x": 240,
-        "y": 180,
-        "wires": [
-            [
-                "f328fcb4.91dc"
-            ]
-        ]
-    },
-    {
-        "id": "732e88e1.e94a48",
-        "type": "function",
-        "z": "c4285970.3276d8",
-        "name": "Set Name And Device Type",
-        "func": "msg.payload['script'] = {};\nmsg.payload['script']['name'] = msg.payload.name\nmsg.payload['script']['deviceType'] = 'blinky-blank';\nmsg.payload['script']['project'] = global.get('project');\nreturn msg;\n",
-        "outputs": 1,
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "libs": [],
-        "x": 360,
-        "y": 260,
-        "wires": [
-            [
-                "a44ee69e.63d478"
-            ]
-        ]
-    },
-    {
-        "id": "98640a4b.e76978",
-        "type": "template",
-        "z": "c4285970.3276d8",
-        "name": "Set Title",
-        "field": "payload.title",
-        "fieldType": "msg",
-        "format": "html",
-        "syntax": "mustache",
-        "template": "Blinky Blank {{{payload.script.name}}}",
-        "output": "str",
-        "x": 300,
-        "y": 340,
-        "wires": [
-            [
-                "2f3fee61.d28812"
-            ]
-        ]
-    },
-    {
-        "id": "a44ee69e.63d478",
-        "type": "template",
-        "z": "c4285970.3276d8",
-        "name": "navBarIcon",
-        "field": "payload.navBarIcon",
-        "fieldType": "msg",
-        "format": "html",
-        "syntax": "mustache",
-        "template": "basicYellow.png",
-        "output": "str",
-        "x": 310,
-        "y": 300,
-        "wires": [
-            [
-                "98640a4b.e76978"
-            ]
-        ]
-    },
-    {
-        "id": "2f3fee61.d28812",
-        "type": "template",
-        "z": "c4285970.3276d8",
-        "name": "script.global",
-        "field": "payload.script.global",
-        "fieldType": "msg",
-        "format": "javascript",
-        "syntax": "mustache",
-        "template": "// Global Javascript\n        useWebSockets(true);\n        var mqttDevice = null;\n        var device = null;\n        var archiveRequestList = [];\n        var archiveList = [];\n        var pingInterval = 5000;\n        var lastPing = 0;\n\n        var restfulDevice = \n        {\n            deviceType  : '{{{payload.script.deviceType}}}',\n            name        : '{{{payload.script.name}}}',\n            project     : '{{{payload.script.project}}}'\n        };\n\n\n        function onDocumentReady()\n        {\n            setRemoteApp(false);\n            if (remoteApp)\n            {\n                getCreds();\n                setInterval(function(){getCreds();}, 1000);\n            }\n            else\n            {\n                $('#userCardId').hide();\n            }\n            $('#archiveCardId').hide();\n            setInterval(function()\n            {\n                var now = new Date().getTime();\n                if ((now - lastPing) > pingInterval)\n                {\n                    lastPing = now;\n                    var actionMsg = \n                        {\n                            topic   : restfulDevice.project + '/' +  restfulDevice.deviceType + '/' +  restfulDevice.name + '/ping',\n                            payload : true\n                        };\n                    sendActionMsg('ping', 'ping', actionMsg);\n               }\n            }, 1000);\n        }\n        function onWebSocketOpen()\n        {\n            if (remoteApp) getArchive(24);\n        }\n        function onWebSocketClose()\n        {\n            \n        }\n        function onWebSocketMessage(msg)\n        {\n            switch(msg.topic)\n            {\n                case 'readings':\n                    if ((msg.mqttDevice.name == restfulDevice.name) && (msg.mqttDevice.deviceType == restfulDevice.deviceType)  && (msg.mqttDevice.project == restfulDevice.project) )\n                    {\n                        lastPing = new Date().getTime();\n                        heartbeat();\n                        device = JSON.parse(pako.inflate(msg.payload, { to: 'string' }));\n                        mqttDevice = msg.mqttDevice;\n                        updateDmaReadings(device);\n                    }\n                    break;\n                case 'readDatabase':\n                    if (msg.userID == userID)\n                    {\n                        if ((msg.payload.device.deviceType == restfulDevice.deviceType) && (msg.payload.device.name == restfulDevice.name) )\n                            putArchiveValues(msg.payload);\n                    }\n                    break;\n                case 'renew':\n                    if (msg.userID == userID)\n                    {\n                        updateCookie(msg);\n                    }\n                    break;\n                case 'permissionError':\n                    if (msg.userID == userID)\n                    {\n                        acknowledgeDialog('Permission', 'Error', msg.payload);\n                    }\n                    break;\n                case 'loginExpired':\n                    if (msg.userID == userID)\n                    {\n                       location.reload();\n                    }\n                    break;\n                default:\n                    break;\n            }\n        }\n        function sendSetting()\n        {\n            var actionMsg = \n                {\n                    topic   : mqttDevice.project + '/' +  mqttDevice.deviceType + '/' +  mqttDevice.name + '/setting',\n                    payload : pako.deflate(JSON.stringify(device))\n                };\n            sendActionMsg('setting','setting',actionMsg);\n       }\n        function setScalarValue(settingValue, attrName)\n        {\n            var settingAttr = device[attrName];\n            if ( (settingAttr.alarm.limits.lolo <= settingValue) && (settingValue <= settingAttr.alarm.limits.hihi) )\n            {\n                settingAttr.value = settingValue;\n                sendSetting();\n            } \n            else\n            {\n                acknowledgeDialog('Acknowledge', 'Error', 'Entry outside range! (' + settingAttr.alarm.limits.lolo.toString() + '-' + settingAttr.alarm.limits.hihi.toString() + ' ' + settingAttr.unit);\n            }\n        }\n        function reset(actionFlag)\n        {\n            var headerText = 'Warning';\n            var title = 'Resetting Tray';\n            var text = 'I hope you know what you are doing.';\n            var buttonTexts = ['Reset', 'Cancel'];\n            var buttonFunctions = \n            [\n                function()\n                {\n                    $( this ).dialog( \"close\" );\n                    setScalarValue(actionFlag, 'reset');\n                 }, \n                function()\n                {\n                    $( this ).dialog( \"close\" );\n                }\n            ];\n            if (actionFlag == 2)\n            {\n                title = 'Rebooting Tray';\n                buttonTexts[0] = 'Reboot';\n            }\n            optionDialog(headerText, title, text, buttonTexts, buttonFunctions);\n        }\n",
-        "output": "str",
-        "x": 630,
-        "y": 260,
-        "wires": [
-            [
-                "d9c5439.0b2c2c"
-            ]
-        ]
-    },
-    {
-        "id": "4b374fc0.a6da2",
-        "type": "template",
-        "z": "c4285970.3276d8",
-        "name": "script.editDevice",
-        "field": "payload.script.editDevice",
-        "fieldType": "msg",
-        "format": "javascript",
-        "syntax": "mustache",
-        "template": "// Edit Temp JavaScript\n       $( function() \n        {\n            $( \"#editDeviceDialog\" ).dialog(\n                {\n//                    closeOnEscape: false,\n//                    open: function(event, ui) {$(\".ui-dialog-titlebar-close\", ui.dialog | ui).hide();},\n                    width:    640,\n                    autoOpen: false,\n                    buttons:\n                    [\n                        {\n                            text: \"Set\",\n                            click: function() {setDevice(); $( this ).dialog( \"close\" );},\n                            showText: false\n                        },\n                        {\n                            text: \"Cancel\",\n                            click: function() \n                            {\n                                $( this ).dialog( \"close\" ); \n                            },\n                            showText: false\n                        }\n                    ]\n                });\n        } );\n        function editDevice(attrName)\n        {\n            $( \"#editDeviceDialog\" ).dialog( \"option\", \"title\", \"Edit\"); \n            editedAttribute = attrName;\n            $( \"#editDeviceDialogAttribute\").html(attrName);\n\n            var attr = device[attrName];\n            $( \"#loloAlarm\").val(attr.alarm.limits.lolo);\n            $( \"#lowAlarm\").val(attr.alarm.limits.low);\n            $( \"#highAlarm\").val(attr.alarm.limits.high);\n            $( \"#hihiAlarm\").val(attr.alarm.limits.hihi);\n            $( \"#notifyName\").val(attr.alarm.notify.name);\n            $( \"#notifyNumber\").val(attr.alarm.notify.number);\n\n            $( \"#editDeviceDialog\" ).dialog( \"open\" );\n        }\n        function setDevice()\n        {\n            var attr = device[editedAttribute];\n            if (isNaN($('#loloAlarm').val()) \n                || isNaN($('#lowAlarm').val()) \n                || isNaN($('#highAlarm').val()) \n                || isNaN($('#hihiAlarm').val()))\n            {\n                acknowledgeDialog('Error', 'Entry not a number!', editedAttribute);\n                editedAttribute = '';\n                return;\n            }\n            editedAttribute = '';\n\n            attr.alarm.limits.lolo = Number($( \"#loloAlarm\").val());\n            attr.alarm.limits.low = Number($( \"#lowAlarm\").val());\n            attr.alarm.limits.high = Number($( \"#highAlarm\").val());\n            attr.alarm.limits.hihi = Number($( \"#hihiAlarm\").val());\n            attr.alarm.notify.number =  $( \"#notifyNumber\").val();\n            attr.alarm.notify.name = $( \"#notifyName\").val();\n            sendSetting();\n        }\n",
-        "output": "str",
-        "x": 640,
-        "y": 380,
-        "wires": [
-            [
-                "5bc90a6b.dab404"
-            ]
-        ]
-    },
-    {
-        "id": "2b06249e.f2687c",
-        "type": "template",
-        "z": "c4285970.3276d8",
-        "name": "javascript",
-        "field": "payload.javascript",
-        "fieldType": "msg",
-        "format": "javascript",
-        "syntax": "mustache",
-        "template": "{{{payload.script.horzbarWidget}}}\n{{{payload.script.gaugeWidget}}}\n{{{payload.script.global}}}\n{{{payload.script.updateReadings}}}\n{{{payload.script.archive}}}\n{{{payload.script.editDevice}}}\n{{{payload.script.user}}}\n",
-        "output": "str",
-        "x": 620,
-        "y": 460,
-        "wires": [
-            [
-                "958816c5.19b398"
-            ]
-        ]
-    },
-    {
-        "id": "359d6cac.22d1c4",
-        "type": "template",
-        "z": "c4285970.3276d8",
-        "name": "body",
-        "field": "payload.body",
-        "fieldType": "msg",
-        "format": "html",
-        "syntax": "mustache",
-        "template": "    <div width=\"100%\">\n        <div class='row' style='padding-bottom: 25px;'>\n            <div class='col-md-12' align='center'>\n{{{payload.html.temperatureBar}}}\n            </div>\n        </div>\n        <div class='row' style='padding-bottom: 25px;'>\n            <div class='col-md-12' align='center'>\n{{{payload.html.windSpeedGauge}}}\n            </div>\n        </div>\n        </div>\n        <div class='row' style='padding-bottom: 25px;'>\n            <div class='col-md-12' align='center'>\n{{{payload.html.dashboard}}}\n            </div>\n        </div>\n        <div class='row' style='padding-bottom: 25px;'>\n            <div class='col-md-12' align='center'>\n{{{payload.html.archive}}}\n            </div>\n        </div>\n        <div class='row' style='padding-bottom: 25px;'>\n            <div class='col-md-12'>\n{{{payload.html.user}}}\n            </div>\n        </div>\n        <div class='row' style='padding-bottom: 25px;'>\n            <div class='col-md-12'>\n{{{payload.html.wifimon}}}\n            </div>\n        </div>\n        <div class='row' style='padding-bottom: 25px;'>\n            <div class='col-md-12'>\n{{{payload.html.reset}}}\n            </div>\n        </div>\n    </div>",
-        "output": "str",
-        "x": 930,
-        "y": 460,
-        "wires": [
-            [
-                "2e95339f.b9da0c"
-            ]
-        ]
-    },
-    {
-        "id": "b98af74e.69d578",
-        "type": "template",
-        "z": "c4285970.3276d8",
-        "name": "html.wifimon",
-        "field": "payload.html.wifimon",
-        "fieldType": "msg",
-        "format": "html",
-        "syntax": "mustache",
-        "template": "<!-- Dashboard HTML -->\n                <div class='card'>\n                    <p class='card-title'>WiFi Connection</p>\n                    <div class='card-body' align=\"center\">\n                        <div class='row'  style='padding-top: 0px;'>\n                            <table width='100%'>\n                                <tr>\n                                    <td width='60%' >\n                                        <span class='card-text' >Device Update</span>\n                                    </td>\n                                    <td width='20%' align='center'></td>\n                                    <td width='20%' align='center'>\n                                        <img src='/img/heartRed.png' id='heartBeatID' width='100px' height='100px'/>\n                                    </td>\n                                </tr>\n                                <tr>\n                                    <td width='60%' >\n                                        <span class='card-text' >Signal Level (dBm)</span>\n                                    </td>\n                                    <td width='20%' align='center'></td>\n                                    <td width='20%' align='center'>\n                                        <span class='card-text' id='signalLevelId' >-100</span>\n                                    </td>\n                                </tr>\n                                <tr>\n                                    <td width='60%' >\n                                        <span class='card-text' >Link Quality (/70)</span>\n                                    </td>\n                                    <td width='20%' align='center'></td>\n                                    <td width='20%' align='center'>\n                                        <span class='card-text' id='linkQualityId' >-1</span>\n                                    </td>\n                                </tr>\n                            </table>\n                        </div>\n                    </div>\n                </div>\n",
-        "output": "str",
-        "x": 950,
-        "y": 380,
-        "wires": [
-            [
-                "e7a77ed7.85e4a"
-            ]
-        ]
-    },
-    {
-        "id": "d7d8f4b7.c679e8",
-        "type": "template",
-        "z": "c4285970.3276d8",
-        "name": "html.user",
-        "field": "payload.html.user",
-        "fieldType": "msg",
-        "format": "html",
-        "syntax": "mustache",
-        "template": "                <div class='card' id='userCardId'>\n                    <div class='card-body' align=\"center\">\n                        <table width=\"100%\">\n                            <tr>\n                                <td  align=\"left\">\n                                     <span class='card-text' style='color:black;'>User:</span>\n                                </td>\n                                <td  align=\"right\">\n                                     <span class='card-text' id='usernameId'></span>\n                                </td>\n                            </tr>\n                            <tr>\n                                <td  align=\"left\">\n                                    <span class='card-text' style='color:black;'>Time left:</span>\n                                </td>\n                                <td  align=\"right\">\n                                     <span class='card-text' id='expTimeId'></span>\n                                </td>\n                            </tr>\n                        </table>\n                        <table width=\"100%\">\n                            <tr>\n                                <td width=\"40%\">\n                                    <button class='btn btn-block card-button big-text' id='logoutButton' onclick=\"renew()\" >Renew</button>\n                                </td>\n                                <td width=\"10%\"></td>\n                                <td width=\"40%\">\n                                    <button class='btn btn-block card-button big-text' id='logoutButton' onclick=\"logout()\" >Logout</button>\n                                </td>\n                            </tr>\n                        </table>\n                    </div>\n                </div>\n",
-        "output": "str",
-        "x": 940,
-        "y": 340,
-        "wires": [
-            [
-                "b98af74e.69d578"
-            ]
-        ]
-    },
-    {
-        "id": "5bc90a6b.dab404",
-        "type": "template",
-        "z": "c4285970.3276d8",
-        "name": "script.user",
-        "field": "payload.script.user",
-        "fieldType": "msg",
-        "format": "javascript",
-        "syntax": "mustache",
-        "template": "        function getCreds()\n        {\n            var now = new Date().getTime();\n            var expDate = Number(getCookie('ExpDate'));\n            if (expDate > 0)\n            {\n                expDate = expDate - now;\n                if(expDate < 0)\n                {\n                    logout();\n                }\n                else\n                {\n                    var hours = Math.floor(expDate / 3600000);\n                    var minutes = expDate - hours * 3600000;\n                    minutes = Math.floor(minutes / 60000);\n                    var seconds = expDate - (hours * 3600000) - (minutes * 60000);\n                    seconds = Math.floor(seconds / 1000);\n                    hours = hours.toString();\n                    if (hours.length == 1) hours = '0' + hours; \n                    minutes = minutes.toString();\n                    if (minutes.length == 1) minutes = '0' + minutes; \n                    seconds = seconds.toString();\n                    if (seconds.length == 1) seconds = '0' + seconds; \n                    var timeString = hours + ':' + minutes + ':' + seconds;\n                    $('#usernameId').text(getCookie('Username'));\n                    $('#expTimeId').text(timeString);\n                }\n            }\n            else\n            {\n                $('#usernameId').text(getCookie('Username'));\n                $('#expTimeId').text('Forever');\n            }\n        }\n        function logout()\n        {\n            document.cookie = project + \"Role= ; expires = Thu, 01 Jan 1970 00:00:00 GMT\";\n            document.cookie = project + \"ExpDate= ; expires = Thu, 01 Jan 1970 00:00:00 GMT\";\n            document.cookie = project + \"Username= ; expires = Thu, 01 Jan 1970 00:00:00 GMT\";\n            window.location.href = \"/\";\n        }\n        function renew()\n        {\n            var actionMsg = {};\n            sendActionMsg('renew', 'renew', actionMsg);\n        }\n        function updateCookie(msg)\n        {\n            document.cookie = project + \"Role=\" + msg.role;\n            document.cookie = project + \"ExpDate=\" + msg.expDate;\n            document.cookie = project + \"Username=\" + msg.username;\n        }\n        function downloadToken()\n        {\n            downloadString(getCookie(\"Role\"), \"text/plain\", project + \"-token.txt\");\n        }\n// from https://gist.github.com/danallison/3ec9d5314788b337b682\n        function downloadString(text, fileType, fileName) \n        {\n            var blob = new Blob([text], { type: fileType });\n            \n            var a = document.createElement('a');\n            a.download = fileName;\n            a.href = URL.createObjectURL(blob);\n            a.dataset.downloadurl = [fileType, a.download, a.href].join(':');\n            a.style.display = \"none\";\n            document.body.appendChild(a);\n            a.click();\n            document.body.removeChild(a);\n            setTimeout(function() { URL.revokeObjectURL(a.href); }, 1500);\n        }",
-        "output": "str",
-        "x": 630,
-        "y": 420,
-        "wires": [
-            [
-                "2b06249e.f2687c"
-            ]
-        ]
-    },
-    {
-        "id": "e7a77ed7.85e4a",
-        "type": "template",
-        "z": "c4285970.3276d8",
-        "name": "html.reset",
-        "field": "payload.html.reset",
-        "fieldType": "msg",
-        "format": "html",
-        "syntax": "mustache",
-        "template": "                <div class='card' id='reset'>\n                    <div class='card-body' align=\"center\">\n                         <table width=\"100%\">\n                            <tr>\n                                <td width=\"40%\">\n                                    <button class='btn btn-block card-button big-text' onclick=\"reset(1)\" >Reset</button>\n                                </td>\n                                <td width=\"10%\"></td>\n                                <td width=\"40%\">\n                                    <button class='btn btn-block card-button big-text' onclick=\"reset(2)\" >Reboot</button>\n                                </td>\n                            </tr>\n                        </table>\n                    </div>\n                </div>\n",
-        "output": "str",
-        "x": 940,
-        "y": 420,
-        "wires": [
-            [
-                "359d6cac.22d1c4"
-            ]
-        ]
-    },
-    {
-        "id": "d9c5439.0b2c2c",
-        "type": "template",
-        "z": "c4285970.3276d8",
-        "name": "script.updateReadings",
-        "field": "payload.script.updateReadings",
-        "fieldType": "msg",
-        "format": "javascript",
-        "syntax": "mustache",
-        "template": "// Update Readings Javascript\n        function updateDmaReadings(device)\n        {\n            $('#linkQualityId').text(device.linkQuality.value);\n            $('#signalLevelId').text(device.signalLevel.value);\n            $('#testValueId').text(device.testValue.value);\n        }\n",
-        "output": "str",
-        "x": 660,
-        "y": 300,
-        "wires": [
-            [
-                "47bb7096.61dc7"
-            ]
-        ]
-    },
-    {
-        "id": "47bb7096.61dc7",
-        "type": "template",
-        "z": "c4285970.3276d8",
-        "name": "script.archive",
-        "field": "payload.script.archive",
-        "fieldType": "msg",
-        "format": "javascript",
-        "syntax": "mustache",
-        "template": "// Archive JavaScript\n        var plotConfig = \n        {\n            trace1Title : 'Temp Value (unit)',\n            trace1Color : '#557a95',\n            trace1GridColor : '#beceda',\n            trace2Title : 'Nothing (unit)',\n            trace2Color : '#f2a31f',\n            trace2GridColor : '#f2a31f',\n            plotLength  : 600000,\n            width   : '',\n            height  :   '500',\n            htmlId  :   'historyStripChart'\n        };\n        function getArchive(hours)\n        { \n            $('#archiveCardId').show();\n\n//            if (hours > 2) messageDialog('Info', 'Wait', 'Getting Archive Data');\n            $('#archive2hrButton').attr(\"disabled\", true); \n            $('#archive4hrButton').attr(\"disabled\", true); \n            $('#archive8hrButton').attr(\"disabled\", true); \n            $('#archive24hrButton').attr(\"disabled\", true); \n            $('#archive72hrButton').attr(\"disabled\", true); \n            $('#archive168hrButton').attr(\"disabled\", true); \n            $('#archive2hrButton').css('color', 'var(--color5)'); \n            $('#archive2hrButton').css('background-color', 'var(--color1)'); \n            $('#archive4hrButton').css('color', 'var(--color5)'); \n            $('#archive4hrButton').css('background-color', 'var(--color1)'); \n            $('#archive8hrButton').css('color', 'var(--color5)'); \n            $('#archive8hrButton').css('background-color', 'var(--color1)'); \n            $('#archive24hrButton').css('color', 'var(--color5)'); \n            $('#archive24hrButton').css('background-color', 'var(--color1)'); \n            $('#archive72hrButton').css('color', 'var(--color5)'); \n            $('#archive72hrButton').css('background-color', 'var(--color1)'); \n            $('#archive168hrButton').css('color', 'var(--color5)'); \n            $('#archive168hrButton').css('background-color', 'var(--color1)'); \n            switch(hours)\n            {\n                case 2:\n                    $('#archive2hrButton').css('color', 'var(--color1)'); \n                    $('#archive2hrButton').css('background-color', 'var(--color5)'); \n                    break;\n                case 4:\n                    $('#archive4hrButton').css('color', 'var(--color1)'); \n                    $('#archive4hrButton').css('background-color', 'var(--color5)'); \n                    break;\n                case 8:\n                    $('#archive8hrButton').css('color', 'var(--color1)'); \n                    $('#archive8hrButton').css('background-color', 'var(--color5)'); \n                    break;\n                case 24:\n                    $('#archive24hrButton').css('color', 'var(--color1)'); \n                    $('#archive24hrButton').css('background-color', 'var(--color5)'); \n                    break;\n                case 72:\n                    $('#archive72hrButton').css('color', 'var(--color1)'); \n                    $('#archive72hrButton').css('background-color', 'var(--color5)'); \n                    break;\n                case 168:\n                    $('#archive168hrButton').css('color', 'var(--color1)'); \n                    $('#archive168hrButton').css('background-color', 'var(--color5)'); \n                    break;\n                default:\n                // code block\n            }\n\n            archiveRequestList = [];\n            archiveList = [];\n            var stopDate = new Date().getTime();\n            var startDate = stopDate - hours * 3600000;\n            archiveRequestList[0] = \n            {\n                deviceType : restfulDevice.deviceType,\n                name : restfulDevice.name, \n                attr : ['tempValue'],\n                startDate: startDate, \n                stopDate: stopDate,\n            };\n            getArchiveValues();\n        }\n        function getArchiveValues()\n        {\n            var actionMsg = \n                {\n                    device      : archiveRequestList[0]\n                };\n            sendActionMsg('readDatabase','readDatabase', actionMsg);\n            archiveRequestList.shift();\n            return;\n        }\n        function putArchiveValues(data)\n        {\n            archiveList.push(data);\n            if (archiveRequestList.length > 0)\n            {\n                getArchiveValues();\n            }\n            else\n            {\n                plotArchive();\n            }\n        }\n\n        function plotArchive()\n        {\n            var layout =\n            {\n                showlegend  : true,\n                legend      : { x: 0, y: 1.15},\n                height      : '500',\n                width       : '',\n                xaxis       :\n                {\n                    type: 'date'\n                },\n                yaxis:\n                {\n                    title           : plotConfig.trace1Title,\n                    titlefont       : {color: plotConfig.trace1Color},\n                    tickfont        : {color:plotConfig.trace1Color},\n                    gridcolor       : plotConfig.trace1GridColor,\n                    zerolinecolor   : plotConfig.trace1GridColor,\n                    linecolor       : plotConfig.trace1GridColor\n\n                },\n                margin: \n                    {\n                        t: 30, //top margin\n    //                    l: 0, //left margin\n    //                    r: 0, //right margin\n    //                    b: 20 //bottom margin\n                    },\n            };\n            var trace1 = \n            {\n                x: [],\n                y: [],\n                name: 'Temp Value',\n                yaxis: 'y1',\n                type: 'scatter',\n                mode: 'lines',\n                line: { color: plotConfig.trace1Color, dash: 'dot'},\n                visible: true\n\n            };\n            for (var ii = 0; ii < archiveList[0].trace.length; ++ii)\n            {\n                var x = archiveList[0].trace[ii].timeStamp;\n                trace1.x[ii] = x;\n                trace1.y[ii] = archiveList[0].trace[ii][archiveList[0].device.attr[0]] ;\n            }\n            Plotly.newPlot('archiveChart', [trace1], layout);\n            $('#archive2hrButton').attr(\"disabled\", false); \n            $('#archive4hrButton').attr(\"disabled\", false); \n            $('#archive8hrButton').attr(\"disabled\", false); \n            $('#archive24hrButton').attr(\"disabled\", false); \n            $('#archive72hrButton').attr(\"disabled\", false); \n            $('#archive168hrButton').attr(\"disabled\", false); \n        }\n",
-        "output": "str",
-        "x": 630,
-        "y": 340,
-        "wires": [
-            [
-                "4b374fc0.a6da2"
-            ]
-        ]
-    },
-    {
-        "id": "b6eeabf9.dc65f8",
-        "type": "template",
-        "z": "c4285970.3276d8",
-        "name": "html.archive",
-        "field": "payload.html.archive",
-        "fieldType": "msg",
-        "format": "html",
-        "syntax": "mustache",
-        "template": "<!-- Archive HTML -->\n                <div class='card' id=archiveCardId>\n                    <p class='card-title'>Archive</p>\n                    <div class='card-body' align=\"center\">\n                        <div class='row' >\n                            <table width='100%'>\n                                <tr>\n                                    <td width='10%' align='center'>\n                                        <button class='btn btn-block big-text' style='background-color:var(--color1);color:var(--color5)' id=\"archive2hrButton\" onclick=\"getArchive(2)\" >2</button>\n                                    </td>\n                                    <td width='10%'  align='center'>\n                                        <button class='btn btn-block big-text' style='background-color:var(--color1);color:var(--color5)' id=\"archive4hrButton\" onclick=\"getArchive(4)\" >4</button>\n                                    </td>\n                                    <td width='10%'  align='center'>\n                                        <button class='btn btn-block big-text' style='background-color:var(--color1);color:var(--color5)' id=\"archive8hrButton\" onclick=\"getArchive(8)\" >8</button>\n                                    </td>\n                                    <td width='10%'  align='center'>\n                                        <button class='btn btn-block big-text' style='background-color:var(--color1);color:var(--color5)' id=\"archive24hrButton\" onclick=\"getArchive(24)\" >24</button>\n                                    </td>\n                                    <td width='10%' align='center'>\n                                        <button class='btn btn-block big-text' style='background-color:var(--color1);color:var(--color5)' id=\"archive72hrButton\" onclick=\"getArchive(72)\" >72</button>\n                                    </td>\n                                    <td width='10%' align='center'>\n                                        <button class='btn btn-block big-text' style='background-color:var(--color1);color:var(--color5)' id=\"archive168hrButton\" onclick=\"getArchive(168)\" >168</button>\n                                    </td>\n                                    <td width='10%' align='center'>\n                                        <span class='big-text' >Hours</span>\n                                    </td>\n                                </tr>\n                            </table>\n                        </div>\n                        <div class='row vert-pad'>\n                            <div class='col-md-12'>\n                                <div id=\"archiveChart\" width=\"100%\" ></div>\n                            </div>\n                        </div>\n                    </div>\n                </div>\n",
-        "output": "str",
-        "x": 950,
-        "y": 300,
-        "wires": [
-            [
-                "d7d8f4b7.c679e8"
-            ]
-        ]
-    },
-    {
-        "id": "958816c5.19b398",
-        "type": "template",
-        "z": "c4285970.3276d8",
-        "name": "html.dashboard",
-        "field": "payload.html.dashboard",
-        "fieldType": "msg",
-        "format": "html",
-        "syntax": "mustache",
-        "template": "<!-- Dashboard HTML -->\n                <div class='card'>\n                    <p class='card-title'>Dashboard</p>\n                    <div class='card-body' align=\"center\">\n                        <div class='row'  style='padding-top: 0px;'>\n                            <table width='100%'>\n                                <tr>\n                                    <td width='50%' >\n                                        <span class='card-text' id='testValueLabel' >Temp Value</span>\n                                    </td>\n                                    <td width='35%' align='center'>\n                                        <span class='card-text' id='testValueId' >-100</span>\n                                    </td>\n                                    <td width='15%'>\n                                        <button class='btn btn-block card-button big-text' id=\"testValueButton\" onclick=\"editDevice('testValue')\" >Edit</button>\n                                    </td>\n                                </tr>\n                            </table>\n                        </div>\n                    </div>\n                </div>\n                <div id=\"editDeviceDialog\" title=\"Edit Device\" class='card'>\n                    <p class='card-title' id='editDeviceDialogAttribute'>Attribute</p>\n                    <div class='card-body'>\n                        <table>\n                            <tr>\n                                <td width=\"70%\" align=\"left\">  <span class=\"tableHeading tableText\">LoLo</span></td>\n                                <td width=\"30%\" align=\"right\"><input class=\"form-control tableText\" id=\"loloAlarm\" type=\"text\" value=\"0\" /></td>\n                            </tr>\n                            <tr>\n                                <td width=\"70%\" align=\"left\">  <span class=\"tableHeading tableText\">LOW</span></td>\n                                <td width=\"30%\" align=\"right\"><input class=\"form-control tableText\" id=\"lowAlarm\" type=\"text\" value=\"0\" /></td>\n                            </tr>\n                            <tr>\n                                <td width=\"70%\" align=\"left\">  <span class=\"tableHeading tableText\">HIGH</span></td>\n                                <td width=\"30%\" align=\"right\"><input class=\"form-control tableText\" id=\"highAlarm\" type=\"text\" value=\"0\" /></td>\n                            </tr>\n                            <tr>\n                                <td width=\"70%\" align=\"left\">  <span class=\"tableHeading tableText\">HiHi</span></td>\n                                <td width=\"30%\" align=\"right\"><input class=\"form-control tableText\" id=\"hihiAlarm\" type=\"text\" value=\"0\" /></td>\n                            </tr>\n                            <tr>\n                                <td width=\"70%\" align=\"left\">  <span class=\"tableHeading tableText\">Notify Name</span></td>\n                                <td width=\"30%\" align=\"right\"><input class=\"form-control tableText\" id=\"notifyName\" type=\"text\" value=\"\" /></td>\n                            </tr>\n                            <tr>\n                                <td width=\"70%\" align=\"left\">  <span class=\"tableHeading tableText\">Notify Number</span></td>\n                                <td width=\"30%\" align=\"right\"><input class=\"form-control tableText\" id=\"notifyNumber\" type=\"text\" value=\"\" /></td>\n                            </tr>\n                        </table>\n                    </div>\n                </div>",
-        "output": "str",
-        "x": 960,
-        "y": 260,
-        "wires": [
-            [
-                "b6eeabf9.dc65f8"
-            ]
-        ]
-    },
-    {
-        "id": "d00f1aba.763b38",
-        "type": "function",
-        "z": "5f562f66.a301e",
-        "name": "Create Readings",
-        "func": "var device = flow.get('device');\nvar ib;\nvar dataView     = new DataView(new ArrayBuffer(4));\n\nfor (ib = 0; ib < 4; ++ib)   dataView.setUint8(ib, msg.payload[0 * 4 + 3 - ib]);\ndevice.testValue.value = Math.round(dataView.getFloat32(0) * 100) / 100;\n\n\nreturn {topic:'newSettingDone', payload:true}\n",
-        "outputs": 1,
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "libs": [],
-        "x": 530,
-        "y": 380,
-        "wires": [
-            [
-                "9115ea87.0ca208"
-            ]
-        ]
+        "id": "496989f01b484a66",
+        "type": "debug",
+        "z": "731de46a.7645fc",
+        "name": "",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 650,
+        "y": 320,
+        "wires": []
     }
 ]
