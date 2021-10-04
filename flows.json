@@ -2104,7 +2104,7 @@
         "fieldType": "msg",
         "format": "html",
         "syntax": "mustache",
-        "template": "<!-- Dashboard HTML -->\n        <div class='row' style='padding-bottom: 25px;'>\n            <div class='col-md-12' align='center'>\n                <div class='card'>\n                    <p class='card-title'>Amplifier Status</p>\n                    <div class='card-body' align=\"center\">\n                        <div class='row'  style='padding-top: 0px;'>\n                            <table width='100%'>\n                                <tr>\n                                    <td width='60%' >\n                                        <span class='card-text' id='fowrwardPowerLabel' >Forward Power (kw)</span>\n                                    </td>\n                                    <td width='20%' align='center'>\n                                        <span class='card-text' id='forwardPower' ></span>\n                                    </td>\n                                    <td width='20%'>\n                                        <button class='btn btn-block card-button big-text' id=\"forwardPowerButton\" onclick=\"editDevice('forwardPower')\" >Edit</button>\n                                    </td>\n                                </tr>\n                                <tr>\n                                    <td width='60%' >\n                                        <span class='card-text' id='reversePowerLabel' >Reverse Power (kw)</span>\n                                    </td>\n                                    <td width='20%' align='center'>\n                                        <span class='card-text' id='reversePower' ></span>\n                                    </td>\n                                    <td width='20%'>\n                                        <button class='btn btn-block card-button big-text' id=\"reversePowerButton\" onclick=\"editDevice('reversePower')\" >Edit</button>\n                                    </td>\n                                </tr>\n                           </table>\n                        </div>\n                    </div>\n                </div>\n                <div id=\"editDeviceDialog\" title=\"Edit Device\" class='card'>\n                    <p class='card-title' id='editDeviceDialogAttribute'>Attribute</p>\n                    <div class='card-body'>\n                        <table>\n                            <tr>\n                                <td width=\"70%\" align=\"left\">  <span class=\"tableHeading tableText\">LoLo</span></td>\n                                <td width=\"30%\" align=\"right\"><input class=\"form-control tableText\" id=\"loloAlarm\" type=\"text\" value=\"0\" /></td>\n                            </tr>\n                            <tr>\n                                <td width=\"70%\" align=\"left\">  <span class=\"tableHeading tableText\">LOW</span></td>\n                                <td width=\"30%\" align=\"right\"><input class=\"form-control tableText\" id=\"lowAlarm\" type=\"text\" value=\"0\" /></td>\n                            </tr>\n                            <tr>\n                                <td width=\"70%\" align=\"left\">  <span class=\"tableHeading tableText\">HIGH</span></td>\n                                <td width=\"30%\" align=\"right\"><input class=\"form-control tableText\" id=\"highAlarm\" type=\"text\" value=\"0\" /></td>\n                            </tr>\n                            <tr>\n                                <td width=\"70%\" align=\"left\">  <span class=\"tableHeading tableText\">HiHi</span></td>\n                                <td width=\"30%\" align=\"right\"><input class=\"form-control tableText\" id=\"hihiAlarm\" type=\"text\" value=\"0\" /></td>\n                            </tr>\n                            <tr>\n                                <td width=\"70%\" align=\"left\">  <span class=\"tableHeading tableText\">Notify Name</span></td>\n                                <td width=\"30%\" align=\"right\"><input class=\"form-control tableText\" id=\"notifyName\" type=\"text\" value=\"\" /></td>\n                            </tr>\n                            <tr>\n                                <td width=\"70%\" align=\"left\">  <span class=\"tableHeading tableText\">Notify Number</span></td>\n                                <td width=\"30%\" align=\"right\"><input class=\"form-control tableText\" id=\"notifyNumber\" type=\"text\" value=\"\" /></td>\n                            </tr>\n                        </table>\n                    </div>\n                </div>\n            </div>\n        </div>\n        <div class='row' style='padding-bottom: 25px;'>\n            <div class='col-md-12' align='center'>\n                <div class='card'>\n                    <p class='card-title'>Amplifier Control</p>\n                    <div class='card-body' align=\"center\">\n                        <div class='row'>\n                            <table width='100%'>\n                                <tr>\n                                    <td width=20%></td>\n                                    <td width=60%><button class='btn btn-block big-text' id=\"togglePowerButton\" onclick=\"togglePower()\" >Power</button></td>\n                                    <td width=20%></td>\n                                </tr>\n                                <tr>\n                                    <td></td>\n                                    <td style='padding-top:35px;' ><button class='btn btn-block big-text' id=\"toggleRFButton\" onclick=\"toggleRF()\">RF</button></td>\n                                    <td></td>\n                                </tr>\n                            </table>\n                        </div>\n                    </div>\n                </div>\n            </div>\n        </div>\n",
+        "template": "<!-- Dashboard HTML -->\n        <div class='row' style='padding-bottom: 25px;'>\n            <div class='col-md-12' align='center'>\n                <div class='card'>\n                    <p class='card-title'>Amplifier Status</p>\n                    <div class='card-body' align=\"center\">\n                        <div class='row'  style='padding-top: 0px;'>\n                            <table width='100%'>\n                                <tr>\n                                    <td width='60%' >\n                                        <span class='card-text' id='fowrwardPowerLabel' >Forward Power (kW)</span>\n                                    </td>\n                                    <td width='20%' align='center'>\n                                        <span class='card-text' id='forwardPower' ></span>\n                                    </td>\n                                    <td width='20%'>\n                                        <button class='btn btn-block card-button big-text' id=\"forwardPowerButton\" onclick=\"editDevice('forwardPower')\" >Edit</button>\n                                    </td>\n                                </tr>\n                                <tr>\n                                    <td width='60%' >\n                                        <span class='card-text' id='reversePowerLabel' >Reverse Power (kW)</span>\n                                    </td>\n                                    <td width='20%' align='center'>\n                                        <span class='card-text' id='reversePower' ></span>\n                                    </td>\n                                    <td width='20%'>\n                                        <button class='btn btn-block card-button big-text' id=\"reversePowerButton\" onclick=\"editDevice('reversePower')\" >Edit</button>\n                                    </td>\n                                </tr>\n                                <tr>\n                                    <td width='60%' >\n                                        <span class='card-text' id='alarmCodeLabel' >Alarm Code</span>\n                                    </td>\n                                    <td width='20%' align='center'>\n                                        <span class='card-text' id='alarmCode' ></span>\n                                    </td>\n                                    <td width='20%'>\n                                    </td>\n                                </tr>\n                                <tr>\n                                    <td width='60%' >\n                                        <span class='card-text' id='warningCodeLabel' >Warning Code</span>\n                                    </td>\n                                    <td width='20%' align='center'>\n                                        <span class='card-text' id='warningCode' ></span>\n                                    </td>\n                                    <td width='20%'>\n                                    </td>\n                                </tr>\n                                <tr>\n                                    <td width='60%' >\n                                        <span class='card-text' id='remoteStatusLabel' >Remote Status</span>\n                                    </td>\n                                    <td width='20%' align='center'>\n                                        <span class='card-text' id='remoteStatus' ></span>\n                                    </td>\n                                    <td width='20%'>\n                                    </td>\n                                </tr>\n                                <tr>\n                                    <td width='60%' >\n                                        <span class='card-text' id='watchDogLabel' >Watchdog</span>\n                                    </td>\n                                    <td width='20%' align='center'>\n                                        <span class='card-text' id='watchDog' ></span>\n                                    </td>\n                                    <td width='20%'>\n                                    </td>\n                                </tr>\n                           </table>\n                        </div>\n                    </div>\n                </div>\n                <div id=\"editDeviceDialog\" title=\"Edit Device\" class='card'>\n                    <p class='card-title' id='editDeviceDialogAttribute'>Attribute</p>\n                    <div class='card-body'>\n                        <table>\n                            <tr>\n                                <td width=\"70%\" align=\"left\">  <span class=\"tableHeading tableText\">LoLo</span></td>\n                                <td width=\"30%\" align=\"right\"><input class=\"form-control tableText\" id=\"loloAlarm\" type=\"text\" value=\"0\" /></td>\n                            </tr>\n                            <tr>\n                                <td width=\"70%\" align=\"left\">  <span class=\"tableHeading tableText\">LOW</span></td>\n                                <td width=\"30%\" align=\"right\"><input class=\"form-control tableText\" id=\"lowAlarm\" type=\"text\" value=\"0\" /></td>\n                            </tr>\n                            <tr>\n                                <td width=\"70%\" align=\"left\">  <span class=\"tableHeading tableText\">HIGH</span></td>\n                                <td width=\"30%\" align=\"right\"><input class=\"form-control tableText\" id=\"highAlarm\" type=\"text\" value=\"0\" /></td>\n                            </tr>\n                            <tr>\n                                <td width=\"70%\" align=\"left\">  <span class=\"tableHeading tableText\">HiHi</span></td>\n                                <td width=\"30%\" align=\"right\"><input class=\"form-control tableText\" id=\"hihiAlarm\" type=\"text\" value=\"0\" /></td>\n                            </tr>\n                            <tr>\n                                <td width=\"70%\" align=\"left\">  <span class=\"tableHeading tableText\">Notify Name</span></td>\n                                <td width=\"30%\" align=\"right\"><input class=\"form-control tableText\" id=\"notifyName\" type=\"text\" value=\"\" /></td>\n                            </tr>\n                            <tr>\n                                <td width=\"70%\" align=\"left\">  <span class=\"tableHeading tableText\">Notify Number</span></td>\n                                <td width=\"30%\" align=\"right\"><input class=\"form-control tableText\" id=\"notifyNumber\" type=\"text\" value=\"\" /></td>\n                            </tr>\n                        </table>\n                    </div>\n                </div>\n            </div>\n        </div>\n        <div class='row' style='padding-bottom: 25px;'>\n            <div class='col-md-12' align='center'>\n                <div class='card'>\n                    <p class='card-title'>Amplifier Control</p>\n                    <div class='card-body' align=\"center\">\n                        <div class='row'>\n                            <table width='100%'>\n                                <tr>\n                                    <td width=20%></td>\n                                    <td width=60%><button class='btn btn-block big-text' id=\"togglePowerButton\" onclick=\"togglePower()\" >Power</button></td>\n                                    <td width=20%></td>\n                                </tr>\n                                <tr>\n                                    <td></td>\n                                    <td style='padding-top:35px;' ><button class='btn btn-block big-text' id=\"toggleRFButton\" onclick=\"toggleRF()\">RF</button></td>\n                                    <td></td>\n                                </tr>\n                                <tr>\n                                    <td></td>\n                                    <td style='padding-top:35px;' ><button class='btn btn-block big-text' id=\"resetAlarmButton\" onclick=\"resetAlarm()\">Reset Alarm</button></td>\n                                    <td></td>\n                                </tr>\n                                <tr>\n                                    <td></td>\n                                    <td style='padding-top:35px;' ><button class='btn btn-block big-text' id=\"resetAllButton\" onclick=\"resetAll()\">Reset All</button></td>\n                                    <td></td>\n                                </tr>\n                            </table>\n                        </div>\n                    </div>\n                </div>\n            </div>\n        </div>\n",
         "output": "str",
         "x": 960,
         "y": 340,
@@ -2474,7 +2474,7 @@
         "fieldType": "msg",
         "format": "javascript",
         "syntax": "mustache",
-        "template": "// Update Readings Javascript\n        function updateDmaReadings()\n        {\n            $('#forwardPowerButton').attr('disabled',false);\n            $('#reversePowerButton').attr('disabled',false);\n            timeplotStripChart.addTracePoints(device.forwardPower.value, device.reversePower.value);\n            $('#forwardPower').text(device.forwardPower.value);\n            $('#reversePower').text(device.reversePower.value);\n            \n\n            if (device.settingInProgress.value == 0)\n            {\n                $('#togglePowerButton').attr('disabled',false);\n                if (device.powerStatus.value == 0)\n                {\n                    $('#toggleRFButton').attr('disabled',true);\n                }\n                else\n                {\n                    $('#toggleRFButton').attr('disabled',false);\n                }\n\n                if (device.powerStatus.value == 0) $('#togglePowerButton').css(\"background-color\", \"white\");\n                if (device.rfStatus.value    == 0) $('#toggleRFButton').css(\"background-color\", \"white\");\n                if (device.powerStatus.value == 1) $('#togglePowerButton').css(\"background-color\", \"green\");\n                if (device.rfStatus.value    == 1) $('#toggleRFButton').css(\"background-color\", \"green\");\n            }\n            else\n            {\n                $('#togglePowerButton').attr('disabled',true);\n                $('#toggleRFButton').attr('disabled',true);\n            }\n\n        }\n        function togglePower()\n        {\n            device.settingInProgress.value = 1;\n            $('#togglePowerButton').attr('disabled',true);\n            $('#toggleRFButton').attr('disabled',true);\n            \n            var extraInfo = {mapLocation: 1,value:0};\n            if (device.powerStatus.value == 0)\n            {\n                extraInfo.value = 1;\n            }\n            else\n            {\n                extraInfo.value = 0;\n            }\n            sendSetting(extraInfo);\n        }\n        function toggleRF()\n        {\n            device.settingInProgress.value = 1;\n            $('#togglePowerButton').attr('disabled',true);\n            $('#toggleRFButton').attr('disabled',true);\n            \n            var extraInfo = {mapLocation: 2,value:0};\n            if (device.rfStatus.value == 0)\n            {\n                extraInfo.value = 1;\n            }\n            else\n            {\n                extraInfo.value = 0;\n            }\n            sendSetting(extraInfo);\n        }\n",
+        "template": "// Update Readings Javascript\n        function updateDmaReadings()\n        {\n            $('#forwardPowerButton').attr('disabled',false);\n            $('#reversePowerButton').attr('disabled',false);\n            timeplotStripChart.addTracePoints(device.forwardPower.value, device.reversePower.value);\n            $('#forwardPower').text(device.forwardPower.value);\n            $('#reversePower').text(device.reversePower.value);\n            if (device.alarmCode.value == 0)\n            {\n                $('#alarmCode').text('OK');\n            }\n            else\n            {\n                $('#alarmCode').text(device.alarmCode.value);\n            }\n            if (device.warningCode.value == 0)\n            {\n                $('#warningCode').text('OK');\n            }\n            else\n            {\n                $('#warningCode').text(device.warningCode.value);\n            }\n            $('#watchDog').text(device.watchDog.value);\n            if (device.remoteStatus.value == 0) $('#remoteStatus').text('Local');\n            if (device.remoteStatus.value == 1) $('#remoteStatus').text('Remote');\n            \n\n            if (device.powerStatus.value == 0) $('#togglePowerButton').css(\"background-color\", \"white\");\n            if (device.rfStatus.value    == 0) $('#toggleRFButton').css(\"background-color\", \"white\");\n            if (device.powerStatus.value == 1) $('#togglePowerButton').css(\"background-color\", \"green\");\n            if (device.rfStatus.value    == 1) $('#toggleRFButton').css(\"background-color\", \"green\");\n            if (device.resetAlarm.value == 0) $('#resetAlarmButton').css(\"background-color\", \"white\");\n            if (device.resetAlarm.value == 1) $('#resetAlarmButton').css(\"background-color\", \"yellow\");\n            if (device.resetAll.value == 0) $('#resetAllButton').css(\"background-color\", \"white\");\n            if (device.resetAll.value == 1) $('#resetAllButton').css(\"background-color\", \"yellow\");\n            if (device.settingInProgress.value == 0)\n            {\n                $('#togglePowerButton').attr('disabled',false);\n                $('#resetAlarmButton').attr('disabled',false);\n                $('#resetAllButton').attr('disabled',false);\n                if (device.powerStatus.value == 0)\n                {\n                    $('#toggleRFButton').attr('disabled',true);\n                }\n                else\n                {\n                    $('#toggleRFButton').attr('disabled',false);\n                }\n\n            }\n            if ((device.resetAlarm.value == 1) || (device.resetAll.value == 1) || (device.settingInProgress.value == 1))\n            {\n                $('#togglePowerButton').attr('disabled',true);\n                $('#toggleRFButton').attr('disabled',true);\n                $('#resetAlarmButton').attr('disabled',true);\n                $('#resetAllButton').attr('disabled',true);\n            }\n\n        }\n        function togglePower()\n        {\n            device.settingInProgress.value = 1;\n            $('#togglePowerButton').attr('disabled',true);\n            $('#toggleRFButton').attr('disabled',true);\n            $('#resetAlarmButton').attr('disabled',true);\n            $('#resetAllButton').attr('disabled',true);\n        \n            var extraInfo = {mapLocation: 1,value:0};\n            if (device.powerStatus.value == 0)\n            {\n                extraInfo.value = 1;\n            }\n            else\n            {\n                extraInfo.value = 0;\n            }\n            sendSetting(extraInfo);\n        }\n        function toggleRF()\n        {\n            device.settingInProgress.value = 1;\n            $('#togglePowerButton').attr('disabled',true);\n            $('#toggleRFButton').attr('disabled',true);\n            $('#resetAlarmButton').attr('disabled',true);\n            $('#resetAllButton').attr('disabled',true);\n            \n            var extraInfo = {mapLocation: 2,value:0};\n            if (device.rfStatus.value == 0)\n            {\n                extraInfo.value = 1;\n            }\n            else\n            {\n                extraInfo.value = 0;\n            }\n            sendSetting(extraInfo);\n        }\n        function resetAlarm()\n        {\n            device.settingInProgress.value = 1;\n            device.resetAlarm.value = 1;\n            $('#togglePowerButton').attr('disabled',true);\n            $('#toggleRFButton').attr('disabled',true);\n            $('#resetAlarmButton').attr('disabled',true);\n            $('#resetAllButton').attr('disabled',true);\n            \n            var extraInfo = {mapLocation: 3,value:1};\n            sendSetting(extraInfo);\n        }\n        function resetAll()\n        {\n            device.settingInProgress.value = 1;\n            device.resetAll.value = 1;\n            $('#togglePowerButton').attr('disabled',true);\n            $('#toggleRFButton').attr('disabled',true);\n            $('#resetAlarmButton').attr('disabled',true);\n            $('#resetAllButton').attr('disabled',true);\n            \n            var extraInfo = {mapLocation: 4,value:1};\n            sendSetting(extraInfo);\n        }\n",
         "output": "str",
         "x": 660,
         "y": 420,
@@ -2755,12 +2755,22 @@
                 "t": "eq",
                 "v": "3",
                 "vt": "num"
+            },
+            {
+                "t": "eq",
+                "v": "4",
+                "vt": "num"
+            },
+            {
+                "t": "eq",
+                "v": "5",
+                "vt": "num"
             }
         ],
         "checkall": "true",
         "repair": false,
-        "outputs": 2,
-        "x": 130,
+        "outputs": 4,
+        "x": 90,
         "y": 640,
         "wires": [
             [
@@ -2768,6 +2778,14 @@
             ],
             [
                 "1004032b5374b819"
+            ],
+            [
+                "90499f52996b5948",
+                "53153cf0f071addb"
+            ],
+            [
+                "53153cf0f071addb",
+                "31a99e277584b304"
             ]
         ]
     },
@@ -2891,7 +2909,8 @@
         "z": "85e21fcb925ef32f",
         "name": "Sim Mode begin",
         "links": [
-            "0b4bc65e8f62f24c"
+            "0b4bc65e8f62f24c",
+            "ffc89e0b554bd270"
         ],
         "x": 755,
         "y": 500,
@@ -2903,7 +2922,8 @@
         "z": "85e21fcb925ef32f",
         "name": "Sim Mode end",
         "links": [
-            "05e2bf389d1d4118"
+            "05e2bf389d1d4118",
+            "fcabb983b3c89d5c"
         ],
         "x": 1015,
         "y": 500,
@@ -3122,6 +3142,195 @@
                 "1004032b5374b819"
             ],
             []
+        ]
+    },
+    {
+        "id": "d5ade3cb63e778b1",
+        "type": "function",
+        "z": "97a0ee667c7ea4c8",
+        "name": "reset alarm",
+        "func": "msg.payload = { value: 0, 'fc': 0x6, 'unitid': 1, 'address': 4 , 'quantity': 1 } ;\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 470,
+        "y": 780,
+        "wires": [
+            [
+                "a2606d0a790cf4eb"
+            ]
+        ]
+    },
+    {
+        "id": "a2606d0a790cf4eb",
+        "type": "modbus-flex-write",
+        "z": "97a0ee667c7ea4c8",
+        "name": "local setter flex",
+        "showStatusActivities": false,
+        "showErrors": false,
+        "server": "54dde46e.53267c",
+        "emptyMsgOnFail": false,
+        "keepMsgProperties": false,
+        "x": 680,
+        "y": 780,
+        "wires": [
+            [],
+            []
+        ]
+    },
+    {
+        "id": "90499f52996b5948",
+        "type": "delay",
+        "z": "97a0ee667c7ea4c8",
+        "name": "",
+        "pauseType": "delay",
+        "timeout": "5",
+        "timeoutUnits": "seconds",
+        "rate": "1",
+        "nbRateUnits": "1",
+        "rateUnits": "second",
+        "randomFirst": "1",
+        "randomLast": "5",
+        "randomUnits": "seconds",
+        "drop": false,
+        "allowrate": false,
+        "x": 300,
+        "y": 780,
+        "wires": [
+            [
+                "d5ade3cb63e778b1"
+            ]
+        ]
+    },
+    {
+        "id": "25dac9652bef62fd",
+        "type": "inject",
+        "z": "97a0ee667c7ea4c8",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 330,
+        "y": 860,
+        "wires": [
+            [
+                "d5ade3cb63e778b1"
+            ]
+        ]
+    },
+    {
+        "id": "53153cf0f071addb",
+        "type": "link out",
+        "z": "97a0ee667c7ea4c8",
+        "name": "Sim in out",
+        "links": [
+            "6d6322c919cdac9b"
+        ],
+        "x": 175,
+        "y": 780,
+        "wires": []
+    },
+    {
+        "id": "6d6322c919cdac9b",
+        "type": "link in",
+        "z": "97a0ee667c7ea4c8",
+        "name": "Sim out in",
+        "links": [
+            "53153cf0f071addb"
+        ],
+        "x": 1195,
+        "y": 540,
+        "wires": [
+            [
+                "05e2bf389d1d4118"
+            ]
+        ]
+    },
+    {
+        "id": "07f7558925d7c01b",
+        "type": "function",
+        "z": "97a0ee667c7ea4c8",
+        "name": "reset all",
+        "func": "msg.payload = { value: 0, 'fc': 0x6, 'unitid': 1, 'address': 5 , 'quantity': 1 } ;\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 460,
+        "y": 940,
+        "wires": [
+            [
+                "a2606d0a790cf4eb"
+            ]
+        ]
+    },
+    {
+        "id": "31a99e277584b304",
+        "type": "delay",
+        "z": "97a0ee667c7ea4c8",
+        "name": "",
+        "pauseType": "delay",
+        "timeout": "5",
+        "timeoutUnits": "seconds",
+        "rate": "1",
+        "nbRateUnits": "1",
+        "rateUnits": "second",
+        "randomFirst": "1",
+        "randomLast": "5",
+        "randomUnits": "seconds",
+        "drop": false,
+        "allowrate": false,
+        "x": 300,
+        "y": 940,
+        "wires": [
+            [
+                "07f7558925d7c01b"
+            ]
+        ]
+    },
+    {
+        "id": "31f48c054940894f",
+        "type": "inject",
+        "z": "97a0ee667c7ea4c8",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 320,
+        "y": 1020,
+        "wires": [
+            [
+                "07f7558925d7c01b"
+            ]
         ]
     }
 ]

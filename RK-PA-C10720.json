@@ -107,7 +107,7 @@
   "rfOn": {
     "action": "setting",
     "type": "scalar",
-    "value": 0,
+    "value": 1,
     "unit": "unit",
     "alarm": {
       "value": 0,
@@ -147,7 +147,7 @@
   "resetAll": {
     "action": "setting",
     "type": "scalar",
-    "value": 0,
+    "value": 1,
     "unit": "unit",
     "alarm": {
       "value": 0,
@@ -247,7 +247,7 @@
   "rfStatus": {
     "action": "reading",
     "type": "scalar",
-    "value": 0,
+    "value": 1,
     "unit": "unit",
     "alarm": {
       "value": 0,
@@ -287,7 +287,7 @@
   "forwardPower": {
     "action": "reading",
     "type": "scalar",
-    "value": 0,
+    "value": 300,
     "unit": "kW",
     "alarm": {
       "value": 0,
@@ -307,7 +307,7 @@
   "reversePower": {
     "action": "reading",
     "type": "scalar",
-    "value": 0,
+    "value": 285,
     "unit": "kW",
     "alarm": {
       "value": 0,
