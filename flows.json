@@ -225,7 +225,7 @@
     {
         "id": "54dde46e.53267c",
         "type": "modbus-client",
-        "name": "Slave",
+        "name": "Cube",
         "clienttype": "simpleser",
         "bufferCommands": true,
         "stateLogEnabled": true,
@@ -233,7 +233,7 @@
         "tcpHost": "${SLAVEIP}",
         "tcpPort": "${SLAVEPORT}",
         "tcpType": "DEFAULT",
-        "serialPort": "/dev/ttyACM3",
+        "serialPort": "$(SERIALPORT)",
         "serialType": "RTU-BUFFERD",
         "serialBaudrate": "19200",
         "serialDatabits": "8",
