@@ -498,7 +498,7 @@
         "type": "function",
         "z": "85e21fcb925ef32f",
         "name": "Save device config in Memory",
-        "func": "msg.payload.reset = 0;\nmsg.payload.settingInProgress = 0;\nflow.set('device', msg.payload);\nreturn msg;",
+        "func": "msg.payload.settingInProgress = 0;\nflow.set('device', msg.payload);\nreturn msg;",
         "outputs": 1,
         "noerr": 0,
         "initialize": "",
@@ -526,7 +526,9 @@
         "x": 130,
         "y": 160,
         "wires": [
-            []
+            [
+                "f812bb6a.1aec68"
+            ]
         ]
     },
     {
@@ -690,8 +692,8 @@
         "timer": "",
         "oldrc": false,
         "name": "Restart",
-        "x": 460,
-        "y": 960,
+        "x": 500,
+        "y": 880,
         "wires": [
             [],
             [],
@@ -703,7 +705,7 @@
         "type": "switch",
         "z": "85e21fcb925ef32f",
         "name": "Reset Tray",
-        "property": "payload.reset.value",
+        "property": "payload",
         "propertyType": "msg",
         "rules": [
             {
@@ -720,8 +722,8 @@
         "checkall": "true",
         "repair": false,
         "outputs": 2,
-        "x": 270,
-        "y": 980,
+        "x": 310,
+        "y": 900,
         "wires": [
             [
                 "c0939e4a.6386f"
@@ -742,8 +744,8 @@
         "timer": "",
         "oldrc": false,
         "name": "Reboot",
-        "x": 460,
-        "y": 1020,
+        "x": 500,
+        "y": 940,
         "wires": [
             [],
             [],
@@ -765,8 +767,9 @@
         "randomLast": "5",
         "randomUnits": "seconds",
         "drop": false,
-        "x": 120,
-        "y": 980,
+        "allowrate": false,
+        "x": 160,
+        "y": 900,
         "wires": [
             [
                 "9e290594.69c548"
@@ -1265,7 +1268,7 @@
         "fieldType": "msg",
         "format": "javascript",
         "syntax": "mustache",
-        "template": "// Global Javascript\n        useWebSockets(true);\n        var mqttDevice = null;\n        var device = null;\n        var archiveRequestList = [];\n        var archiveList = [];\n        var archiveList = [];\n        var pingInterval = 2000;\n        var lastPing = 0;\n\n        var restfulDevice = \n        {\n            deviceType  : '{{{payload.script.deviceType}}}',\n            name        : '{{{payload.script.name}}}',\n            project     : '{{{payload.script.project}}}'\n        };\n\n        function onDocumentReady()\n        {\n            setRemoteApp(false);\n            if (remoteApp)\n            {\n                getCreds();\n                setInterval(function(){getCreds();}, 1000);\n            }\n            else\n            {\n                $('#userCardId').hide();\n            }\n            $('#archiveCardId').hide();\n            setInterval(function()\n            {\n                if (device != null)\n                {\n                    if (device.settingInProgress == 1) return;\n                }\n                var now = new Date().getTime();\n                if ((now - lastPing) > pingInterval)\n                {\n                    lastPing = now;\n                    var actionMsg = \n                        {\n                            topic   : restfulDevice.project + '/' +  restfulDevice.deviceType + '/' +  restfulDevice.name + '/ping',\n                            payload : true\n                        };\n                    sendActionMsg('ping', 'ping', actionMsg);\n               }\n            }, 1000);\n\n            disableSettings(true);\n        }\n        function onWebSocketOpen()\n        {\n            if (remoteApp) getArchive(24);\n        }\n        function onWebSocketClose()\n        {\n            \n        }\n        function onWebSocketMessage(msg)\n        {\n            switch(msg.topic)\n            {\n                case 'readings':\n                    if ((msg.mqttDevice.name == restfulDevice.name) && (msg.mqttDevice.deviceType == restfulDevice.deviceType)  && (msg.mqttDevice.project == restfulDevice.project) )\n                    {\n                        lastPing = new Date().getTime();\n                        heartbeat();\n                        device = JSON.parse(msg.payload);\n                        mqttDevice = msg.mqttDevice;\n                        updateDmaReadings(device);\n                    }\n                    break;\n                case 'readDatabase':\n                    if (msg.userID == userID)\n                    {\n                        if ((msg.payload.device.deviceType == restfulDevice.deviceType) && (msg.payload.device.name == restfulDevice.name) )\n                            putArchiveValues(msg.payload);\n                    }\n                    break;\n                case 'renew':\n                    if (msg.userID == userID)\n                    {\n                        updateCookie(msg);\n                    }\n                    break;\n                case 'permissionError':\n                    if (msg.userID == userID)\n                    {\n                        acknowledgeDialog('Permission', 'Error', msg.payload);\n                    }\n                    break;\n                case 'loginExpired':\n                    if (msg.userID == userID)\n                    {\n                       location.reload();\n                    }\n                    break;\n                default:\n                    break;\n            }\n        }\n        function sendSetting(payload)\n        {\n            var actionMsg = \n                {\n                    topic   : mqttDevice.project + '/' +  mqttDevice.deviceType + '/' +  mqttDevice.name + '/setting',\n                    payload : payload\n                };\n            sendActionMsg('setting','setting',actionMsg);\n        }\n        function reset(actionFlag)\n        {\n            var headerText = 'Warning';\n            var title = 'Resetting Tray';\n            var text = 'I hope you know what you are doing.';\n            var buttonTexts = ['Reset', 'Cancel'];\n            var buttonFunctions = \n            [\n                function()\n                {\n                    $( this ).dialog( \"close\" );\n                    device.reset.value = actionFlag;\n                    sendSetting(null);\n                 }, \n                function()\n                {\n                    $( this ).dialog( \"close\" );\n                }\n            ];\n            if (actionFlag == 2)\n            {\n                title = 'Rebooting Tray';\n                buttonTexts[0] = 'Reboot';\n            }\n            optionDialog(headerText, title, text, buttonTexts, buttonFunctions);\n            \n        }\n",
+        "template": "// Global Javascript\n        useWebSockets(true);\n        var mqttDevice = null;\n        var device = null;\n        var archiveRequestList = [];\n        var archiveList = [];\n        var archiveList = [];\n        var pingInterval = 2000;\n        var lastPing = 0;\n\n        var restfulDevice = \n        {\n            deviceType  : '{{{payload.script.deviceType}}}',\n            name        : '{{{payload.script.name}}}',\n            project     : '{{{payload.script.project}}}'\n        };\n\n        function onDocumentReady()\n        {\n            setRemoteApp(false);\n            if (remoteApp)\n            {\n                getCreds();\n                setInterval(function(){getCreds();}, 1000);\n            }\n            else\n            {\n                $('#userCardId').hide();\n            }\n            $('#archiveCardId').hide();\n            setInterval(function()\n            {\n                if (device != null)\n                {\n                    if (device.settingInProgress == 1) return;\n                }\n                var now = new Date().getTime();\n                if ((now - lastPing) > pingInterval)\n                {\n                    lastPing = now;\n                    var actionMsg = \n                        {\n                            topic   : restfulDevice.project + '/' +  restfulDevice.deviceType + '/' +  restfulDevice.name + '/ping',\n                            payload : true\n                        };\n                    sendActionMsg('ping', 'ping', actionMsg);\n               }\n            }, 1000);\n\n            disableSettings(true);\n        }\n        function onWebSocketOpen()\n        {\n            if (remoteApp) getArchive(24);\n        }\n        function onWebSocketClose()\n        {\n            \n        }\n        function onWebSocketMessage(msg)\n        {\n            switch(msg.topic)\n            {\n                case 'readings':\n                    if ((msg.mqttDevice.name == restfulDevice.name) && (msg.mqttDevice.deviceType == restfulDevice.deviceType)  && (msg.mqttDevice.project == restfulDevice.project) )\n                    {\n                        lastPing = new Date().getTime();\n                        heartbeat();\n                        device = JSON.parse(msg.payload);\n                        mqttDevice = msg.mqttDevice;\n                        updateDmaReadings(device);\n                    }\n                    break;\n                case 'readDatabase':\n                    if (msg.userID == userID)\n                    {\n                        if ((msg.payload.device.deviceType == restfulDevice.deviceType) && (msg.payload.device.name == restfulDevice.name) )\n                            putArchiveValues(msg.payload);\n                    }\n                    break;\n                case 'renew':\n                    if (msg.userID == userID)\n                    {\n                        updateCookie(msg);\n                    }\n                    break;\n                case 'permissionError':\n                    if (msg.userID == userID)\n                    {\n                        acknowledgeDialog('Permission', 'Error', msg.payload);\n                    }\n                    break;\n                case 'loginExpired':\n                    if (msg.userID == userID)\n                    {\n                       location.reload();\n                    }\n                    break;\n                default:\n                    break;\n            }\n        }\n        function sendSetting(payload)\n        {\n            var actionMsg = \n                {\n                    topic   : mqttDevice.project + '/' +  mqttDevice.deviceType + '/' +  mqttDevice.name + '/setting',\n                    payload : payload\n                };\n            sendActionMsg('setting','setting',actionMsg);\n        }\n        function reset(actionFlag)\n        {\n            var headerText = 'Warning';\n            var title = 'Resetting Tray';\n            var text = 'I hope you know what you are doing.';\n            var buttonTexts = ['Reset', 'Cancel'];\n            var buttonFunctions = \n            [\n                function()\n                {\n                    $( this ).dialog( \"close\" );\n                    var actionMsg = \n                        {\n                            topic   : mqttDevice.project + '/' +  mqttDevice.deviceType + '/' +  mqttDevice.name + '/reset',\n                            payload : actionFlag\n                        };\n                    sendActionMsg('reset','setting',actionMsg);\n                 }, \n                function()\n                {\n                    $( this ).dialog( \"close\" );\n                }\n            ];\n            if (actionFlag == 2)\n            {\n                title = 'Rebooting Tray';\n                buttonTexts[0] = 'Reboot';\n            }\n            optionDialog(headerText, title, text, buttonTexts, buttonFunctions);\n            \n        }\n",
         "output": "str",
         "x": 630,
         "y": 340,
@@ -1436,7 +1439,7 @@
         "fieldType": "msg",
         "format": "html",
         "syntax": "mustache",
-        "template": "                <div class='card' id='reset'>\n                    <div class='card-body' align=\"center\">\n                         <table width=\"100%\">\n                            <tr>\n                                <td width=\"40%\">\n                                    <button class='btn btn-block card-button big-text' onclick=\"reset(1)\" >Reset</button>\n                                </td>\n                                <td width=\"10%\"></td>\n                                <td width=\"40%\">\n                                    <button class='btn btn-block card-button big-text' onclick=\"reset(2)\" >Reboot</button>\n                                </td>\n                            </tr>\n                        </table>\n                    </div>\n                </div>\n",
+        "template": "                <div class='card' id='reset'>\n                    <div class='card-body' align=\"center\">\n                         <table width=\"100%\">\n                            <tr>\n                                <td width=\"40%\">\n                                    <button class='btn btn-block card-button big-text' id='resetButton' onclick=\"reset(1)\" >Reset</button>\n                                </td>\n                                <td width=\"10%\"></td>\n                                <td width=\"40%\">\n                                    <button class='btn btn-block card-button big-text' id='rebootButton'onclick=\"reset(2)\" >Reboot</button>\n                                </td>\n                            </tr>\n                        </table>\n                    </div>\n                </div>\n",
         "output": "str",
         "x": 940,
         "y": 540,
@@ -1552,7 +1555,7 @@
         "fieldType": "msg",
         "format": "javascript",
         "syntax": "mustache",
-        "template": "// Update Readings Javascript\n        function updateDmaReadings(device)\n        {\n            if (device.settingInProgress == 0)\n            {\n                disableSettings(false);\n            }\n            else\n            {\n                disableSettings(true);\n            }\n            $('#linkQualityId').text(device.linkQuality.value);\n            $('#signalLevelId').text(device.signalLevel.value);\n\n            if (device.led0.value == 0)\n            {\n                $('#led0img').attr('src','/img/greenLight.png');\n                $('#toggleLed0Button').attr('style','background-color:green;');\n            }\n            else\n            {\n                $('#led0img').attr('src','/img/redLight.png');\n                $('#toggleLed0Button').attr('style','background-color:red;');\n            }\n\n            if (device.led1.value == 0)\n            {\n                $('#led1img').attr('src','/img/greenLight.png');\n                $('#toggleLed1Button').attr('style','background-color:green;');\n            }\n            else\n            {\n                $('#led1img').attr('src','/img/redLight.png');\n                $('#toggleLed1Button').attr('style','background-color:red;');\n            }\n\n            if (device.led2.value == 0)\n            {\n                $('#led2img').attr('src','/img/greenLight.png');\n                $('#toggleLed2Button').attr('style','background-color:green;');\n            }\n            else\n            {\n                $('#led2img').attr('src','/img/redLight.png');\n                $('#toggleLed2Button').attr('style','background-color:red;');\n            }\n\n            if (device.led3.value == 0)\n            {\n                $('#led3img').attr('src','/img/greenLight.png');\n                $('#toggleLed3Button').attr('style','background-color:green;');\n            }\n            else\n            {\n                $('#led3img').attr('src','/img/redLight.png');\n                $('#toggleLed3Button').attr('style','background-color:red;');\n            }\n\n        }\n        function toggleLed(led)\n        {\n            device.settingInProgress.value = 1;\n            disableSettings(true);\n            var attr = 'led' + led.toString();\n            var ledValue = device[attr].value;\n            if (ledValue == 0)\n            {\n                ledValue = 1;\n            }\n            else\n            {\n                ledValue = 0;\n            }\n\n            var payload = {'attr': attr, 'value':ledValue};\n            sendSetting(payload);\n        }\n        function disableSettings(disable)\n        {\n            $('#led0EditButton').attr('disabled',disable);\n            $('#led1EditButton').attr('disabled',disable);\n            $('#led2EditButton').attr('disabled',disable);\n            $('#led3EditButton').attr('disabled',disable);\n            $('#toggleLed0Button').attr('disabled',disable);\n            $('#toggleLed1Button').attr('disabled',disable);\n            $('#toggleLed2Button').attr('disabled',disable);\n            $('#toggleLed3Button').attr('disabled',disable);\n        }\n",
+        "template": "// Update Readings Javascript\n        function updateDmaReadings(device)\n        {\n            if (device.settingInProgress == 0)\n            {\n                disableSettings(false);\n            }\n            else\n            {\n                disableSettings(true);\n            }\n            $('#linkQualityId').text(device.linkQuality.value);\n            $('#signalLevelId').text(device.signalLevel.value);\n\n            if (device.led0.value == 0)\n            {\n                $('#led0img').attr('src','/img/greenLight.png');\n                $('#toggleLed0Button').attr('style','background-color:green;');\n            }\n            else\n            {\n                $('#led0img').attr('src','/img/redLight.png');\n                $('#toggleLed0Button').attr('style','background-color:red;');\n            }\n\n            if (device.led1.value == 0)\n            {\n                $('#led1img').attr('src','/img/greenLight.png');\n                $('#toggleLed1Button').attr('style','background-color:green;');\n            }\n            else\n            {\n                $('#led1img').attr('src','/img/redLight.png');\n                $('#toggleLed1Button').attr('style','background-color:red;');\n            }\n\n            if (device.led2.value == 0)\n            {\n                $('#led2img').attr('src','/img/greenLight.png');\n                $('#toggleLed2Button').attr('style','background-color:green;');\n            }\n            else\n            {\n                $('#led2img').attr('src','/img/redLight.png');\n                $('#toggleLed2Button').attr('style','background-color:red;');\n            }\n\n            if (device.led3.value == 0)\n            {\n                $('#led3img').attr('src','/img/greenLight.png');\n                $('#toggleLed3Button').attr('style','background-color:green;');\n            }\n            else\n            {\n                $('#led3img').attr('src','/img/redLight.png');\n                $('#toggleLed3Button').attr('style','background-color:red;');\n            }\n\n        }\n        function toggleLed(led)\n        {\n            device.settingInProgress.value = 1;\n            disableSettings(true);\n            var attr = 'led' + led.toString();\n            var ledValue = device[attr].value;\n            if (ledValue == 0)\n            {\n                ledValue = 1;\n            }\n            else\n            {\n                ledValue = 0;\n            }\n\n            var payload = {'attr': attr, 'value':ledValue};\n            sendSetting(payload);\n        }\n        function disableSettings(disable)\n        {\n            $('#led0EditButton').attr('disabled',disable);\n            $('#led1EditButton').attr('disabled',disable);\n            $('#led2EditButton').attr('disabled',disable);\n            $('#led3EditButton').attr('disabled',disable);\n            $('#toggleLed0Button').attr('disabled',disable);\n            $('#toggleLed1Button').attr('disabled',disable);\n            $('#toggleLed2Button').attr('disabled',disable);\n            $('#toggleLed3Button').attr('disabled',disable);\n\n            $('#resetButton').attr('disabled',disable);\n            $('#rebootButton').attr('disabled',disable);\n\n        }\n",
         "output": "str",
         "x": 660,
         "y": 380,
@@ -2179,11 +2182,16 @@
                 "t": "eq",
                 "v": "config",
                 "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "reset",
+                "vt": "str"
             }
         ],
         "checkall": "true",
         "repair": false,
-        "outputs": 3,
+        "outputs": 4,
         "x": 650,
         "y": 160,
         "wires": [
@@ -2195,6 +2203,9 @@
             ],
             [
                 "c81b72b9290d1c36"
+            ],
+            [
+                "72b5ca0e2043aba0"
             ]
         ]
     },
@@ -2802,23 +2813,6 @@
         ]
     },
     {
-        "id": "90791ce066fd404a",
-        "type": "debug",
-        "z": "85e21fcb925ef32f",
-        "name": "",
-        "active": true,
-        "tosidebar": true,
-        "console": false,
-        "tostatus": false,
-        "complete": "true",
-        "targetType": "full",
-        "statusVal": "",
-        "statusType": "auto",
-        "x": 530,
-        "y": 840,
-        "wires": []
-    },
-    {
         "id": "8d9add5fcb252088",
         "type": "inject",
         "z": "731de46a.7645fc",
@@ -2862,7 +2856,8 @@
         "y": 180,
         "wires": [
             [
-                "c83aaf87a8feeb65"
+                "c83aaf87a8feeb65",
+                "5152879001ec63ea"
             ]
         ]
     },
@@ -2922,23 +2917,6 @@
         ],
         "x": 375,
         "y": 400,
-        "wires": []
-    },
-    {
-        "id": "abf6289f6854ed47",
-        "type": "debug",
-        "z": "85e21fcb925ef32f",
-        "name": "",
-        "active": true,
-        "tosidebar": true,
-        "console": false,
-        "tostatus": false,
-        "complete": "true",
-        "targetType": "full",
-        "statusVal": "",
-        "statusType": "auto",
-        "x": 710,
-        "y": 1000,
         "wires": []
     },
     {
@@ -3303,5 +3281,33 @@
         "x": 475,
         "y": 780,
         "wires": []
+    },
+    {
+        "id": "72b5ca0e2043aba0",
+        "type": "link out",
+        "z": "85e21fcb925ef32f",
+        "name": "Reset Out",
+        "links": [
+            "6c366c9b4d8b8f19"
+        ],
+        "x": 755,
+        "y": 260,
+        "wires": []
+    },
+    {
+        "id": "6c366c9b4d8b8f19",
+        "type": "link in",
+        "z": "85e21fcb925ef32f",
+        "name": "Reset in",
+        "links": [
+            "72b5ca0e2043aba0"
+        ],
+        "x": 55,
+        "y": 900,
+        "wires": [
+            [
+                "557e4f40.b904e"
+            ]
+        ]
     }
 ]
