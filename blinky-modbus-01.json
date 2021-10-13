@@ -2,19 +2,19 @@
   "deviceType": "blinky-modbus",
   "name": "01",
   "arcPeriod": 60000,
-  "timeStamp": 1624548582087,
-  "lastArchive": 1624548570480,
+  "timeStamp": 1634109573209,
+  "lastArchive": 1634109544163,
   "settingInProgress": 0,
   "linkQuality": {
     "action": "reading",
     "type": "scalar",
-    "value": 54,
+    "value": 0,
     "unit": "/70",
     "alarm": {
       "value": 0,
       "limits": {
-        "lolo": 0,
-        "low": 0,
+        "lolo": -1,
+        "low": -1,
         "high": 100,
         "hihi": 100
       },
@@ -28,7 +28,7 @@
   "signalLevel": {
     "action": "reading",
     "type": "scalar",
-    "value": -56,
+    "value": 0,
     "unit": "dBm",
     "alarm": {
       "value": 0,
@@ -56,7 +56,7 @@
         "lolo": -1,
         "low": -1,
         "high": 2,
-        "hihi": 2
+        "hihi": 3
       },
       "notify": {
         "name": "",
@@ -68,7 +68,7 @@
   "led1": {
     "action": "setting",
     "type": "scalar",
-    "value": 0,
+    "value": 1,
     "unit": "unit",
     "alarm": {
       "value": 0,
@@ -88,7 +88,7 @@
   "led2": {
     "action": "setting",
     "type": "scalar",
-    "value": 0,
+    "value": 1,
     "unit": "unit",
     "alarm": {
       "value": 0,
@@ -108,7 +108,7 @@
   "led3": {
     "action": "setting",
     "type": "scalar",
-    "value": 0,
+    "value": 1,
     "unit": "unit",
     "alarm": {
       "value": 0,
