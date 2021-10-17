@@ -624,7 +624,7 @@
         "overwriteFile": "true",
         "encoding": "none",
         "x": 1370,
-        "y": 360,
+        "y": 340,
         "wires": [
             []
         ]
@@ -641,7 +641,7 @@
         "finalize": "",
         "libs": [],
         "x": 1180,
-        "y": 360,
+        "y": 340,
         "wires": [
             [
                 "168ce872.83d788"
@@ -1569,21 +1569,24 @@
         "id": "396511465a838d2e",
         "type": "function",
         "z": "85e21fcb925ef32f",
-        "name": "Create Modbus Setting",
-        "func": "var device = flow.get('device');\ndevice.settingInProgress = 1;\nvar address = -1;\nswitch(msg.payload.attr)\n{\n    case 'led0':\n        address   = 0;\n        break;\n    case 'led1':\n        address   = 1;\n        break;\n    case 'led2':\n        address   = 2;\n        break;\n    case 'led3':\n        address   = 3;\n        break;\n    default:\n        break;\n}\nmsg.payload = { value: msg.payload.value, 'fc': 0x6, 'unitid': 1, 'address': address , 'quantity': 1 } ;\nreturn [msg, {topic:'settingInProgress', payload:true}];",
-        "outputs": 2,
+        "name": "Create Setting",
+        "func": "var device = flow.get('device');\nvar modbusSettingMsg = \n{\n    topic : msg.topic, \n    payload : { value: msg.payload.value, 'fc': 0x6, 'unitid': 1, 'address': -1 , 'quantity': 1 } \n}\nvar modbusMessage = false;\nswitch(msg.payload.attr)\n{\n    case 'led0':\n        modbusSettingMsg.payload.address = 0;\n        modbusMessage = true;\n        break;\n    case 'led1':\n        modbusSettingMsg.payload.address = 1;\n        modbusMessage = true;\n        break;\n    case 'led2':\n        modbusSettingMsg.payload.address = 2;\n        modbusMessage = true;\n        break;\n    case 'led3':\n        modbusSettingMsg.payload.address = 3;\n        modbusMessage = true;\n        break;\n    case 'nonModbusSetting':\n        device.nonModbusSetting.value  = msg.payload.value;\n        modbusMessage = false;\n        break;\n    default:\n        break;\n}\nvar msgArray = [null,null,null];\nif (modbusMessage)\n{\n    device.settingInProgress = 1;\n    var settingInProgressMsg = {topic:'settingInProgress', payload:true};\n    msgArray = [modbusSettingMsg, settingInProgressMsg, null];\n    \n}\nelse\n{\n    device.settingInProgress = 0;\n    msgArray = [null,null,{topic:'settingDone', payload:true}];\n}\nreturn msgArray;",
+        "outputs": 3,
         "noerr": 0,
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 200,
-        "y": 360,
+        "x": 180,
+        "y": 340,
         "wires": [
             [
                 "3744a97333f32473"
             ],
             [
                 "a66ef2e5b482662a"
+            ],
+            [
+                "1e34df4b19ff22cc"
             ]
         ]
     },
@@ -1597,8 +1600,8 @@
         "server": "54dde46e.53267c",
         "emptyMsgOnFail": false,
         "keepMsgProperties": false,
-        "x": 600,
-        "y": 360,
+        "x": 540,
+        "y": 340,
         "wires": [
             [],
             [
@@ -1617,8 +1620,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 820,
-        "y": 360,
+        "x": 760,
+        "y": 340,
         "wires": [
             [
                 "6af21e76e0c4ad80"
@@ -1641,8 +1644,8 @@
         "randomUnits": "seconds",
         "drop": false,
         "allowrate": false,
-        "x": 430,
-        "y": 360,
+        "x": 370,
+        "y": 340,
         "wires": [
             [
                 "27fd052995f7f038"
@@ -1670,7 +1673,7 @@
             "4493527757138cdc"
         ],
         "x": 55,
-        "y": 360,
+        "y": 340,
         "wires": [
             [
                 "396511465a838d2e"
@@ -2856,7 +2859,8 @@
             "6af21e76e0c4ad80",
             "86aff585d6d97f09",
             "df03212a7e41deb1",
-            "0bf699584a2609d5"
+            "0bf699584a2609d5",
+            "1e34df4b19ff22cc"
         ],
         "x": 915,
         "y": 180,
@@ -2898,8 +2902,8 @@
         "links": [
             "45a97566b65c65cc"
         ],
-        "x": 375,
-        "y": 400,
+        "x": 315,
+        "y": 380,
         "wires": []
     },
     {
@@ -3125,8 +3129,8 @@
             "04d132d87ffeb91a",
             "45a97566b65c65cc"
         ],
-        "x": 955,
-        "y": 360,
+        "x": 895,
+        "y": 340,
         "wires": []
     },
     {
@@ -3136,10 +3140,11 @@
         "name": "Save Settings to file in",
         "links": [
             "6af21e76e0c4ad80",
-            "501090a1fd5f88f5"
+            "501090a1fd5f88f5",
+            "1e34df4b19ff22cc"
         ],
         "x": 1035,
-        "y": 360,
+        "y": 340,
         "wires": [
             [
                 "89892a30.598e28"
@@ -3311,5 +3316,18 @@
                 "d51354fd.a03048"
             ]
         ]
+    },
+    {
+        "id": "1e34df4b19ff22cc",
+        "type": "link out",
+        "z": "85e21fcb925ef32f",
+        "name": "nonModbusSetting Out",
+        "links": [
+            "04d132d87ffeb91a",
+            "45a97566b65c65cc"
+        ],
+        "x": 315,
+        "y": 420,
+        "wires": []
     }
 ]
