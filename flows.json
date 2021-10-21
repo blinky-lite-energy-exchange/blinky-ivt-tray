@@ -693,7 +693,7 @@
         "oldrc": false,
         "name": "Restart",
         "x": 500,
-        "y": 880,
+        "y": 960,
         "wires": [
             [],
             [],
@@ -723,7 +723,7 @@
         "repair": false,
         "outputs": 2,
         "x": 310,
-        "y": 900,
+        "y": 980,
         "wires": [
             [
                 "c0939e4a.6386f"
@@ -745,7 +745,7 @@
         "oldrc": false,
         "name": "Reboot",
         "x": 500,
-        "y": 940,
+        "y": 1020,
         "wires": [
             [],
             [],
@@ -769,7 +769,7 @@
         "drop": false,
         "allowrate": false,
         "x": 160,
-        "y": 900,
+        "y": 980,
         "wires": [
             [
                 "9e290594.69c548"
@@ -785,7 +785,7 @@
         "qos": "0",
         "retain": "false",
         "broker": "79250bf3.365cc4",
-        "x": 1250,
+        "x": 1510,
         "y": 140,
         "wires": []
     },
@@ -2784,7 +2784,7 @@
         "type": "function",
         "z": "85e21fcb925ef32f",
         "name": "Read Modbus",
-        "func": "if (flow.get('device').settingInProgress == 1) return null;\nvar modeBusCommand = { 'fc': 0x3, 'unitid': 1, 'address': 0 , 'quantity': 4 } ;\nreturn {topic: \"readStatus\", payload:modeBusCommand};\n",
+        "func": "if (flow.get('device').settingInProgress == 1) return null;\nif (flow.get('device').archiveNow > 0) return null;\nvar modeBusCommand = { 'fc': 0x3, 'unitid': 1, 'address': 0 , 'quantity': 4 } ;\nreturn {topic: \"readStatus\", payload:modeBusCommand};\n",
         "outputs": 1,
         "noerr": 0,
         "initialize": "",
@@ -2843,7 +2843,7 @@
         "wires": [
             [
                 "c83aaf87a8feeb65",
-                "5152879001ec63ea"
+                "1463dac06e181d53"
             ]
         ]
     },
@@ -3291,7 +3291,7 @@
             "72b5ca0e2043aba0"
         ],
         "x": 55,
-        "y": 900,
+        "y": 980,
         "wires": [
             [
                 "557e4f40.b904e"
@@ -3328,6 +3328,131 @@
         ],
         "x": 315,
         "y": 420,
+        "wires": []
+    },
+    {
+        "id": "ad52c21e3a17754a",
+        "type": "inject",
+        "z": "85e21fcb925ef32f",
+        "name": "Archive now",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "archiveNow",
+        "payloadType": "date",
+        "x": 130,
+        "y": 840,
+        "wires": [
+            [
+                "79bcfa1e394fe9e5"
+            ]
+        ]
+    },
+    {
+        "id": "79bcfa1e394fe9e5",
+        "type": "function",
+        "z": "85e21fcb925ef32f",
+        "name": "Single Archive Pulse",
+        "func": "var device = flow.get('device');\ndevice.archiveNow = 1;\nreturn {topic:'archivePulse', payload:true};",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "// Code added here will be run once\n// whenever the node is started.\ncontext.set('lastArchive', new Date().getTime());",
+        "finalize": "",
+        "libs": [],
+        "x": 330,
+        "y": 840,
+        "wires": [
+            [
+                "0bf699584a2609d5"
+            ]
+        ]
+    },
+    {
+        "id": "1463dac06e181d53",
+        "type": "function",
+        "z": "85e21fcb925ef32f",
+        "name": "Check ArchiveNow",
+        "func": "var device = flow.get(\"device\");\nvar resetArchiveNowMsg = null;\nif (device.archiveNow > 0) resetArchiveNowMsg = {topic:\"resetArchiveNow\", payload:true};\nreturn [msg,resetArchiveNowMsg];",
+        "outputs": 2,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1250,
+        "y": 140,
+        "wires": [
+            [
+                "5152879001ec63ea"
+            ],
+            [
+                "5df204fa6ac2e395"
+            ]
+        ]
+    },
+    {
+        "id": "5df204fa6ac2e395",
+        "type": "delay",
+        "z": "85e21fcb925ef32f",
+        "name": "",
+        "pauseType": "delay",
+        "timeout": "1",
+        "timeoutUnits": "seconds",
+        "rate": "1",
+        "nbRateUnits": "1",
+        "rateUnits": "second",
+        "randomFirst": "1",
+        "randomLast": "5",
+        "randomUnits": "seconds",
+        "drop": false,
+        "allowrate": false,
+        "x": 1490,
+        "y": 200,
+        "wires": [
+            [
+                "999f67627c632e86",
+                "d5050a43934b9972"
+            ]
+        ]
+    },
+    {
+        "id": "999f67627c632e86",
+        "type": "function",
+        "z": "85e21fcb925ef32f",
+        "name": "Reset ArchiveNow",
+        "func": "flow.get(\"device\").archiveNow = 0;\n",
+        "outputs": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1670,
+        "y": 200,
+        "wires": []
+    },
+    {
+        "id": "d5050a43934b9972",
+        "type": "debug",
+        "z": "85e21fcb925ef32f",
+        "name": "",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1660,
+        "y": 260,
         "wires": []
     }
 ]
