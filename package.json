@@ -1,5 +1,5 @@
 {
-  "name": "blinky-blank-tray",
+  "name": "blinky-modbus-tray",
   "version": "1.0.0",
   "description": "",
   "main": "node_modules/node-red/red.js -s ./settings.js -u ./",
