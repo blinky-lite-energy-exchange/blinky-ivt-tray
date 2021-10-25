@@ -5,11 +5,11 @@
   "timeStamp": 1634109573209,
   "lastArchive": 1634109544163,
   "settingInProgress": 0,
-  "archiveNow":0,
+  "archiveNow": 0,
   "linkQuality": {
     "action": "reading",
     "type": "scalar",
-    "value": 69,
+    "value": 64,
     "unit": "/70",
     "alarm": {
       "value": 0,
@@ -29,7 +29,7 @@
   "signalLevel": {
     "action": "reading",
     "type": "scalar",
-    "value": -41,
+    "value": -46,
     "unit": "dBm",
     "alarm": {
       "value": 0,
@@ -38,26 +38,6 @@
         "low": -100,
         "high": 30,
         "hihi": 30
-      },
-      "notify": {
-        "name": "",
-        "number": "",
-        "time": 0
-      }
-    }
-  },
-  "led0": {
-    "action": "setting",
-    "type": "scalar",
-    "value": 1,
-    "unit": "unit",
-    "alarm": {
-      "value": 0,
-      "limits": {
-        "lolo": -1,
-        "low": -1,
-        "high": 2,
-        "hihi": 3
       },
       "notify": {
         "name": "",
@@ -109,7 +89,7 @@
   "led3": {
     "action": "setting",
     "type": "scalar",
-    "value": 1,
+    "value": 0,
     "unit": "unit",
     "alarm": {
       "value": 0,
