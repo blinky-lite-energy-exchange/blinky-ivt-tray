@@ -9,7 +9,7 @@
   "linkQuality": {
     "action": "reading",
     "type": "scalar",
-    "value": 58,
+    "value": 70,
     "unit": "/70",
     "alarm": {
       "value": 0,
@@ -29,7 +29,7 @@
   "signalLevel": {
     "action": "reading",
     "type": "scalar",
-    "value": -52,
+    "value": -25,
     "unit": "dBm",
     "alarm": {
       "value": 0,
@@ -49,7 +49,6 @@
   "led1": {
     "action": "setting",
     "type": "scalar",
-    "value": 0,
     "unit": "unit",
     "alarm": {
       "value": 0,
@@ -64,12 +63,12 @@
         "number": "",
         "time": 0
       }
-    }
+    },
+    "value": 1
   },
   "led2": {
     "action": "setting",
     "type": "scalar",
-    "value": 0,
     "unit": "unit",
     "alarm": {
       "value": 0,
@@ -84,12 +83,13 @@
         "number": "",
         "time": 0
       }
-    }
+    },
+    "value": 0
   },
   "led3": {
     "action": "setting",
     "type": "scalar",
-    "value": 0,
+    "value": 1,
     "unit": "unit",
     "alarm": {
       "value": 0,

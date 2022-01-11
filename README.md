@@ -7,7 +7,8 @@ MQTTSERVERIP=something.cloudmqtt.com
 MQTTUSERNAME=xxxx  
 MQTTPASSWORD=yyyy  
 SERIALPORT=/dev/ttyACM3  
-SERAILBUFSIZE=64  
+SERIALBUFSIZE=8  
+PM2NAME=blinky-bus  
 NODEREDCONFIGSECRET=a-secret-key    
 
 with no CR after the last line

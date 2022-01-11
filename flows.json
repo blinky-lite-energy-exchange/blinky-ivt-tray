@@ -264,7 +264,7 @@
         "id": "a4f4c59daf894823",
         "type": "serial-port",
         "serialport": "$(SERIALPORT)",
-        "serialbaud": "9600",
+        "serialbaud": "19200",
         "databits": "8",
         "parity": "none",
         "stopbits": "1",
@@ -972,15 +972,16 @@
         "id": "c0939e4a.6386f",
         "type": "exec",
         "z": "85e21fcb925ef32f",
-        "command": "pm2 restart red",
-        "addpay": false,
+        "command": "pm2 restart ",
+        "addpay": "payload",
         "append": "",
         "useSpawn": "false",
         "timer": "",
+        "winHide": false,
         "oldrc": false,
         "name": "Restart",
-        "x": 500,
-        "y": 960,
+        "x": 700,
+        "y": 1460,
         "wires": [
             [],
             [],
@@ -1010,10 +1011,10 @@
         "repair": false,
         "outputs": 2,
         "x": 310,
-        "y": 980,
+        "y": 1540,
         "wires": [
             [
-                "c0939e4a.6386f"
+                "985cd59b3e414efe"
             ],
             [
                 "236a8168.66f7fe"
@@ -1032,7 +1033,7 @@
         "oldrc": false,
         "name": "Reboot",
         "x": 500,
-        "y": 1020,
+        "y": 1580,
         "wires": [
             [],
             [],
@@ -1057,7 +1058,7 @@
         "allowrate": false,
         "outputs": 1,
         "x": 160,
-        "y": 980,
+        "y": 1540,
         "wires": [
             [
                 "9e290594.69c548"
@@ -1207,14 +1208,14 @@
         "id": "03bd55da520e5d7c",
         "type": "function",
         "z": "85e21fcb925ef32f",
-        "name": "Check Modbus Setting",
+        "name": "Check blinkybus Setting",
         "func": "device = flow.get('device');\ndevice.settingInProgress = 0;\nswitch(msg.payload.address)\n{\n    case 1:\n        device.led1.value = msg.payload.value;\n        break;\n    case 2:\n        device.led2.value = msg.payload.value;\n        break;\n    case 3:\n        device.led3.value = msg.payload.value;\n        break;\n    default:\n        break;\n}\nreturn {topic:'settingCompleted', payload:true};",
         "outputs": 1,
         "noerr": 0,
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 760,
+        "x": 770,
         "y": 340,
         "wires": [
             [
@@ -1263,7 +1264,7 @@
         "id": "4bddb9a0e424ebf4",
         "type": "link in",
         "z": "85e21fcb925ef32f",
-        "name": "Modbus setting in",
+        "name": "blinkybus setting in",
         "links": [
             "4493527757138cdc"
         ],
@@ -1402,7 +1403,7 @@
         "type": "function",
         "z": "85e21fcb925ef32f",
         "name": "Read BlinkyBus",
-        "func": "if (flow.get('device').settingInProgress == 1) return null;\nreturn {topic: \"readStatus\", payload:true};\n",
+        "func": "if (flow.get('device').settingInProgress != 0) return null;\nreturn {topic: \"readStatus\", payload:true};\n",
         "outputs": 1,
         "noerr": 0,
         "initialize": "",
@@ -1501,7 +1502,7 @@
         "type": "function",
         "z": "85e21fcb925ef32f",
         "name": "Init cube",
-        "func": "var device = flow.get('device');\nvar msgs = [];\nmsgs[0] = {\"address\":1,\"value\":device.led1.value};\nmsgs[1] = {\"address\":2,\"value\":device.led2.value};\nmsgs[2] = {\"address\":2,\"value\":device.led2.value};\n//must be the last!\nmsgs[3] = {\"address\":0,\"value\":0};\nreturn {topic : 'initCube', payload: msgs};\n",
+        "func": "var device = flow.get('device');\nvar msgs = [];\nmsgs[0] = {\"address\":0,\"value\":0};\nmsgs[1] = {\"address\":1,\"value\":device.led1.value};\nmsgs[2] = {\"address\":2,\"value\":device.led2.value};\nmsgs[3] = {\"address\":3,\"value\":device.led3.value};\n//must be the last!\nmsgs[4] = {\"address\":-1,\"value\":0};\nreturn {topic : 'initCube', payload: msgs};\n",
         "outputs": 1,
         "noerr": 0,
         "initialize": "",
@@ -1511,7 +1512,7 @@
         "y": 60,
         "wires": [
             [
-                "930b94f38479787c"
+                "ebb5481bd4277b24"
             ]
         ]
     },
@@ -1526,7 +1527,7 @@
         "arraySpltType": "len",
         "stream": false,
         "addname": "",
-        "x": 1190,
+        "x": 1350,
         "y": 60,
         "wires": [
             [
@@ -1551,11 +1552,11 @@
         "drop": false,
         "allowrate": false,
         "outputs": 1,
-        "x": 1340,
+        "x": 1500,
         "y": 60,
         "wires": [
             [
-                "aa428318895690ee"
+                "742713de179bd6ce"
             ]
         ]
     },
@@ -1700,12 +1701,13 @@
         "id": "6af21e76e0c4ad80",
         "type": "link out",
         "z": "85e21fcb925ef32f",
-        "name": "Check Modbus Setting out",
+        "name": "Check blinkybus Setting out",
+        "mode": "link",
         "links": [
             "04d132d87ffeb91a",
             "45a97566b65c65cc"
         ],
-        "x": 895,
+        "x": 915,
         "y": 340,
         "wires": []
     },
@@ -1868,7 +1870,7 @@
             "72b5ca0e2043aba0"
         ],
         "x": 55,
-        "y": 980,
+        "y": 1540,
         "wires": [
             [
                 "557e4f40.b904e"
@@ -1879,7 +1881,8 @@
         "id": "1e34df4b19ff22cc",
         "type": "link out",
         "z": "85e21fcb925ef32f",
-        "name": "nonModbusSetting Out",
+        "name": "nonBlinkybusSetting Out",
+        "mode": "link",
         "links": [
             "04d132d87ffeb91a",
             "45a97566b65c65cc"
@@ -2002,41 +2005,16 @@
         "type": "function",
         "z": "85e21fcb925ef32f",
         "name": "Allow Readings",
-        "func": "if (msg.payload.address == 0)\n{\n    flow.get(\"device\").settingInProgress = 0;\n}\nreturn msg;",
+        "func": "if (msg.payload.address == -1)\n{\n    flow.get(\"device\").settingInProgress = 0;\n}\nreturn msg;",
         "outputs": 1,
         "noerr": 0,
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 1700,
-        "y": 60,
+        "x": 1980,
+        "y": 120,
         "wires": [
             []
-        ]
-    },
-    {
-        "id": "74c6d394f2452a62",
-        "type": "delay",
-        "z": "85e21fcb925ef32f",
-        "name": "",
-        "pauseType": "delay",
-        "timeout": "3",
-        "timeoutUnits": "seconds",
-        "rate": "1",
-        "nbRateUnits": "1",
-        "rateUnits": "second",
-        "randomFirst": "1",
-        "randomLast": "5",
-        "randomUnits": "seconds",
-        "drop": false,
-        "allowrate": false,
-        "outputs": 1,
-        "x": 880,
-        "y": 760,
-        "wires": [
-            [
-                "9ecac5e72feeaa9c"
-            ]
         ]
     },
     {
@@ -2110,8 +2088,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 1110,
-        "y": 1100,
+        "x": 330,
+        "y": 1120,
         "wires": []
     },
     {
@@ -2135,8 +2113,8 @@
         "topic": "serialBufSize",
         "payload": "SERIALBUFSIZE",
         "payloadType": "env",
-        "x": 910,
-        "y": 1100,
+        "x": 130,
+        "y": 1120,
         "wires": [
             [
                 "6af76a294daa96eb"
@@ -2148,14 +2126,14 @@
         "type": "function",
         "z": "85e21fcb925ef32f",
         "name": "Send Setting",
-        "func": "var bufsize = 4;\nvar buffer = new ArrayBuffer(bufsize);\nvar settingsView = new DataView(buffer);\nsettingsView.setUint8(0, 1, true); //setting\nsettingsView.setUint8(1, msg.payload.address, true); //address\nsettingsView.setInt16(2, msg.payload.value, true); //value\n\n\nreturn {topic:'setting',payload:Buffer.from(buffer),address:msg.payload.address};\n",
+        "func": "var bufsize = 4;\nvar buffer = new ArrayBuffer(bufsize);\nvar settingsView = new DataView(buffer);\nsettingsView.setUint8(0, 1, true); //setting\nsettingsView.setUint8(1, msg.payload.address, true); //address\nsettingsView.setInt16(2, msg.payload.value, true); //value\nreturn {topic:'setting',payload:Buffer.from(buffer),address:msg.payload.address};\n",
         "outputs": 1,
         "noerr": 0,
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 950,
-        "y": 940,
+        "x": 170,
+        "y": 960,
         "wires": [
             [
                 "1f4c751fdd689750"
@@ -2168,8 +2146,8 @@
         "z": "85e21fcb925ef32f",
         "name": "Blinky-Bus",
         "serial": "a4f4c59daf894823",
-        "x": 1130,
-        "y": 980,
+        "x": 350,
+        "y": 1000,
         "wires": [
             [
                 "6b066f99a43ec0aa"
@@ -2187,8 +2165,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 1420,
-        "y": 940,
+        "x": 640,
+        "y": 960,
         "wires": [
             [
                 "2f397c492e8931b9"
@@ -2217,8 +2195,8 @@
         "checkall": "true",
         "repair": false,
         "outputs": 2,
-        "x": 1270,
-        "y": 980,
+        "x": 490,
+        "y": 1000,
         "wires": [
             [
                 "91198f280faf6f80"
@@ -2239,8 +2217,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 950,
-        "y": 1020,
+        "x": 170,
+        "y": 1040,
         "wires": [
             [
                 "1f4c751fdd689750"
@@ -2252,14 +2230,14 @@
         "type": "function",
         "z": "85e21fcb925ef32f",
         "name": "Check Reading",
-        "func": "var serialBufSize = flow.get('serialBufSize');\nvar dataView     = new DataView(new ArrayBuffer(2));\nfor (ib = 0; ib < 2; ++ib)   dataView.setUint8(ib, msg.payload[serialBufSize -1 - ib]);\nvar dataBufferLength = dataView.getInt16(0);\nvar dataBuffer = [];\nfor (var ii = 0; ii < dataBufferLength; ++ii)\n{\n    for (ib = 0; ib < 2; ++ib)   dataView.setUint8(ib, msg.payload[(ii * 2) + 1 - ib]);\n    dataBuffer.push( dataView.getInt16(0));\n}\nreturn {topic:msg.topic,payload:dataBuffer};",
+        "func": "var serialBufSize = flow.get('serialBufSize');\nvar dataView     = new DataView(new ArrayBuffer(2));\nvar dataBuffer = [];\nfor (var ii = 0; ii < (msg.payload.length / 2); ++ii)\n{\n    for (ib = 0; ib < 2; ++ib)   dataView.setUint8(ib, msg.payload[(ii * 2) + 1 - ib]);\n    dataBuffer.push( dataView.getInt16(0));\n}\nreturn {topic:msg.topic,payload:dataBuffer};",
         "outputs": 1,
         "noerr": 0,
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 1420,
-        "y": 1020,
+        "x": 640,
+        "y": 1040,
         "wires": [
             [
                 "ed6ec66d5cb48297"
@@ -2276,8 +2254,8 @@
             "aa428318895690ee",
             "93758a55568a2f76"
         ],
-        "x": 835,
-        "y": 940,
+        "x": 55,
+        "y": 960,
         "wires": [
             [
                 "52b50d7763d10fa2"
@@ -2293,8 +2271,8 @@
             "6238aa4113faa347",
             "b7fd8744c033e8b3"
         ],
-        "x": 835,
-        "y": 1020,
+        "x": 55,
+        "y": 1040,
         "wires": [
             [
                 "e023e3fbaf0e8beb"
@@ -2312,8 +2290,8 @@
             "4e7f69ba08b375d1",
             "e6880b0c36ae9c73"
         ],
-        "x": 1535,
-        "y": 940,
+        "x": 755,
+        "y": 960,
         "wires": []
     },
     {
@@ -2326,24 +2304,8 @@
             "a3d99d9c796d9231",
             "edafb769c9979256"
         ],
-        "x": 1535,
-        "y": 1020,
-        "wires": []
-    },
-    {
-        "id": "543b58533f22ab69",
-        "type": "debug",
-        "z": "85e21fcb925ef32f",
-        "name": "",
-        "active": true,
-        "tosidebar": true,
-        "console": false,
-        "tostatus": false,
-        "complete": "false",
-        "statusVal": "",
-        "statusType": "auto",
-        "x": 1900,
-        "y": 60,
+        "x": 755,
+        "y": 1040,
         "wires": []
     },
     {
@@ -2355,7 +2317,7 @@
         "links": [
             "b0f91914917b2de1"
         ],
-        "x": 1455,
+        "x": 1755,
         "y": 60,
         "wires": []
     },
@@ -2367,11 +2329,11 @@
         "links": [
             "2f397c492e8931b9"
         ],
-        "x": 1575,
+        "x": 1835,
         "y": 60,
         "wires": [
             [
-                "3c51c680e18abf95"
+                "fa6e40279b96ba81"
             ]
         ]
     },
@@ -2430,6 +2392,322 @@
         "wires": [
             [
                 "03bd55da520e5d7c"
+            ]
+        ]
+    },
+    {
+        "id": "85aad4c007777379",
+        "type": "status",
+        "z": "85e21fcb925ef32f",
+        "name": "",
+        "scope": [
+            "1f4c751fdd689750"
+        ],
+        "x": 100,
+        "y": 1300,
+        "wires": [
+            [
+                "0c13823324600aa5"
+            ]
+        ]
+    },
+    {
+        "id": "0c13823324600aa5",
+        "type": "switch",
+        "z": "85e21fcb925ef32f",
+        "name": "",
+        "property": "status.fill",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "eq",
+                "v": "red",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "green",
+                "vt": "str"
+            }
+        ],
+        "checkall": "true",
+        "repair": false,
+        "outputs": 2,
+        "x": 260,
+        "y": 1300,
+        "wires": [
+            [
+                "de0d4dd3607e9ecd"
+            ],
+            [
+                "53ef6223ba1ca248"
+            ]
+        ]
+    },
+    {
+        "id": "de0d4dd3607e9ecd",
+        "type": "function",
+        "z": "85e21fcb925ef32f",
+        "name": "Serial Not Connected",
+        "func": "flow.get('device').settingInProgress = -1;\nflow.set('serialState', 0);\nreturn msg;",
+        "outputs": 0,
+        "noerr": 0,
+        "initialize": "// Code added here will be run once\n// whenever the node is started.\nflow.set('serialState', 0);\n",
+        "finalize": "",
+        "libs": [],
+        "x": 440,
+        "y": 1260,
+        "wires": []
+    },
+    {
+        "id": "f342efc46c6d2fd7",
+        "type": "function",
+        "z": "85e21fcb925ef32f",
+        "name": "Reset Setting in Progress",
+        "func": "if (flow.get('device').settingInProgress == -1) \n{\n    if (flow.get('serialState') == 1) flow.get('device').settingInProgress = 0;\n    return msg;\n}\nelse\n{\n    return null;\n}\nreturn null;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 810,
+        "y": 1340,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "53ef6223ba1ca248",
+        "type": "function",
+        "z": "85e21fcb925ef32f",
+        "name": "Serial Connected",
+        "func": "flow.set('serialState', 1);\nif (flow.get('device').settingInProgress != -1) return null\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 430,
+        "y": 1340,
+        "wires": [
+            [
+                "dfea2fb0eebb8e26"
+            ]
+        ]
+    },
+    {
+        "id": "dfea2fb0eebb8e26",
+        "type": "delay",
+        "z": "85e21fcb925ef32f",
+        "name": "",
+        "pauseType": "delay",
+        "timeout": "7",
+        "timeoutUnits": "seconds",
+        "rate": "1",
+        "nbRateUnits": "1",
+        "rateUnits": "second",
+        "randomFirst": "1",
+        "randomLast": "5",
+        "randomUnits": "seconds",
+        "drop": false,
+        "allowrate": false,
+        "outputs": 1,
+        "x": 610,
+        "y": 1340,
+        "wires": [
+            [
+                "f342efc46c6d2fd7"
+            ]
+        ]
+    },
+    {
+        "id": "74c6d394f2452a62",
+        "type": "delay",
+        "z": "85e21fcb925ef32f",
+        "name": "",
+        "pauseType": "delay",
+        "timeout": "3",
+        "timeoutUnits": "seconds",
+        "rate": "1",
+        "nbRateUnits": "1",
+        "rateUnits": "second",
+        "randomFirst": "1",
+        "randomLast": "5",
+        "randomUnits": "seconds",
+        "drop": false,
+        "allowrate": false,
+        "outputs": 1,
+        "x": 880,
+        "y": 760,
+        "wires": [
+            [
+                "9ecac5e72feeaa9c"
+            ]
+        ]
+    },
+    {
+        "id": "ebb5481bd4277b24",
+        "type": "delay",
+        "z": "85e21fcb925ef32f",
+        "name": "",
+        "pauseType": "delay",
+        "timeout": "5",
+        "timeoutUnits": "seconds",
+        "rate": "1",
+        "nbRateUnits": "1",
+        "rateUnits": "second",
+        "randomFirst": "1",
+        "randomLast": "5",
+        "randomUnits": "seconds",
+        "drop": false,
+        "allowrate": false,
+        "outputs": 1,
+        "x": 1210,
+        "y": 60,
+        "wires": [
+            [
+                "930b94f38479787c"
+            ]
+        ]
+    },
+    {
+        "id": "4ce34923f9f085d5",
+        "type": "catch",
+        "z": "85e21fcb925ef32f",
+        "name": "",
+        "scope": [
+            "91198f280faf6f80",
+            "1fc86ac13df1a13f",
+            "1f4c751fdd689750"
+        ],
+        "uncaught": false,
+        "x": 90,
+        "y": 1240,
+        "wires": [
+            [
+                "de0d4dd3607e9ecd"
+            ]
+        ]
+    },
+    {
+        "id": "fa6e40279b96ba81",
+        "type": "debug",
+        "z": "85e21fcb925ef32f",
+        "name": "",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1970,
+        "y": 60,
+        "wires": []
+    },
+    {
+        "id": "742713de179bd6ce",
+        "type": "switch",
+        "z": "85e21fcb925ef32f",
+        "name": "",
+        "property": "payload.address",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "gte",
+                "v": "0",
+                "vt": "num"
+            },
+            {
+                "t": "eq",
+                "v": "-1",
+                "vt": "num"
+            }
+        ],
+        "checkall": "true",
+        "repair": false,
+        "outputs": 2,
+        "x": 1650,
+        "y": 60,
+        "wires": [
+            [
+                "aa428318895690ee"
+            ],
+            [
+                "cc28796b6343f69f"
+            ]
+        ]
+    },
+    {
+        "id": "cc28796b6343f69f",
+        "type": "delay",
+        "z": "85e21fcb925ef32f",
+        "name": "",
+        "pauseType": "delay",
+        "timeout": "2",
+        "timeoutUnits": "seconds",
+        "rate": "1",
+        "nbRateUnits": "1",
+        "rateUnits": "second",
+        "randomFirst": "1",
+        "randomLast": "5",
+        "randomUnits": "seconds",
+        "drop": false,
+        "allowrate": false,
+        "outputs": 1,
+        "x": 1800,
+        "y": 120,
+        "wires": [
+            [
+                "3c51c680e18abf95"
+            ]
+        ]
+    },
+    {
+        "id": "10e54acd6f4f5fb4",
+        "type": "inject",
+        "z": "85e21fcb925ef32f",
+        "name": "pm2Name",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": true,
+        "onceDelay": "1",
+        "topic": "pm2Name",
+        "payload": "PM2NAME",
+        "payloadType": "env",
+        "x": 130,
+        "y": 1180,
+        "wires": [
+            [
+                "6af76a294daa96eb"
+            ]
+        ]
+    },
+    {
+        "id": "985cd59b3e414efe",
+        "type": "function",
+        "z": "85e21fcb925ef32f",
+        "name": "Get pm2Name",
+        "func": "msg.payload = flow.get(\"pm2Name\");\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 520,
+        "y": 1460,
+        "wires": [
+            [
+                "c0939e4a.6386f"
             ]
         ]
     },
@@ -2616,7 +2894,7 @@
         "repeat": "",
         "crontab": "",
         "once": true,
-        "onceDelay": 0.1,
+        "onceDelay": "1",
         "topic": "project",
         "payload": "PROJECT",
         "payloadType": "env",
@@ -2753,7 +3031,7 @@
         "repeat": "",
         "crontab": "",
         "once": true,
-        "onceDelay": 0.1,
+        "onceDelay": "1",
         "topic": "deviceA",
         "payload": "MQTTDEVICEA",
         "payloadType": "env",
