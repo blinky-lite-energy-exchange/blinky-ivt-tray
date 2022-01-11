@@ -1,5 +1,5 @@
 {
-  "deviceType": "blinky-modbus",
+  "deviceType": "blinky-bus",
   "name": "01",
   "arcPeriod": 60000,
   "timeStamp": 1634109573209,
@@ -9,7 +9,7 @@
   "linkQuality": {
     "action": "reading",
     "type": "scalar",
-    "value": 70,
+    "value": 58,
     "unit": "/70",
     "alarm": {
       "value": 0,
@@ -29,7 +29,7 @@
   "signalLevel": {
     "action": "reading",
     "type": "scalar",
-    "value": -21,
+    "value": -52,
     "unit": "dBm",
     "alarm": {
       "value": 0,
@@ -69,7 +69,7 @@
   "led2": {
     "action": "setting",
     "type": "scalar",
-    "value": 1,
+    "value": 0,
     "unit": "unit",
     "alarm": {
       "value": 0,
