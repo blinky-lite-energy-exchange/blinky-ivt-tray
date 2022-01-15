@@ -29,7 +29,7 @@
   "signalLevel": {
     "action": "reading",
     "type": "scalar",
-    "value": -22,
+    "value": -21,
     "unit": "dBm",
     "alarm": {
       "value": 0,
@@ -84,7 +84,7 @@
         "time": 0
       }
     },
-    "value": 0
+    "value": 1
   },
   "led3": {
     "action": "setting",

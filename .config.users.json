@@ -14,6 +14,6 @@
                 "welcome": "2.1.4-git"
             }
         },
-        "menu-menu-item-sidebar": false
+        "menu-menu-item-sidebar": true
     }
 }
