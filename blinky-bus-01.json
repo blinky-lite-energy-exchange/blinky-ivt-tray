@@ -29,7 +29,7 @@
   "signalLevel": {
     "action": "reading",
     "type": "scalar",
-    "value": -21,
+    "value": -30,
     "unit": "dBm",
     "alarm": {
       "value": 0,
