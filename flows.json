@@ -539,7 +539,7 @@
         "type": "function",
         "z": "7b3105fe3b029f96",
         "name": "Init cube",
-        "func": "var device = global.get('device');\nvar msgs = [];\nmsgs[0] = {\"address\":0,\"value\":0};\nmsgs[1] = {\"address\":1,\"value\":device.led1.value};\nmsgs[2] = {\"address\":2,\"value\":device.led2.value};\nmsgs[3] = {\"address\":3,\"value\":device.led3.value};\n//must be the last!\nmsgs[4] = {\"address\":-1,\"value\":0};\nreturn {topic : 'initCube', payload: msgs};\n",
+        "func": "var device = global.get('device');\nvar cubeInit = global.get('cubeInit');\nif (cubeInit == 1) //tray rebooted\n{\n    \n}\nif (cubeInit == 2) //cube rebooted\n{\n    \n}\n\nvar msgs = [];\nmsgs[0] = {\"address\":0,\"value\":0};\nmsgs[1] = {\"address\":1,\"value\":device.led1.value};\nmsgs[2] = {\"address\":2,\"value\":device.led2.value};\nmsgs[3] = {\"address\":3,\"value\":device.led3.value};\n//must be the last!\nmsgs[4] = {\"address\":-1,\"value\":0};\nreturn {topic : 'initCube', payload: msgs};\n",
         "outputs": 1,
         "noerr": 0,
         "initialize": "",
@@ -575,7 +575,7 @@
         "type": "function",
         "z": "d624945311b3ac33",
         "name": "Create Readings",
-        "func": "var device = global.get('device');\nvar initCube             = msg.payload[0];\ndevice.led1.value        = msg.payload[1];\ndevice.led2.value        = msg.payload[2];\ndevice.led3.value        = msg.payload[3];\nvar initCubeMsg = null;\nif (initCube == 1)\n{\n    initCubeMsg = {topic:\"initCube\",payload:true};\n    device.settingInProgress = 1;\n}\nreturn  [{topic:'newSettingDone', payload:true},initCubeMsg];\n",
+        "func": "var device = global.get('device');\nvar initCube             = msg.payload[0];\ndevice.led1.value        = msg.payload[1];\ndevice.led2.value        = msg.payload[2];\ndevice.led3.value        = msg.payload[3];\ndevice.timeStamp = msg.timeStamp;\n\nvar initCubeMsg = null;\nif (initCube == 1)\n{\n    initCubeMsg = {topic:\"initCube\",payload:true};\n    device.settingInProgress = 1;\n}\nreturn  [{topic:'newSettingDone', payload:true},initCubeMsg];\n\n",
         "outputs": 2,
         "noerr": 0,
         "initialize": "",
@@ -1162,7 +1162,7 @@
         "type": "function",
         "z": "85e21fcb925ef32f",
         "name": "Read BlinkyBus",
-        "func": "if (global.get('device').settingInProgress != 0) return null;\nif (global.get('cubeInit') != 0) return null;\nreturn {topic: \"readStatus\", payload:true};\n",
+        "func": "if (global.get('device').settingInProgress != 0) return null;\nif (global.get('cubeInit') != 0) return null;\nreturn {topic: \"readStatus\", payload:true, timeStamp:msg.payload};\n",
         "outputs": 1,
         "noerr": 0,
         "initialize": "",
@@ -1714,8 +1714,8 @@
         "id": "9ecac5e72feeaa9c",
         "type": "function",
         "z": "85e21fcb925ef32f",
-        "name": "Set input filename",
-        "func": "var deviceProps = global.get('deviceProps');\nreturn {topic: 'readFile', 'filename':deviceProps.configFile};",
+        "name": "Set cube Init flag",
+        "func": "global.set('cubeInit', 2);\nreturn {topic: 'initCube', payload:true};",
         "outputs": 1,
         "noerr": 0,
         "initialize": "",
@@ -1737,11 +1737,11 @@
         "links": [
             "961b85c2472cee35"
         ],
-        "x": 355,
+        "x": 955,
         "y": 100,
         "wires": [
             [
-                "4a8d91e8.fcb68"
+                "e564944240ac8193"
             ]
         ]
     },
@@ -1879,7 +1879,7 @@
         "type": "function",
         "z": "85e21fcb925ef32f",
         "name": "Get Reading",
-        "func": "var bufsize = 4;\nvar buffer = new ArrayBuffer(bufsize);\nvar settingsView = new DataView(buffer);\nsettingsView.setUint8(0, 0, true); //setting\nsettingsView.setUint8(1, 0, true); //address\nsettingsView.setInt16(2, 0, true); //value\n\nreturn {topic:'reading',payload:Buffer.from(buffer)};\n",
+        "func": "var bufsize = 4;\nvar buffer = new ArrayBuffer(bufsize);\nvar settingsView = new DataView(buffer);\nsettingsView.setUint8(0, 0, true); //setting\nsettingsView.setUint8(1, 0, true); //address\nsettingsView.setInt16(2, 0, true); //value\n\nreturn {topic:'reading',payload:Buffer.from(buffer),timeStamp:msg.timeStamp};\n",
         "outputs": 1,
         "noerr": 0,
         "initialize": "",
@@ -1898,7 +1898,7 @@
         "type": "function",
         "z": "85e21fcb925ef32f",
         "name": "Check Reading",
-        "func": "var serialBufSize = global.get('serialBufSize');\nvar dataView     = new DataView(new ArrayBuffer(2));\nvar dataBuffer = [];\nfor (var ii = 0; ii < (msg.payload.length / 2); ++ii)\n{\n    for (ib = 0; ib < 2; ++ib)   dataView.setUint8(ib, msg.payload[(ii * 2) + 1 - ib]);\n    dataBuffer.push( dataView.getInt16(0));\n}\nreturn {topic:msg.topic,payload:dataBuffer};",
+        "func": "var serialBufSize = global.get('serialBufSize');\nvar dataView     = new DataView(new ArrayBuffer(2));\nvar dataBuffer = [];\nfor (var ii = 0; ii < (msg.payload.length / 2); ++ii)\n{\n    for (ib = 0; ib < 2; ++ib)   dataView.setUint8(ib, msg.payload[(ii * 2) + 1 - ib]);\n    dataBuffer.push( dataView.getInt16(0));\n}\nreturn {topic:msg.topic,payload:dataBuffer, timeStamp:msg.timeStamp};",
         "outputs": 1,
         "noerr": 0,
         "initialize": "",

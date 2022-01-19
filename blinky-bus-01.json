@@ -2,7 +2,7 @@
   "deviceType": "blinky-bus",
   "name": "01",
   "arcPeriod": 60000,
-  "timeStamp": 1634109573209,
+  "timeStamp": 1642600773874,
   "lastArchive": 1634109544163,
   "settingInProgress": 0,
   "archiveNow": 0,
@@ -29,7 +29,7 @@
   "signalLevel": {
     "action": "reading",
     "type": "scalar",
-    "value": -30,
+    "value": -29,
     "unit": "dBm",
     "alarm": {
       "value": 0,
