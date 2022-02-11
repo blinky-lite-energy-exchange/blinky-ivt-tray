@@ -1,5 +1,5 @@
 {
-  "deviceType": "blinky-bus",
+  "type": "blinky-bus",
   "name": "01",
   "arcPeriod": 60000,
   "timeStamp": 1642600773874,
