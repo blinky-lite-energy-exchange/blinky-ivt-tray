@@ -327,7 +327,7 @@
         "type": "function",
         "z": "62acd293754d30b8",
         "name": "Create Setting",
-        "func": "var tray = global.get('tray');\nvar blinkyBusSettingMsg = \n{\n    topic : msg.topic, \n    payload : { value: msg.payload.value,  'address': -1  } \n}\nvar blinkyBusMessage = false;\nswitch(msg.payload.attr)\n{\n    case 'led1':\n        blinkyBusSettingMsg.payload.address = 1;\n        blinkyBusMessage = true;\n        break;\n    case 'led2':\n        blinkyBusSettingMsg.payload.address = 2;\n        blinkyBusMessage = true;\n        break;\n    case 'led3':\n        blinkyBusSettingMsg.payload.address = 3;\n        blinkyBusMessage = true;\n        break;\n    case 'nonblinkyBusSetting':\n        tray.nonblinkyBusSetting.value  = msg.payload.value;\n        blinkyBusMessage = false;\n        break;\n    default:\n        break;\n}\nvar msgArray = [null,null,null];\nif (blinkyBusMessage)\n{\n    tray.settingInProgress = 1;\n    var settingInProgressMsg = {topic:'settingInProgress', payload:true};\n    msgArray = [blinkyBusSettingMsg, settingInProgressMsg, null];\n    \n}\nelse\n{\n    tray.settingInProgress = 0;\n    msgArray = [null,null,{topic:'settingDone', payload:true}];\n}\nreturn msgArray;",
+        "func": "var tray = global.get('tray');\nvar blinkyBusSettingMsg = \n{\n    topic : msg.topic, \n    payload : { value: msg.payload.value,  'address': -1  } \n}\nvar blinkyBusMessage = false;\nswitch(msg.payload.attr)\n{\n    case 'led1':\n        blinkyBusSettingMsg.payload.address = 1;\n        blinkyBusMessage = true;\n        break;\n    case 'led2':\n        blinkyBusSettingMsg.payload.address = 2;\n        blinkyBusMessage = true;\n        break;\n    case 'led3':\n        blinkyBusSettingMsg.payload.address = 3;\n        blinkyBusMessage = true;\n        break;\n    case 'nonblinkyBusSetting':\n        tray.nonblinkyBusSetting.value  = msg.payload.value;\n        blinkyBusMessage = false;\n        break;\n    default:\n        break;\n}\nvar msgArray = [null,null,null];\nif (blinkyBusMessage)\n{\n    global.set('settingInProgress',true);\n    var settingInProgressMsg = {topic:'settingInProgress', payload:true};\n    msgArray = [blinkyBusSettingMsg, settingInProgressMsg, null];\n    \n}\nelse\n{\n    global.set('settingInProgress',false);\n    msgArray = [null,null,{topic:'settingDone', payload:true}];\n}\nreturn msgArray;",
         "outputs": 3,
         "noerr": 0,
         "initialize": "",
@@ -346,7 +346,7 @@
         "type": "function",
         "z": "d624945311b3ac33",
         "name": "Create Readings",
-        "func": "var tray = global.get('tray');\nvar initDevice             = msg.payload[0];\nvar newData = false;\nif (tray.led1.value != msg.payload[1])\n{\n    tray.led1.value        = msg.payload[1];\n    newData = true;\n}\nif (tray.led2.value != msg.payload[2])\n{\n    tray.led2.value        = msg.payload[2];\n    newData = true;\n}\nif (tray.led3.value != msg.payload[3])\n{\n    tray.led3.value        = msg.payload[3];\n    newData = true;\n}\ntray.timeStamp = msg.timeStamp;\n\nvar initDeviceMsg = null;\nif (initDevice == 1)\n{\n    initDeviceMsg = {topic:\"initDevice\",payload:true};\n    tray.settingInProgress = 1;\n}\nreturn  [{topic:'newReading', payload:newData},initDeviceMsg];\n\n",
+        "func": "var tray = global.get('tray');\nvar initDevice             = msg.payload[0];\nvar newData = false;\nif (tray.led1.value != msg.payload[1])\n{\n    tray.led1.value        = msg.payload[1];\n    newData = true;\n}\nif (tray.led2.value != msg.payload[2])\n{\n    tray.led2.value        = msg.payload[2];\n    newData = true;\n}\nif (tray.led3.value != msg.payload[3])\n{\n    tray.led3.value        = msg.payload[3];\n    newData = true;\n}\ntray.timeStamp = msg.timeStamp;\n\nvar initDeviceMsg = null;\nif (initDevice == 1)\n{\n    initDeviceMsg = {topic:\"initDevice\",payload:true};\n    global.set('settingInProgress', true)\n}\nreturn  [{topic:'newReading', payload:newData},initDeviceMsg];\n\n",
         "outputs": 2,
         "noerr": 0,
         "initialize": "",
@@ -364,7 +364,7 @@
         "type": "function",
         "z": "8518ec08d93433a4",
         "name": "Check Setting",
-        "func": "tray = global.get('tray');\ntray.settingInProgress = 0;\nswitch(msg.payload.address)\n{\n    case 1:\n        tray.led1.value = msg.payload.value;\n        break;\n    case 2:\n        tray.led2.value = msg.payload.value;\n        break;\n    case 3:\n        tray.led3.value = msg.payload.value;\n        break;\n    default:\n        break;\n}\nreturn {topic:'settingCompleted', payload:true};",
+        "func": "tray = global.get('tray');\nglobal.set('settingInProgress', false);\nswitch(msg.payload.address)\n{\n    case 1:\n        tray.led1.value = msg.payload.value;\n        break;\n    case 2:\n        tray.led2.value = msg.payload.value;\n        break;\n    case 3:\n        tray.led3.value = msg.payload.value;\n        break;\n    default:\n        break;\n}\nreturn {topic:'settingCompleted', payload:true};",
         "outputs": 1,
         "noerr": 0,
         "initialize": "",
@@ -381,7 +381,7 @@
         "type": "function",
         "z": "85e21fcb925ef32f",
         "name": "Save tray config in Memory",
-        "func": "msg.payload.settingInProgress = 1;\nglobal.set('tray', msg.payload);\nglobal.set('deviceInit', 1);\nreturn msg;",
+        "func": "global.set('settingInProgress', true);\nglobal.set('tray', msg.payload);\nglobal.set('deviceInit', 1);\nreturn msg;",
         "outputs": 1,
         "noerr": 0,
         "initialize": "",
@@ -484,7 +484,7 @@
         "type": "function",
         "z": "85e21fcb925ef32f",
         "name": "Init flow Variables",
-        "func": "var mqttSplit = msg.payload.split('/');\nvar trayProps = {\n    box         :   mqttSplit[0],\n    type        :   mqttSplit[1],\n    name        :   mqttSplit[2],\n};\nglobal.set('trayProps',trayProps);\nreturn {topic: 'readFile', payload:true};",
+        "func": "var mqttSplit = msg.payload.split('/');\nvar trayProps = {\n    box         :   mqttSplit[0],\n    type        :   mqttSplit[1],\n    name        :   mqttSplit[2],\n};\nglobal.set('trayProps',trayProps);\nglobal.set('settingInProgress', false);\n\nreturn {topic: 'readFile', payload:true};",
         "outputs": 1,
         "noerr": 0,
         "initialize": "",
@@ -655,8 +655,8 @@
         "qos": "0",
         "retain": "false",
         "broker": "79250bf3.365cc4",
-        "x": 1490,
-        "y": 180,
+        "x": 1210,
+        "y": 220,
         "wires": []
     },
     {
@@ -703,31 +703,6 @@
         "wires": [
             [
                 "b5aa124df51a8d82"
-            ]
-        ]
-    },
-    {
-        "id": "3744a97333f32473",
-        "type": "delay",
-        "z": "85e21fcb925ef32f",
-        "name": "",
-        "pauseType": "delay",
-        "timeout": "200",
-        "timeoutUnits": "milliseconds",
-        "rate": "1",
-        "nbRateUnits": "1",
-        "rateUnits": "second",
-        "randomFirst": "1",
-        "randomLast": "5",
-        "randomUnits": "seconds",
-        "drop": false,
-        "allowrate": false,
-        "outputs": 1,
-        "x": 370,
-        "y": 340,
-        "wires": [
-            [
-                "93758a55568a2f76"
             ]
         ]
     },
@@ -832,7 +807,7 @@
         "type": "function",
         "z": "85e21fcb925ef32f",
         "name": "Read BlinkyBus",
-        "func": "if (global.get('tray').settingInProgress != 0) return null;\nif (global.get('deviceInit') != 0) return null;\nreturn {topic: \"readStatus\", payload:true, timeStamp:msg.payload};\n",
+        "func": "if (global.get('settingInProgress')) return null;\nif (global.get('deviceInit') != 0) return null;\nreturn {topic: \"readStatus\", payload:true, timeStamp:msg.payload};\n",
         "outputs": 1,
         "noerr": 0,
         "initialize": "",
@@ -861,7 +836,7 @@
         "y": 220,
         "wires": [
             [
-                "1463dac06e181d53"
+                "5152879001ec63ea"
             ]
         ]
     },
@@ -879,7 +854,9 @@
             "a66ef2e5b482662a",
             "df03212a7e41deb1",
             "f0c1e263384a520f",
-            "f5d0568e288098ed"
+            "f5d0568e288098ed",
+            "3fc0261f194a7067",
+            "396e4a58f43bbdef"
         ],
         "x": 915,
         "y": 220,
@@ -895,7 +872,8 @@
         "z": "85e21fcb925ef32f",
         "name": "Alarm Scan out",
         "links": [
-            "45a97566b65c65cc"
+            "45a97566b65c65cc",
+            "05c0c7b4f59ca88d"
         ],
         "x": 1155,
         "y": 600,
@@ -907,7 +885,8 @@
         "z": "85e21fcb925ef32f",
         "name": "Ping Out",
         "links": [
-            "45a97566b65c65cc"
+            "45a97566b65c65cc",
+            "05c0c7b4f59ca88d"
         ],
         "x": 755,
         "y": 180,
@@ -919,7 +898,8 @@
         "z": "85e21fcb925ef32f",
         "name": "Create Setting out",
         "links": [
-            "45a97566b65c65cc"
+            "45a97566b65c65cc",
+            "05c0c7b4f59ca88d"
         ],
         "x": 315,
         "y": 380,
@@ -970,26 +950,6 @@
         ]
     },
     {
-        "id": "ec0ebc3b16e457a7",
-        "type": "function",
-        "z": "85e21fcb925ef32f",
-        "name": "Pause Tray readings",
-        "func": "var tray = global.get('tray');\ntray.settingInProgress = 1;\nreturn msg;",
-        "outputs": 1,
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "libs": [],
-        "x": 200,
-        "y": 520,
-        "wires": [
-            [
-                "3bf6ac1b7755486b",
-                "86aff585d6d97f09"
-            ]
-        ]
-    },
-    {
         "id": "c81b72b9290d1c36",
         "type": "link out",
         "z": "85e21fcb925ef32f",
@@ -1013,32 +973,7 @@
         "y": 520,
         "wires": [
             [
-                "ec0ebc3b16e457a7"
-            ]
-        ]
-    },
-    {
-        "id": "3bf6ac1b7755486b",
-        "type": "delay",
-        "z": "85e21fcb925ef32f",
-        "name": "",
-        "pauseType": "delay",
-        "timeout": "1",
-        "timeoutUnits": "seconds",
-        "rate": "1",
-        "nbRateUnits": "1",
-        "rateUnits": "second",
-        "randomFirst": "1",
-        "randomLast": "5",
-        "randomUnits": "seconds",
-        "drop": false,
-        "allowrate": false,
-        "outputs": 1,
-        "x": 440,
-        "y": 520,
-        "wires": [
-            [
-                "47de6287cc26419f"
+                "b82f13a5e04e195a"
             ]
         ]
     },
@@ -1047,43 +982,18 @@
         "type": "function",
         "z": "85e21fcb925ef32f",
         "name": "Save config file",
-        "func": "global.set('tray',JSON.parse(JSON.stringify(msg.payload)));\nvar tray = global.get('tray');\ntray.settingInProgress = 1;\n\nreturn {topic:'trayConfigCompleted', payload:true};",
+        "func": "global.set('tray',JSON.parse(JSON.stringify(msg.payload)));\nreturn {topic:'trayConfigCompleted', payload:true};",
         "outputs": 1,
         "noerr": 0,
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 620,
+        "x": 500,
         "y": 520,
         "wires": [
             [
-                "b2fa30dfd3934d2e",
-                "501090a1fd5f88f5"
-            ]
-        ]
-    },
-    {
-        "id": "b2fa30dfd3934d2e",
-        "type": "delay",
-        "z": "85e21fcb925ef32f",
-        "name": "",
-        "pauseType": "delay",
-        "timeout": "1",
-        "timeoutUnits": "seconds",
-        "rate": "1",
-        "nbRateUnits": "1",
-        "rateUnits": "second",
-        "randomFirst": "1",
-        "randomLast": "5",
-        "randomUnits": "seconds",
-        "drop": false,
-        "allowrate": false,
-        "outputs": 1,
-        "x": 820,
-        "y": 520,
-        "wires": [
-            [
-                "2cd296fd87868cea"
+                "501090a1fd5f88f5",
+                "eec56d72bdbd1430"
             ]
         ]
     },
@@ -1092,13 +1002,13 @@
         "type": "function",
         "z": "85e21fcb925ef32f",
         "name": "Continue Tray readings",
-        "func": "var tray = global.get('tray');\ntray.settingInProgress = 0;\nreturn msg;",
+        "func": "global.set('settingInProgress',false)\nreturn msg;",
         "outputs": 1,
         "noerr": 0,
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 1030,
+        "x": 870,
         "y": 520,
         "wires": [
             [
@@ -1114,7 +1024,8 @@
         "mode": "link",
         "links": [
             "04d132d87ffeb91a",
-            "45a97566b65c65cc"
+            "45a97566b65c65cc",
+            "05c0c7b4f59ca88d"
         ],
         "x": 855,
         "y": 340,
@@ -1128,7 +1039,9 @@
         "links": [
             "6af21e76e0c4ad80",
             "501090a1fd5f88f5",
-            "1e34df4b19ff22cc"
+            "1e34df4b19ff22cc",
+            "75aab98047eea696",
+            "344a2a68c26672b2"
         ],
         "x": 935,
         "y": 340,
@@ -1139,39 +1052,15 @@
         ]
     },
     {
-        "id": "86aff585d6d97f09",
-        "type": "link out",
-        "z": "85e21fcb925ef32f",
-        "name": "Pause Tray Readings out",
-        "mode": "link",
-        "links": [
-            "45a97566b65c65cc"
-        ],
-        "x": 395,
-        "y": 480,
-        "wires": []
-    },
-    {
-        "id": "501090a1fd5f88f5",
-        "type": "link out",
-        "z": "85e21fcb925ef32f",
-        "name": "Save config file out",
-        "links": [
-            "04d132d87ffeb91a"
-        ],
-        "x": 775,
-        "y": 480,
-        "wires": []
-    },
-    {
         "id": "df03212a7e41deb1",
         "type": "link out",
         "z": "85e21fcb925ef32f",
         "name": "Continue Devie Readings out",
         "links": [
-            "45a97566b65c65cc"
+            "45a97566b65c65cc",
+            "05c0c7b4f59ca88d"
         ],
-        "x": 1175,
+        "x": 1015,
         "y": 520,
         "wires": []
     },
@@ -1192,7 +1081,7 @@
         "repeat": "1",
         "crontab": "",
         "once": true,
-        "onceDelay": "8",
+        "onceDelay": "20",
         "topic": "archiveClock",
         "payloadType": "date",
         "x": 140,
@@ -1218,21 +1107,9 @@
         "y": 780,
         "wires": [
             [
-                "0bf699584a2609d5"
+                "d74e019a27b1a659"
             ]
         ]
-    },
-    {
-        "id": "0bf699584a2609d5",
-        "type": "link out",
-        "z": "85e21fcb925ef32f",
-        "name": "Archive Pulse Out",
-        "links": [
-            "45a97566b65c65cc"
-        ],
-        "x": 475,
-        "y": 780,
-        "wires": []
     },
     {
         "id": "72b5ca0e2043aba0",
@@ -1270,72 +1147,11 @@
         "mode": "link",
         "links": [
             "04d132d87ffeb91a",
-            "45a97566b65c65cc"
+            "45a97566b65c65cc",
+            "05c0c7b4f59ca88d"
         ],
         "x": 315,
         "y": 420,
-        "wires": []
-    },
-    {
-        "id": "1463dac06e181d53",
-        "type": "function",
-        "z": "85e21fcb925ef32f",
-        "name": "Check ArchiveNow",
-        "func": "var tray = global.get(\"tray\");\nvar resetArchiveNowMsg = null;\nif (tray.archiveNow > 0) resetArchiveNowMsg = {topic:\"resetArchiveNow\", payload:true};\nreturn [msg,resetArchiveNowMsg];",
-        "outputs": 2,
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "libs": [],
-        "x": 1250,
-        "y": 220,
-        "wires": [
-            [
-                "5152879001ec63ea"
-            ],
-            [
-                "5df204fa6ac2e395"
-            ]
-        ]
-    },
-    {
-        "id": "5df204fa6ac2e395",
-        "type": "delay",
-        "z": "85e21fcb925ef32f",
-        "name": "",
-        "pauseType": "delay",
-        "timeout": "1",
-        "timeoutUnits": "seconds",
-        "rate": "1",
-        "nbRateUnits": "1",
-        "rateUnits": "second",
-        "randomFirst": "1",
-        "randomLast": "5",
-        "randomUnits": "seconds",
-        "drop": false,
-        "allowrate": false,
-        "outputs": 1,
-        "x": 1460,
-        "y": 240,
-        "wires": [
-            [
-                "999f67627c632e86"
-            ]
-        ]
-    },
-    {
-        "id": "999f67627c632e86",
-        "type": "function",
-        "z": "85e21fcb925ef32f",
-        "name": "Reset ArchiveNow",
-        "func": "global.get(\"tray\").archiveNow = 0;\n",
-        "outputs": 0,
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "libs": [],
-        "x": 1670,
-        "y": 240,
         "wires": []
     },
     {
@@ -1343,7 +1159,7 @@
         "type": "function",
         "z": "85e21fcb925ef32f",
         "name": "Allow Readings",
-        "func": "if (msg.payload.address == -1)\n{\n    global.get(\"tray\").settingInProgress = 0;\n    global.set('deviceInit', 0);\n}\nreturn msg;",
+        "func": "if (msg.payload.address == -1)\n{\n    global.set('settingInProgress',false);\n    global.set('deviceInit', 0);\n}\nreturn msg;",
         "outputs": 1,
         "noerr": 0,
         "initialize": "",
@@ -1354,19 +1170,6 @@
         "wires": [
             []
         ]
-    },
-    {
-        "id": "f0c1e263384a520f",
-        "type": "link out",
-        "z": "85e21fcb925ef32f",
-        "name": "Start Init Device",
-        "mode": "link",
-        "links": [
-            "45a97566b65c65cc"
-        ],
-        "x": 835,
-        "y": 660,
-        "wires": []
     },
     {
         "id": "961b85c2472cee35",
@@ -1465,7 +1268,7 @@
         "type": "function",
         "z": "85e21fcb925ef32f",
         "name": "Send Setting",
-        "func": "if (global.get('tray').settingInProgress == -1) return null;\nglobal.get('tray').settingInProgress = 1;\nvar bufsize = 4;\nvar buffer = new ArrayBuffer(bufsize);\nvar settingsView = new DataView(buffer);\nsettingsView.setUint8(0, 1, true); //setting\nsettingsView.setUint8(1, msg.payload.address, true); //address\nsettingsView.setInt16(2, msg.payload.value, true); //value\nreturn {topic:'setting',payload:Buffer.from(buffer),address:msg.payload.address};\n",
+        "func": "global.set('settingInProgress',true);\nvar bufsize = 4;\nvar buffer = new ArrayBuffer(bufsize);\nvar settingsView = new DataView(buffer);\nsettingsView.setUint8(0, 1, true); //setting\nsettingsView.setUint8(1, msg.payload.address, true); //address\nsettingsView.setInt16(2, msg.payload.value, true); //value\nreturn {topic:'setting',payload:Buffer.from(buffer),address:msg.payload.address};\n",
         "outputs": 1,
         "noerr": 0,
         "initialize": "",
@@ -1745,9 +1548,7 @@
         "x": 100,
         "y": 1300,
         "wires": [
-            [
-                "0c13823324600aa5"
-            ]
+            []
         ]
     },
     {
@@ -1788,7 +1589,7 @@
         "type": "function",
         "z": "85e21fcb925ef32f",
         "name": "Serial Not Connected",
-        "func": "global.get('tray').settingInProgress = -1;\nglobal.set('serialState', 0);\nreturn msg;",
+        "func": "global.get('settingInProgress',true);\nglobal.set('serialState', 0);\nreturn msg;",
         "outputs": 0,
         "noerr": 0,
         "initialize": "// Code added here will be run once\n// whenever the node is started.\nglobal.set('serialState', 0);\n",
@@ -1803,7 +1604,7 @@
         "type": "function",
         "z": "85e21fcb925ef32f",
         "name": "Reset Setting in Progress",
-        "func": "if (global.get('tray').settingInProgress == -1) \n{\n    if (global.get('serialState') == 1) global.get('tray').settingInProgress = 0;\n    return msg;\n}\nelse\n{\n    return null;\n}\nreturn null;",
+        "func": "if (global.get('settingInProgress')) \n{\n    if (global.get('serialState') == 1) global.set('settingInProgress',false);\n    return msg;\n}\nelse\n{\n    return null;\n}\nreturn null;",
         "outputs": 1,
         "noerr": 0,
         "initialize": "",
@@ -1820,7 +1621,7 @@
         "type": "function",
         "z": "85e21fcb925ef32f",
         "name": "Serial Connected",
-        "func": "if (global.get('tray') == undefined) return null;\nglobal.set('serialState', 1);\nif (global.get('tray').settingInProgress != -1) return null\nreturn msg;",
+        "func": "if (global.get('tray') == undefined) return null;\nglobal.set('serialState', 1);\nif (!global.get('settingInProgress')) return null\nreturn msg;",
         "outputs": 1,
         "noerr": 0,
         "initialize": "",
@@ -1923,9 +1724,7 @@
         "x": 90,
         "y": 1240,
         "wires": [
-            [
-                "de0d4dd3607e9ecd"
-            ]
+            []
         ]
     },
     {
@@ -2055,7 +1854,7 @@
         "type": "subflow:7b3105fe3b029f96",
         "z": "85e21fcb925ef32f",
         "name": "",
-        "x": 1060,
+        "x": 1070,
         "y": 60,
         "wires": [
             [
@@ -2092,7 +1891,6 @@
                 "99fbe8135d0ce161"
             ],
             [
-                "f0c1e263384a520f",
                 "74c6d394f2452a62"
             ]
         ]
@@ -2142,7 +1940,7 @@
         "type": "function",
         "z": "85e21fcb925ef32f",
         "name": "Single Archive Pulse",
-        "func": "var tray = global.get('tray');\ntray.archiveNow = 1;\nreturn {topic:'archivePulse', payload:true};",
+        "func": "return {topic:'archivePulse', payload:true};",
         "outputs": 1,
         "noerr": 0,
         "initialize": "// Code added here will be run once\n// whenever the node is started.\ncontext.set('lastArchive', new Date().getTime());",
@@ -2152,7 +1950,7 @@
         "y": 840,
         "wires": [
             [
-                "0bf699584a2609d5"
+                "d74e019a27b1a659"
             ]
         ]
     },
@@ -2255,6 +2053,159 @@
         "y": 1680,
         "wires": [
             []
+        ]
+    },
+    {
+        "id": "501090a1fd5f88f5",
+        "type": "link out",
+        "z": "85e21fcb925ef32f",
+        "name": "Save config file out",
+        "links": [
+            "04d132d87ffeb91a"
+        ],
+        "x": 715,
+        "y": 480,
+        "wires": []
+    },
+    {
+        "id": "3744a97333f32473",
+        "type": "delay",
+        "z": "85e21fcb925ef32f",
+        "name": "",
+        "pauseType": "delay",
+        "timeout": "200",
+        "timeoutUnits": "milliseconds",
+        "rate": "1",
+        "nbRateUnits": "1",
+        "rateUnits": "second",
+        "randomFirst": "1",
+        "randomLast": "5",
+        "randomUnits": "seconds",
+        "drop": false,
+        "allowrate": false,
+        "outputs": 1,
+        "x": 370,
+        "y": 340,
+        "wires": [
+            [
+                "93758a55568a2f76"
+            ]
+        ]
+    },
+    {
+        "id": "eec56d72bdbd1430",
+        "type": "delay",
+        "z": "85e21fcb925ef32f",
+        "name": "",
+        "pauseType": "delay",
+        "timeout": "1",
+        "timeoutUnits": "seconds",
+        "rate": "1",
+        "nbRateUnits": "1",
+        "rateUnits": "second",
+        "randomFirst": "1",
+        "randomLast": "5",
+        "randomUnits": "seconds",
+        "drop": false,
+        "allowrate": false,
+        "outputs": 1,
+        "x": 680,
+        "y": 520,
+        "wires": [
+            [
+                "2cd296fd87868cea"
+            ]
+        ]
+    },
+    {
+        "id": "9fd0de78d517fcc9",
+        "type": "comment",
+        "z": "85e21fcb925ef32f",
+        "name": "Needs Fixing",
+        "info": "",
+        "x": 250,
+        "y": 1240,
+        "wires": []
+    },
+    {
+        "id": "95bf73e1f0d68181",
+        "type": "delay",
+        "z": "85e21fcb925ef32f",
+        "name": "",
+        "pauseType": "delay",
+        "timeout": "2",
+        "timeoutUnits": "seconds",
+        "rate": "1",
+        "nbRateUnits": "1",
+        "rateUnits": "second",
+        "randomFirst": "1",
+        "randomLast": "5",
+        "randomUnits": "seconds",
+        "drop": false,
+        "allowrate": false,
+        "outputs": 1,
+        "x": 340,
+        "y": 520,
+        "wires": [
+            [
+                "47de6287cc26419f"
+            ]
+        ]
+    },
+    {
+        "id": "b82f13a5e04e195a",
+        "type": "function",
+        "z": "85e21fcb925ef32f",
+        "name": "Pause Readings",
+        "func": "global.set('settingInProgress',true)\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 180,
+        "y": 520,
+        "wires": [
+            [
+                "95bf73e1f0d68181"
+            ]
+        ]
+    },
+    {
+        "id": "45409b1230e854cd",
+        "type": "mqtt out",
+        "z": "85e21fcb925ef32f",
+        "name": "Publish Archive",
+        "topic": "",
+        "qos": "0",
+        "retain": "false",
+        "respTopic": "",
+        "contentType": "",
+        "userProps": "",
+        "correl": "",
+        "expiry": "",
+        "broker": "79250bf3.365cc4",
+        "x": 760,
+        "y": 780,
+        "wires": []
+    },
+    {
+        "id": "d74e019a27b1a659",
+        "type": "function",
+        "z": "85e21fcb925ef32f",
+        "name": "Publish tray",
+        "func": "if (!msg.payload) return null;\nvar tray = global.get('tray');\nvar newMsg = \n{\n    topic: global.get('trayProps').box + '/' + global.get('trayProps').type + '/' + global.get('trayProps').name + '/archive',\n    payload: JSON.stringify(tray)\n};\nreturn  newMsg;  \n",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 570,
+        "y": 780,
+        "wires": [
+            [
+                "45409b1230e854cd"
+            ]
         ]
     }
 ]
