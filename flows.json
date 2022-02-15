@@ -7,170 +7,84 @@
         "info": ""
     },
     {
-        "id": "7b3105fe3b029f96",
-        "type": "subflow",
-        "name": "Init Device",
-        "info": "",
-        "category": "",
-        "in": [
-            {
-                "x": 60,
-                "y": 80,
-                "wires": [
-                    {
-                        "id": "6d5438e0e1856402"
-                    }
-                ]
-            }
+        "id": "6785b9f659322af5",
+        "type": "group",
+        "z": "85e21fcb925ef32f",
+        "name": "Edit Me",
+        "style": {
+            "fill": "#9363b7",
+            "label": true,
+            "label-position": "n",
+            "color": "#ffff00",
+            "stroke": "#001f60"
+        },
+        "nodes": [
+            "e02713f3ebea0b0d"
         ],
-        "out": [
-            {
-                "x": 340,
-                "y": 80,
-                "wires": [
-                    {
-                        "id": "6d5438e0e1856402",
-                        "port": 0
-                    }
-                ]
-            }
-        ],
-        "env": [],
-        "meta": {},
-        "color": "#3FADB5",
-        "icon": "node-red/status.svg"
+        "x": 634,
+        "y": 299,
+        "w": 212,
+        "h": 82
     },
     {
-        "id": "62acd293754d30b8",
-        "type": "subflow",
-        "name": "Create Setting",
-        "info": "",
-        "category": "",
-        "in": [
-            {
-                "x": 40,
-                "y": 80,
-                "wires": [
-                    {
-                        "id": "396511465a838d2e"
-                    }
-                ]
-            }
+        "id": "40e56362c23599cc",
+        "type": "group",
+        "z": "85e21fcb925ef32f",
+        "name": "Edit Me",
+        "style": {
+            "fill": "#9363b7",
+            "label": true,
+            "label-position": "n",
+            "color": "#ffff00",
+            "stroke": "#001f60"
+        },
+        "nodes": [
+            "5e7d2de841bcb0c1"
         ],
-        "out": [
-            {
-                "x": 360,
-                "y": 40,
-                "wires": [
-                    {
-                        "id": "396511465a838d2e",
-                        "port": 0
-                    }
-                ]
-            },
-            {
-                "x": 360,
-                "y": 100,
-                "wires": [
-                    {
-                        "id": "396511465a838d2e",
-                        "port": 1
-                    }
-                ]
-            },
-            {
-                "x": 360,
-                "y": 160,
-                "wires": [
-                    {
-                        "id": "396511465a838d2e",
-                        "port": 2
-                    }
-                ]
-            }
-        ],
-        "env": [],
-        "meta": {},
-        "color": "#3FADB5",
-        "icon": "node-red/status.svg"
+        "x": 994,
+        "y": 19,
+        "w": 192,
+        "h": 82
     },
     {
-        "id": "d624945311b3ac33",
-        "type": "subflow",
-        "name": "Create Readings",
-        "info": "",
-        "category": "",
-        "in": [
-            {
-                "x": 60,
-                "y": 80,
-                "wires": [
-                    {
-                        "id": "9a1f03ead8c07372"
-                    }
-                ]
-            }
+        "id": "cc88dacde90c32cd",
+        "type": "group",
+        "z": "85e21fcb925ef32f",
+        "name": "Edit Me",
+        "style": {
+            "stroke": "#000000",
+            "fill": "#9363b7",
+            "label": true,
+            "label-position": "n",
+            "color": "#ffff00"
+        },
+        "nodes": [
+            "352395cfbb5c4259"
         ],
-        "out": [
-            {
-                "x": 400,
-                "y": 60,
-                "wires": [
-                    {
-                        "id": "9a1f03ead8c07372",
-                        "port": 0
-                    }
-                ]
-            },
-            {
-                "x": 400,
-                "y": 120,
-                "wires": [
-                    {
-                        "id": "9a1f03ead8c07372",
-                        "port": 1
-                    }
-                ]
-            }
-        ],
-        "env": [],
-        "meta": {},
-        "color": "#3FADB5",
-        "icon": "node-red/status.svg"
+        "x": 574,
+        "y": 599,
+        "w": 232,
+        "h": 82
     },
     {
-        "id": "8518ec08d93433a4",
-        "type": "subflow",
-        "name": "Check Setting",
-        "info": "",
-        "category": "",
-        "in": [
-            {
-                "x": 60,
-                "y": 80,
-                "wires": [
-                    {
-                        "id": "03bd55da520e5d7c"
-                    }
-                ]
-            }
+        "id": "24d6701c4857e25e",
+        "type": "group",
+        "z": "85e21fcb925ef32f",
+        "name": "Edit Me",
+        "style": {
+            "stroke": "#001f60",
+            "fill": "#9363b7",
+            "label": true,
+            "label-position": "n",
+            "color": "#ffff00"
+        },
+        "nodes": [
+            "fcc98447c16c3949"
         ],
-        "out": [
-            {
-                "x": 300,
-                "y": 80,
-                "wires": [
-                    {
-                        "id": "03bd55da520e5d7c",
-                        "port": 0
-                    }
-                ]
-            }
-        ],
-        "env": [],
-        "meta": {},
-        "color": "#3FADB5",
-        "icon": "node-red/status.svg"
+        "x": 94,
+        "y": 331.5,
+        "w": 212,
+        "h": 97
     },
     {
         "id": "6ad7c930.1a06b8",
@@ -306,77 +220,6 @@
         "responsetimeout": "2000"
     },
     {
-        "id": "6d5438e0e1856402",
-        "type": "function",
-        "z": "7b3105fe3b029f96",
-        "name": "Init Device",
-        "func": "var tray = global.get('tray');\nvar deviceInit = global.get('deviceInit');\nif (deviceInit == 1) //tray rebooted\n{\n    \n}\nif (deviceInit == 2) //device rebooted\n{\n    \n}\n\nvar msgs = [];\nmsgs[0] = {\"address\":0,\"value\":0};\nmsgs[1] = {\"address\":1,\"value\":tray.led1.value};\nmsgs[2] = {\"address\":2,\"value\":tray.led2.value};\nmsgs[3] = {\"address\":3,\"value\":tray.led3.value};\n//must be the last!\nmsgs[4] = {\"address\":-1,\"value\":0};\nreturn {topic : 'initDevice', payload: msgs};\n",
-        "outputs": 1,
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "libs": [],
-        "x": 210,
-        "y": 80,
-        "wires": [
-            []
-        ]
-    },
-    {
-        "id": "396511465a838d2e",
-        "type": "function",
-        "z": "62acd293754d30b8",
-        "name": "Create Setting",
-        "func": "var tray = global.get('tray');\nvar blinkyBusSettingMsg = \n{\n    topic : msg.topic, \n    payload : { value: msg.payload.value,  'address': -1  } \n}\nvar blinkyBusMessage = false;\nswitch(msg.payload.attr)\n{\n    case 'led1':\n        blinkyBusSettingMsg.payload.address = 1;\n        blinkyBusMessage = true;\n        break;\n    case 'led2':\n        blinkyBusSettingMsg.payload.address = 2;\n        blinkyBusMessage = true;\n        break;\n    case 'led3':\n        blinkyBusSettingMsg.payload.address = 3;\n        blinkyBusMessage = true;\n        break;\n    case 'nonblinkyBusSetting':\n        tray.nonblinkyBusSetting.value  = msg.payload.value;\n        blinkyBusMessage = false;\n        break;\n    default:\n        break;\n}\nvar msgArray = [null,null,null];\nif (blinkyBusMessage)\n{\n    global.set('settingInProgress',true);\n    var settingInProgressMsg = {topic:'settingInProgress', payload:true};\n    msgArray = [blinkyBusSettingMsg, settingInProgressMsg, null];\n    \n}\nelse\n{\n    global.set('settingInProgress',false);\n    msgArray = [null,null,{topic:'settingDone', payload:true}];\n}\nreturn msgArray;",
-        "outputs": 3,
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "libs": [],
-        "x": 200,
-        "y": 80,
-        "wires": [
-            [],
-            [],
-            []
-        ]
-    },
-    {
-        "id": "9a1f03ead8c07372",
-        "type": "function",
-        "z": "d624945311b3ac33",
-        "name": "Create Readings",
-        "func": "var tray = global.get('tray');\nvar initDevice             = msg.payload[0];\nvar newData = false;\nif (tray.led1.value != msg.payload[1])\n{\n    tray.led1.value        = msg.payload[1];\n    newData = true;\n}\nif (tray.led2.value != msg.payload[2])\n{\n    tray.led2.value        = msg.payload[2];\n    newData = true;\n}\nif (tray.led3.value != msg.payload[3])\n{\n    tray.led3.value        = msg.payload[3];\n    newData = true;\n}\ntray.timeStamp = msg.timeStamp;\n\nvar initDeviceMsg = null;\nif (initDevice == 1)\n{\n    initDeviceMsg = {topic:\"initDevice\",payload:true};\n    global.set('settingInProgress', true)\n}\nreturn  [{topic:'newReading', payload:newData},initDeviceMsg];\n\n",
-        "outputs": 2,
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "libs": [],
-        "x": 230,
-        "y": 80,
-        "wires": [
-            [],
-            []
-        ]
-    },
-    {
-        "id": "03bd55da520e5d7c",
-        "type": "function",
-        "z": "8518ec08d93433a4",
-        "name": "Check Setting",
-        "func": "tray = global.get('tray');\nglobal.set('settingInProgress', false);\nswitch(msg.payload.address)\n{\n    case 1:\n        tray.led1.value = msg.payload.value;\n        break;\n    case 2:\n        tray.led2.value = msg.payload.value;\n        break;\n    case 3:\n        tray.led3.value = msg.payload.value;\n        break;\n    default:\n        break;\n}\nreturn {topic:'settingCompleted', payload:true};",
-        "outputs": 1,
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "libs": [],
-        "x": 180,
-        "y": 80,
-        "wires": [
-            []
-        ]
-    },
-    {
         "id": "30f384ea.cf21fc",
         "type": "function",
         "z": "85e21fcb925ef32f",
@@ -391,7 +234,7 @@
         "y": 60,
         "wires": [
             [
-                "e564944240ac8193"
+                "5e7d2de841bcb0c1"
             ]
         ]
     },
@@ -670,7 +513,7 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 900,
+        "x": 980,
         "y": 600,
         "wires": [
             [
@@ -730,7 +573,7 @@
         "y": 380,
         "wires": [
             [
-                "d96bfe8a33941fcb"
+                "fcc98447c16c3949"
             ]
         ]
     },
@@ -875,7 +718,7 @@
             "45a97566b65c65cc",
             "05c0c7b4f59ca88d"
         ],
-        "x": 1155,
+        "x": 1235,
         "y": 600,
         "wires": []
     },
@@ -901,7 +744,7 @@
             "45a97566b65c65cc",
             "05c0c7b4f59ca88d"
         ],
-        "x": 315,
+        "x": 355,
         "y": 380,
         "wires": []
     },
@@ -916,7 +759,7 @@
         "arraySpltType": "len",
         "stream": false,
         "addname": "",
-        "x": 1350,
+        "x": 1430,
         "y": 60,
         "wires": [
             [
@@ -941,7 +784,7 @@
         "drop": false,
         "allowrate": false,
         "outputs": 1,
-        "x": 1500,
+        "x": 1580,
         "y": 60,
         "wires": [
             [
@@ -1027,7 +870,7 @@
             "45a97566b65c65cc",
             "05c0c7b4f59ca88d"
         ],
-        "x": 855,
+        "x": 875,
         "y": 340,
         "wires": []
     },
@@ -1150,7 +993,7 @@
             "45a97566b65c65cc",
             "05c0c7b4f59ca88d"
         ],
-        "x": 315,
+        "x": 355,
         "y": 420,
         "wires": []
     },
@@ -1165,7 +1008,7 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 1980,
+        "x": 2060,
         "y": 120,
         "wires": [
             []
@@ -1180,8 +1023,8 @@
         "links": [
             "5aebb0b38ba2e191"
         ],
-        "x": 1155,
-        "y": 700,
+        "x": 1235,
+        "y": 680,
         "wires": []
     },
     {
@@ -1195,8 +1038,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 1030,
-        "y": 700,
+        "x": 1110,
+        "y": 680,
         "wires": [
             [
                 "961b85c2472cee35"
@@ -1215,7 +1058,7 @@
         "y": 100,
         "wires": [
             [
-                "e564944240ac8193"
+                "5e7d2de841bcb0c1"
             ]
         ]
     },
@@ -1459,7 +1302,7 @@
         "links": [
             "b0f91914917b2de1"
         ],
-        "x": 1755,
+        "x": 1835,
         "y": 60,
         "wires": []
     },
@@ -1471,7 +1314,7 @@
         "links": [
             "2f397c492e8931b9"
         ],
-        "x": 1835,
+        "x": 1915,
         "y": 60,
         "wires": [
             [
@@ -1500,11 +1343,11 @@
         "links": [
             "ed6ec66d5cb48297"
         ],
-        "x": 555,
+        "x": 515,
         "y": 640,
         "wires": [
             [
-                "8cee87837321d43f"
+                "352395cfbb5c4259"
             ]
         ]
     },
@@ -1517,7 +1360,7 @@
         "links": [
             "b0f91914917b2de1"
         ],
-        "x": 475,
+        "x": 515,
         "y": 340,
         "wires": []
     },
@@ -1529,11 +1372,11 @@
         "links": [
             "2f397c492e8931b9"
         ],
-        "x": 615,
+        "x": 595,
         "y": 340,
         "wires": [
             [
-                "3d05be42635c40a6"
+                "e02713f3ebea0b0d"
             ]
         ]
     },
@@ -1677,8 +1520,8 @@
         "drop": false,
         "allowrate": false,
         "outputs": 1,
-        "x": 860,
-        "y": 700,
+        "x": 940,
+        "y": 680,
         "wires": [
             [
                 "9ecac5e72feeaa9c"
@@ -1702,7 +1545,7 @@
         "drop": false,
         "allowrate": false,
         "outputs": 1,
-        "x": 1210,
+        "x": 1290,
         "y": 60,
         "wires": [
             [
@@ -1739,7 +1582,7 @@
         "complete": "false",
         "statusVal": "",
         "statusType": "auto",
-        "x": 1970,
+        "x": 2050,
         "y": 60,
         "wires": []
     },
@@ -1765,7 +1608,7 @@
         "checkall": "true",
         "repair": false,
         "outputs": 2,
-        "x": 1650,
+        "x": 1730,
         "y": 60,
         "wires": [
             [
@@ -1793,7 +1636,7 @@
         "drop": false,
         "allowrate": false,
         "outputs": 1,
-        "x": 1800,
+        "x": 1880,
         "y": 120,
         "wires": [
             [
@@ -1846,64 +1689,6 @@
         "wires": [
             [
                 "c0939e4a.6386f"
-            ]
-        ]
-    },
-    {
-        "id": "e564944240ac8193",
-        "type": "subflow:7b3105fe3b029f96",
-        "z": "85e21fcb925ef32f",
-        "name": "",
-        "x": 1070,
-        "y": 60,
-        "wires": [
-            [
-                "ebb5481bd4277b24"
-            ]
-        ]
-    },
-    {
-        "id": "d96bfe8a33941fcb",
-        "type": "subflow:62acd293754d30b8",
-        "z": "85e21fcb925ef32f",
-        "x": 180,
-        "y": 380,
-        "wires": [
-            [
-                "3744a97333f32473"
-            ],
-            [
-                "a66ef2e5b482662a"
-            ],
-            [
-                "1e34df4b19ff22cc"
-            ]
-        ]
-    },
-    {
-        "id": "8cee87837321d43f",
-        "type": "subflow:d624945311b3ac33",
-        "z": "85e21fcb925ef32f",
-        "x": 690,
-        "y": 640,
-        "wires": [
-            [
-                "99fbe8135d0ce161"
-            ],
-            [
-                "74c6d394f2452a62"
-            ]
-        ]
-    },
-    {
-        "id": "3d05be42635c40a6",
-        "type": "subflow:8518ec08d93433a4",
-        "z": "85e21fcb925ef32f",
-        "x": 740,
-        "y": 340,
-        "wires": [
-            [
-                "6af21e76e0c4ad80"
             ]
         ]
     },
@@ -2084,7 +1869,7 @@
         "drop": false,
         "allowrate": false,
         "outputs": 1,
-        "x": 370,
+        "x": 410,
         "y": 340,
         "wires": [
             [
@@ -2205,6 +1990,95 @@
         "wires": [
             [
                 "45409b1230e854cd"
+            ]
+        ]
+    },
+    {
+        "id": "e02713f3ebea0b0d",
+        "type": "function",
+        "z": "85e21fcb925ef32f",
+        "g": "6785b9f659322af5",
+        "name": "Check Setting",
+        "func": "tray = global.get('tray');\nglobal.set('settingInProgress', false);\nswitch(msg.payload.address)\n{\n    case 1:\n        tray.led1.value = msg.payload.value;\n        break;\n    case 2:\n        tray.led2.value = msg.payload.value;\n        break;\n    case 3:\n        tray.led3.value = msg.payload.value;\n        break;\n    default:\n        break;\n}\nreturn {topic:'settingCompleted', payload:true};",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 740,
+        "y": 340,
+        "wires": [
+            [
+                "6af21e76e0c4ad80"
+            ]
+        ]
+    },
+    {
+        "id": "5e7d2de841bcb0c1",
+        "type": "function",
+        "z": "85e21fcb925ef32f",
+        "g": "40e56362c23599cc",
+        "name": "Init Device",
+        "func": "var tray = global.get('tray');\nvar deviceInit = global.get('deviceInit');\nif (deviceInit == 1) //tray rebooted\n{\n    \n}\nif (deviceInit == 2) //device rebooted\n{\n    \n}\n\nvar msgs = [];\nmsgs[0] = {\"address\":0,\"value\":0};\nmsgs[1] = {\"address\":1,\"value\":tray.led1.value};\nmsgs[2] = {\"address\":2,\"value\":tray.led2.value};\nmsgs[3] = {\"address\":3,\"value\":tray.led3.value};\n//must be the last!\nmsgs[4] = {\"address\":-1,\"value\":0};\nreturn {topic : 'initDevice', payload: msgs};\n",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1090,
+        "y": 60,
+        "wires": [
+            [
+                "ebb5481bd4277b24"
+            ]
+        ]
+    },
+    {
+        "id": "352395cfbb5c4259",
+        "type": "function",
+        "z": "85e21fcb925ef32f",
+        "g": "cc88dacde90c32cd",
+        "name": "Create Readings",
+        "func": "var tray = global.get('tray');\nvar initDevice             = msg.payload[0];\nvar newData = false;\nif (tray.led1.value != msg.payload[1])\n{\n    tray.led1.value        = msg.payload[1];\n    newData = true;\n}\nif (tray.led2.value != msg.payload[2])\n{\n    tray.led2.value        = msg.payload[2];\n    newData = true;\n}\nif (tray.led3.value != msg.payload[3])\n{\n    tray.led3.value        = msg.payload[3];\n    newData = true;\n}\ntray.timeStamp = msg.timeStamp;\n\nvar initDeviceMsg = null;\nif (initDevice == 1)\n{\n    initDeviceMsg = {topic:\"initDevice\",payload:true};\n    global.set('settingInProgress', true)\n}\nreturn  [{topic:'newReading', payload:newData},initDeviceMsg];\n\n",
+        "outputs": 2,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 690,
+        "y": 640,
+        "wires": [
+            [
+                "99fbe8135d0ce161"
+            ],
+            [
+                "74c6d394f2452a62"
+            ]
+        ]
+    },
+    {
+        "id": "fcc98447c16c3949",
+        "type": "function",
+        "z": "85e21fcb925ef32f",
+        "g": "24d6701c4857e25e",
+        "name": "Create Setting",
+        "func": "var tray = global.get('tray');\nvar blinkyBusSettingMsg = \n{\n    topic : msg.topic, \n    payload : { value: msg.payload.value,  'address': -1  } \n}\nvar blinkyBusMessage = false;\nswitch(msg.payload.cube)\n{\n    case 'led1':\n        blinkyBusSettingMsg.payload.address = 1;\n        blinkyBusMessage = true;\n        break;\n    case 'led2':\n        blinkyBusSettingMsg.payload.address = 2;\n        blinkyBusMessage = true;\n        break;\n    case 'led3':\n        blinkyBusSettingMsg.payload.address = 3;\n        blinkyBusMessage = true;\n        break;\n    case 'nonblinkyBusSetting':\n        tray.nonblinkyBusSetting.value  = msg.payload.value;\n        blinkyBusMessage = false;\n        break;\n    default:\n        break;\n}\nvar msgArray = [null,null,null];\nif (blinkyBusMessage)\n{\n    global.set('settingInProgress',true);\n    var settingInProgressMsg = {topic:'settingInProgress', payload:true};\n    msgArray = [blinkyBusSettingMsg, settingInProgressMsg, null];\n    \n}\nelse\n{\n    global.set('settingInProgress',false);\n    msgArray = [null,null,{topic:'settingDone', payload:true}];\n}\nreturn msgArray;",
+        "outputs": 3,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 200,
+        "y": 380,
+        "wires": [
+            [
+                "3744a97333f32473"
+            ],
+            [
+                "a66ef2e5b482662a"
+            ],
+            [
+                "1e34df4b19ff22cc"
             ]
         ]
     }
