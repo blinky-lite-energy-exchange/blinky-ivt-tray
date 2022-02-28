@@ -833,7 +833,7 @@
         "type": "function",
         "z": "85e21fcb925ef32f",
         "name": "Save config file",
-        "func": "global.set('tray',JSON.parse(JSON.stringify(msg.payload)));\nreturn {topic:'trayConfigCompleted', payload:true};",
+        "func": "let cubeAlarm = global.get('tray')[msg.payload.cube].alarm;\ncubeAlarm.limits.lolo = msg.payload.limits.lolo;\ncubeAlarm.limits.low  = msg.payload.limits.low;\ncubeAlarm.limits.high = msg.payload.limits.high;\ncubeAlarm.limits.hihi = msg.payload.limits.hihi;\ncubeAlarm.notify.name = msg.payload.notify.name;\ncubeAlarm.notify.number = msg.payload.notify.number;\nreturn {topic:'trayConfigCompleted', payload:true};",
         "outputs": 1,
         "noerr": 0,
         "initialize": "",
@@ -843,8 +843,8 @@
         "y": 520,
         "wires": [
             [
-                "501090a1fd5f88f5",
-                "eec56d72bdbd1430"
+                "eec56d72bdbd1430",
+                "501090a1fd5f88f5"
             ]
         ]
     },
