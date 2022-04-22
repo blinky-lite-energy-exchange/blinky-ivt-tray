@@ -2,7 +2,7 @@
   "type": "blinky-bus",
   "name": "01",
   "arcPeriod": 60000,
-  "timeStamp": 1646408271939,
+  "timeStamp": 1649435680293,
   "linkQuality": {
     "action": "reading",
     "type": "scalar",
@@ -26,7 +26,7 @@
   "signalLevel": {
     "action": "reading",
     "type": "scalar",
-    "value": -30,
+    "value": -25,
     "unit": "dBm",
     "alarm": {
       "value": 0,
@@ -50,9 +50,9 @@
     "alarm": {
       "value": 0,
       "limits": {
-        "lolo": -1,
-        "low": -1,
-        "high": 2,
+        "lolo": 0,
+        "low": 0.5,
+        "high": 1.5,
         "hihi": 2
       },
       "notify": {
