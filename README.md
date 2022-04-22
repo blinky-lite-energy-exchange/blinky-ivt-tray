@@ -1,11 +1,13 @@
-# mirrotron-llrf-scope-tray
+# blinky-bus-tray
 ## need to add .env file with the following
-MQTTSUBSCRIBE=mirrotron/llrf-scope/01/setting/#  
-MQTTCLIENTID=mirrotron-llrf-scope-tray-01  
+MQTTSUBSCRIBE=blinky-lite-v4/blinky-bus/01/setting/#  
+MQTTCLIENTID=blinky-bus-tray-01  
 MQTTSERVERIP=something.cloudmqtt.com  
 MQTTUSERNAME=xxxx  
 MQTTPASSWORD=yyyy  
-PM2NAME=llrf-scope  
+SERIALPORT=/dev/ttyACM3  
+SERIALBUFSIZE=8  
+PM2NAME=blinky-bus  
 NODEREDCONFIGSECRET=a-secret-key    
 
 with no CR after the last line
