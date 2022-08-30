@@ -21,8 +21,8 @@
         "nodes": [
             "5e7d2de841bcb0c1"
         ],
-        "x": 994,
-        "y": 19,
+        "x": 834,
+        "y": 1019,
         "w": 172,
         "h": 82
     },
@@ -204,19 +204,15 @@
         "type": "function",
         "z": "85e21fcb925ef32f",
         "name": "Save tray config in Memory",
-        "func": "global.set('settingInProgress', true);\nglobal.set('tray', msg.payload);\nglobal.set('deviceInit', 1);\nreturn msg;",
-        "outputs": 1,
+        "func": "global.set('settingInProgress', true);\nmsg.payload.watchdog.value = 0;\nglobal.set('tray', msg.payload);\nglobal.set('deviceInit', 0);\nreturn msg;",
+        "outputs": 0,
         "noerr": 0,
         "initialize": "",
         "finalize": "",
         "libs": [],
         "x": 840,
         "y": 60,
-        "wires": [
-            [
-                "5e7d2de841bcb0c1"
-            ]
-        ]
+        "wires": []
     },
     {
         "id": "5023092b.a0fe38",
@@ -483,7 +479,7 @@
         "correl": "",
         "expiry": "",
         "broker": "79250bf3.365cc4",
-        "x": 1250,
+        "x": 1270,
         "y": 340,
         "wires": []
     },
@@ -492,23 +488,20 @@
         "type": "function",
         "z": "85e21fcb925ef32f",
         "name": "Readings Alarm Scan",
-        "func": "var newData = msg.payload;\nvar tray = global.get('tray');\ntray.linkQuality.value     = global.get('linkQuality');\ntray.signalLevel.value     = global.get('signalLevel');\nvar alarmFlagReading = scalarAlarmScan(tray, 'reading');\nvar alarmFlagSetting = scalarAlarmScan(tray, 'setting');\nvar newMsg   = null;\nvar alarmMsg = null;\nvar newSettingMsg = null;\nif (alarmFlagReading || alarmFlagSetting)\n{\n    alarmMsg = \n    {\n        topic: 'alarm',\n        payload: true\n    }\n}\nif (msg.topic == 'newSetting')\n{\n    newSettingMsg = \n    {\n        topic: 'newSetting',\n        payload: true\n    }\n};\nif (newData)\n{\n    newMsg = \n    {\n        topic: 'newData',\n        payload: true\n    }\n}\nif (alarmMsg != null ) newMsg = null;\nreturn [newMsg, newSettingMsg, alarmMsg];\n\nfunction getActionArray(tray, type, actionType)\n{\n    var actionArray = [];\n    var keys = Object.keys(tray);\n    for (var ii = 0; ii < keys.length; ++ii)\n    {\n        if (tray[keys[ii]].hasOwnProperty('type'))\n        {\n            if (tray[keys[ii]].type == type)\n            {\n                if (tray[keys[ii]].action == actionType)\n                {\n                    actionArray.push(tray[keys[ii]]);\n                }\n            }\n        }\n    }\n    return actionArray;\n}\nfunction scalarAlarmScan(tray, actionType)\n{\n    var alarmFlag = false;\n    var actionArray = getActionArray(tray, 'scalar', actionType);\n    if (actionArray.length > 0)\n    {\n        for (var ii = 0; ii < actionArray.length; ++ii)\n        {\n            let oldAlarmValue = actionArray[ii].alarm.value;\n            actionArray[ii].alarm.value = 0;\n            if (!isNaN(actionArray[ii].value))\n            {\n                if (actionArray[ii].value <= actionArray[ii].alarm.limits.low)  actionArray[ii].alarm.value = 1;\n                if (actionArray[ii].value <= actionArray[ii].alarm.limits.lolo) actionArray[ii].alarm.value = 3;\n                if (actionArray[ii].value >= actionArray[ii].alarm.limits.high) actionArray[ii].alarm.value = 2;\n                if (actionArray[ii].value >= actionArray[ii].alarm.limits.hihi) actionArray[ii].alarm.value = 4;\n                if (actionArray[ii].alarm.value != oldAlarmValue) alarmFlag = true;\n            }\n        }\n    }\n    return alarmFlag;\n}\n",
-        "outputs": 3,
+        "func": "var newData = msg.payload;\nvar tray = global.get('tray');\ntray.linkQuality.value     = global.get('linkQuality');\ntray.signalLevel.value     = global.get('signalLevel');\nvar alarmFlagReading = scalarAlarmScan(tray, 'reading');\nvar alarmFlagSetting = scalarAlarmScan(tray, 'setting');\nvar newMsg   = null;\nvar newSettingMsg = null;\nif (msg.topic == 'newSetting')\n{\n    newSettingMsg = \n    {\n        topic: 'newSetting',\n        payload: true\n    }\n};\nif (newData)\n{\n    newMsg = \n    {\n        topic: 'newData',\n        payload: true\n    }\n}\nreturn [newMsg, newSettingMsg];\n\nfunction getActionArray(tray, type, actionType)\n{\n    var actionArray = [];\n    var keys = Object.keys(tray);\n    for (var ii = 0; ii < keys.length; ++ii)\n    {\n        if (tray[keys[ii]].hasOwnProperty('type'))\n        {\n            if (tray[keys[ii]].type == type)\n            {\n                if (tray[keys[ii]].action == actionType)\n                {\n                    actionArray.push(tray[keys[ii]]);\n                }\n            }\n        }\n    }\n    return actionArray;\n}\nfunction scalarAlarmScan(tray, actionType)\n{\n    var alarmFlag = false;\n    var actionArray = getActionArray(tray, 'scalar', actionType);\n    if (actionArray.length > 0)\n    {\n        for (var ii = 0; ii < actionArray.length; ++ii)\n        {\n            let oldAlarmValue = actionArray[ii].alarm.value;\n            actionArray[ii].alarm.value = 0;\n            if (!isNaN(actionArray[ii].value))\n            {\n                if (actionArray[ii].value <= actionArray[ii].alarm.limits.low)  actionArray[ii].alarm.value = 1;\n                if (actionArray[ii].value <= actionArray[ii].alarm.limits.lolo) actionArray[ii].alarm.value = 3;\n                if (actionArray[ii].value >= actionArray[ii].alarm.limits.high) actionArray[ii].alarm.value = 2;\n                if (actionArray[ii].value >= actionArray[ii].alarm.limits.hihi) actionArray[ii].alarm.value = 4;\n                if (actionArray[ii].alarm.value != oldAlarmValue) alarmFlag = true;\n            }\n        }\n    }\n    return alarmFlag;\n}\n",
+        "outputs": 2,
         "noerr": 0,
         "initialize": "// Code added here will be run once\n// whenever the node is started.\ncontext.set('lastAlarm', -1);",
         "finalize": "",
         "libs": [],
-        "x": 900,
-        "y": 640,
+        "x": 880,
+        "y": 620,
         "wires": [
             [
                 "f5d0568e288098ed"
             ],
             [
                 "9f8c3b4630e734a3"
-            ],
-            [
-                "e490045da57dbc44"
             ]
         ]
     },
@@ -750,8 +743,8 @@
         "arraySpltType": "len",
         "stream": false,
         "addname": "",
-        "x": 1430,
-        "y": 60,
+        "x": 1270,
+        "y": 1060,
         "wires": [
             [
                 "69d1e54394d2fd5e"
@@ -775,8 +768,8 @@
         "drop": false,
         "allowrate": false,
         "outputs": 1,
-        "x": 1580,
-        "y": 60,
+        "x": 1420,
+        "y": 1060,
         "wires": [
             [
                 "742713de179bd6ce"
@@ -861,7 +854,8 @@
             "1e34df4b19ff22cc",
             "75aab98047eea696",
             "344a2a68c26672b2",
-            "9f8c3b4630e734a3"
+            "9f8c3b4630e734a3",
+            "d627c61f63b32aba"
         ],
         "x": 955,
         "y": 420,
@@ -985,39 +979,10 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 2060,
-        "y": 120,
+        "x": 1900,
+        "y": 1120,
         "wires": [
             []
-        ]
-    },
-    {
-        "id": "961b85c2472cee35",
-        "type": "link out",
-        "z": "85e21fcb925ef32f",
-        "name": "begin re-init device",
-        "mode": "link",
-        "links": [
-            "5aebb0b38ba2e191"
-        ],
-        "x": 855,
-        "y": 1020,
-        "wires": []
-    },
-    {
-        "id": "5aebb0b38ba2e191",
-        "type": "link in",
-        "z": "85e21fcb925ef32f",
-        "name": "read tray config in",
-        "links": [
-            "961b85c2472cee35"
-        ],
-        "x": 935,
-        "y": 100,
-        "wires": [
-            [
-                "5e7d2de841bcb0c1"
-            ]
         ]
     },
     {
@@ -1107,7 +1072,7 @@
         "type": "function",
         "z": "85e21fcb925ef32f",
         "name": "Check Reading",
-        "func": "var serialBufSize = global.get('serialBufSize');\nvar dataView     = new DataView(new ArrayBuffer(2));\nvar dataBuffer = [];\nfor (var ii = 0; ii < (msg.payload.length / 2); ++ii)\n{\n    for (ib = 0; ib < 2; ++ib)   dataView.setUint8(ib, msg.payload[(ii * 2) + 1 - ib]);\n    dataBuffer.push( dataView.getInt16(0));\n}\nvar topic = 'newReading';\nif (global.get('settingInProgress'))\n{\n    topic = 'newSetting';\n    if (global.get('deviceInit') < 1);\n        global.set('settingInProgress', false)\n}\nglobal.get('tray').timeStamp = new Date().getTime();\nif (dataBuffer[0] == 1)\n{\n    var initDeviceMsg = {topic:\"initDevice\",payload:true};\n    global.set('settingInProgress', true)\n    global.set('deviceInit', 2);\n    return [null, initDeviceMsg];\n}\nreturn [{topic:topic, payload:dataBuffer},null];\n\n\n\n",
+        "func": "var serialBufSize = global.get('serialBufSize');\nvar dataView     = new DataView(new ArrayBuffer(2));\nvar dataBuffer = [];\nfor (var ii = 0; ii < (msg.payload.length / 2); ++ii)\n{\n    for (ib = 0; ib < 2; ++ib)   dataView.setUint8(ib, msg.payload[(ii * 2) + 1 - ib]);\n    dataBuffer.push( dataView.getInt16(0));\n}\nvar topic = 'newReading';\nif (global.get('settingInProgress'))\n{\n    topic = 'newSetting';\n    if (global.get('deviceInit') < 1);\n        global.set('settingInProgress', false)\n}\nglobal.get('tray').timeStamp = new Date().getTime();\nif (dataBuffer[0] == 1)\n{\n    var initDeviceMsg = {topic:\"initDevice\",payload:true};\n    global.set('settingInProgress', true)\n    global.set('deviceInit', 1);\n    return [null, initDeviceMsg];\n}\nreturn [{topic:topic, payload:dataBuffer},null];\n\n\n\n",
         "outputs": 2,
         "noerr": 0,
         "initialize": "",
@@ -1120,7 +1085,7 @@
                 "ed6ec66d5cb48297"
             ],
             [
-                "961b85c2472cee35"
+                "5e7d2de841bcb0c1"
             ]
         ]
     },
@@ -1182,8 +1147,8 @@
         "links": [
             "b0f91914917b2de1"
         ],
-        "x": 1835,
-        "y": 60,
+        "x": 1675,
+        "y": 1060,
         "wires": []
     },
     {
@@ -1245,8 +1210,8 @@
         "drop": false,
         "allowrate": false,
         "outputs": 1,
-        "x": 1290,
-        "y": 60,
+        "x": 1130,
+        "y": 1060,
         "wires": [
             [
                 "930b94f38479787c"
@@ -1275,8 +1240,8 @@
         "checkall": "true",
         "repair": false,
         "outputs": 2,
-        "x": 1730,
-        "y": 60,
+        "x": 1570,
+        "y": 1060,
         "wires": [
             [
                 "aa428318895690ee"
@@ -1303,8 +1268,8 @@
         "drop": false,
         "allowrate": false,
         "outputs": 1,
-        "x": 1880,
-        "y": 120,
+        "x": 1720,
+        "y": 1120,
         "wires": [
             [
                 "3c51c680e18abf95"
@@ -1656,14 +1621,14 @@
         "z": "85e21fcb925ef32f",
         "g": "40e56362c23599cc",
         "name": "Init Gizmo",
-        "func": "var tray = global.get('tray');\nvar deviceInit = global.get('deviceInit');\nif (deviceInit == 1) //tray rebooted\n{\n    \n}\nif (deviceInit == 2) //device rebooted\n{\n    \n}\n\nvar msgs = [];\nmsgs[0] = {\"address\":0,\"value\":0};\nmsgs[1] = {\"address\":1,\"value\":tray.led1.value};\nmsgs[2] = {\"address\":2,\"value\":tray.led2.value};\nmsgs[3] = {\"address\":3,\"value\":tray.led3.value};\n//must be the last!\nmsgs[4] = {\"address\":-1,\"value\":0};\nreturn {topic : 'initDevice', payload: msgs};\n",
+        "func": "var tray = global.get('tray');\nvar msgs = [];\nmsgs[0] = {\"address\":0,\"value\":0};\nmsgs[1] = {\"address\":1,\"value\":tray.led1.value};\nmsgs[2] = {\"address\":2,\"value\":tray.led2.value};\nmsgs[3] = {\"address\":3,\"value\":tray.led3.value};\n//must be the last!\nmsgs[4] = {\"address\":-1,\"value\":0};\nreturn {topic : 'initDevice', payload: msgs};\n",
         "outputs": 1,
         "noerr": 0,
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 1080,
-        "y": 60,
+        "x": 920,
+        "y": 1060,
         "wires": [
             [
                 "ebb5481bd4277b24"
@@ -1676,8 +1641,8 @@
         "z": "85e21fcb925ef32f",
         "g": "cc88dacde90c32cd",
         "name": "Create Readings",
-        "func": "var tray = global.get('tray');\nvar newData = false;\nif (tray.led1.value != msg.payload[1])\n{\n    tray.led1.value        = msg.payload[1];\n    newData = true;\n}\nif (tray.led2.value != msg.payload[2])\n{\n    tray.led2.value        = msg.payload[2];\n    newData = true;\n}\nif (tray.led3.value != msg.payload[3])\n{\n    tray.led3.value        = msg.payload[3];\n    newData = true;\n}\n\nreturn  {topic:msg.topic, payload:newData}\n",
-        "outputs": 1,
+        "func": "var tray = global.get('tray');\nvar newData = true;\ntray.led1.value        = msg.payload[1];\ntray.led2.value        = msg.payload[2];\ntray.led3.value        = msg.payload[3];\n\ntray.watchdog.value = tray.watchdog.value + 1;\nif (tray.watchdog.value > 32760) tray.watchdog.value = 0;\n\nvar writeTrayMsg = null;\n\nreturn  [{topic:msg.topic, payload:newData},writeTrayMsg]\n",
+        "outputs": 2,
         "noerr": 0,
         "initialize": "",
         "finalize": "",
@@ -1687,6 +1652,9 @@
         "wires": [
             [
                 "99fbe8135d0ce161"
+            ],
+            [
+                "d627c61f63b32aba"
             ]
         ]
     },
@@ -1715,43 +1683,6 @@
                 "1e34df4b19ff22cc"
             ]
         ]
-    },
-    {
-        "id": "e490045da57dbc44",
-        "type": "function",
-        "z": "85e21fcb925ef32f",
-        "name": "Alarm changed",
-        "func": "if (!msg.payload) return null;\nvar tray = global.get('tray');\nvar newMsg = \n{\n    topic: global.get('trayProps').box + '/' + global.get('trayProps').type + '/' + global.get('trayProps').name + '/reading',\n    payload: JSON.stringify(tray)\n};\nreturn  newMsg;  \n",
-        "outputs": 1,
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "libs": [],
-        "x": 1120,
-        "y": 680,
-        "wires": [
-            [
-                "e067291cdd1fd9f4"
-            ]
-        ]
-    },
-    {
-        "id": "e067291cdd1fd9f4",
-        "type": "mqtt out",
-        "z": "85e21fcb925ef32f",
-        "name": "QoS = 1",
-        "topic": "",
-        "qos": "1",
-        "retain": "false",
-        "respTopic": "",
-        "contentType": "",
-        "userProps": "",
-        "correl": "",
-        "expiry": "",
-        "broker": "79250bf3.365cc4",
-        "x": 1280,
-        "y": 680,
-        "wires": []
     },
     {
         "id": "3026811a11de85fd",
@@ -1788,6 +1719,19 @@
         ],
         "x": 1055,
         "y": 640,
+        "wires": []
+    },
+    {
+        "id": "d627c61f63b32aba",
+        "type": "link out",
+        "z": "85e21fcb925ef32f",
+        "name": "Save motor location",
+        "mode": "link",
+        "links": [
+            "04d132d87ffeb91a"
+        ],
+        "x": 815,
+        "y": 680,
         "wires": []
     }
 ]
