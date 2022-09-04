@@ -551,7 +551,8 @@
         "z": "85e21fcb925ef32f",
         "name": "blinkybus setting in",
         "links": [
-            "4493527757138cdc"
+            "4493527757138cdc",
+            "b9cdd2288a021d99"
         ],
         "x": 55,
         "y": 380,
@@ -743,32 +744,7 @@
         "arraySpltType": "len",
         "stream": false,
         "addname": "",
-        "x": 1270,
-        "y": 1060,
-        "wires": [
-            [
-                "69d1e54394d2fd5e"
-            ]
-        ]
-    },
-    {
-        "id": "69d1e54394d2fd5e",
-        "type": "delay",
-        "z": "85e21fcb925ef32f",
-        "name": "",
-        "pauseType": "rate",
-        "timeout": "5",
-        "timeoutUnits": "seconds",
-        "rate": "1",
-        "nbRateUnits": "1",
-        "rateUnits": "second",
-        "randomFirst": "1",
-        "randomLast": "5",
-        "randomUnits": "seconds",
-        "drop": false,
-        "allowrate": false,
-        "outputs": 1,
-        "x": 1420,
+        "x": 1090,
         "y": 1060,
         "wires": [
             [
@@ -974,16 +950,14 @@
         "z": "85e21fcb925ef32f",
         "name": "Allow Readings",
         "func": "if (msg.payload.address == -1)\n{\n    global.set('settingInProgress',false);\n    global.set('deviceInit', 0);\n}\nreturn msg;",
-        "outputs": 1,
+        "outputs": 0,
         "noerr": 0,
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 1900,
+        "x": 1580,
         "y": 1120,
-        "wires": [
-            []
-        ]
+        "wires": []
     },
     {
         "id": "6af76a294daa96eb",
@@ -1147,7 +1121,7 @@
         "links": [
             "b0f91914917b2de1"
         ],
-        "x": 1675,
+        "x": 1375,
         "y": 1060,
         "wires": []
     },
@@ -1189,34 +1163,9 @@
         "links": [
             "b0f91914917b2de1"
         ],
-        "x": 515,
+        "x": 835,
         "y": 340,
         "wires": []
-    },
-    {
-        "id": "ebb5481bd4277b24",
-        "type": "delay",
-        "z": "85e21fcb925ef32f",
-        "name": "",
-        "pauseType": "delay",
-        "timeout": "5",
-        "timeoutUnits": "seconds",
-        "rate": "1",
-        "nbRateUnits": "1",
-        "rateUnits": "second",
-        "randomFirst": "1",
-        "randomLast": "5",
-        "randomUnits": "seconds",
-        "drop": false,
-        "allowrate": false,
-        "outputs": 1,
-        "x": 1130,
-        "y": 1060,
-        "wires": [
-            [
-                "930b94f38479787c"
-            ]
-        ]
     },
     {
         "id": "742713de179bd6ce",
@@ -1240,7 +1189,7 @@
         "checkall": "true",
         "repair": false,
         "outputs": 2,
-        "x": 1570,
+        "x": 1210,
         "y": 1060,
         "wires": [
             [
@@ -1268,7 +1217,7 @@
         "drop": false,
         "allowrate": false,
         "outputs": 1,
-        "x": 1720,
+        "x": 1420,
         "y": 1120,
         "wires": [
             [
@@ -1485,31 +1434,6 @@
         "wires": []
     },
     {
-        "id": "3744a97333f32473",
-        "type": "delay",
-        "z": "85e21fcb925ef32f",
-        "name": "",
-        "pauseType": "delay",
-        "timeout": "200",
-        "timeoutUnits": "milliseconds",
-        "rate": "1",
-        "nbRateUnits": "1",
-        "rateUnits": "second",
-        "randomFirst": "1",
-        "randomLast": "5",
-        "randomUnits": "seconds",
-        "drop": false,
-        "allowrate": false,
-        "outputs": 1,
-        "x": 410,
-        "y": 340,
-        "wires": [
-            [
-                "93758a55568a2f76"
-            ]
-        ]
-    },
-    {
         "id": "eec56d72bdbd1430",
         "type": "delay",
         "z": "85e21fcb925ef32f",
@@ -1621,7 +1545,7 @@
         "z": "85e21fcb925ef32f",
         "g": "40e56362c23599cc",
         "name": "Init Gizmo",
-        "func": "var tray = global.get('tray');\nvar msgs = [];\nmsgs[0] = {\"address\":0,\"value\":0};\nmsgs[1] = {\"address\":1,\"value\":tray.led1.value};\nmsgs[2] = {\"address\":2,\"value\":tray.led2.value};\nmsgs[3] = {\"address\":3,\"value\":tray.led3.value};\n//must be the last!\nmsgs[4] = {\"address\":-1,\"value\":0};\nreturn {topic : 'initDevice', payload: msgs};\n",
+        "func": "global.set('deviceInit', 1);\nlet tray = global.get('tray');\nlet now = new Date();\ntray.hours.value = now.getHours();\ntray.mins.value  = now.getMinutes();\nlet msgs = [];\n//tray.power.value = 0;\nif(isNaN(tray.temperature.value)) tray.temperature.value = 18;\ntray.temperature.value = Math.round(tray.temperature.value);\n\nmsgs[0] = {\"address\":0,\"value\":0};\nmsgs[1] = {\"address\":1,\"value\":tray.power.value};\nmsgs[2] = {\"address\":2,\"value\":tray.mode.value};\nmsgs[3] = {\"address\":3,\"value\":tray.fan.value};\nmsgs[4] = {\"address\":4,\"value\":tray.temperature.value};\nmsgs[5] = {\"address\":5,\"value\":tray.hours.value};\nmsgs[6] = {\"address\":6,\"value\":tray.mins.value };\n//must be the last!\nmsgs[7] = {\"address\":-1,\"value\":0};\nreturn {topic : 'initDevice', payload: msgs};\n",
         "outputs": 1,
         "noerr": 0,
         "initialize": "",
@@ -1631,7 +1555,7 @@
         "y": 1060,
         "wires": [
             [
-                "ebb5481bd4277b24"
+                "930b94f38479787c"
             ]
         ]
     },
@@ -1641,7 +1565,7 @@
         "z": "85e21fcb925ef32f",
         "g": "cc88dacde90c32cd",
         "name": "Create Readings",
-        "func": "var tray = global.get('tray');\nvar newData = true;\ntray.led1.value        = msg.payload[1];\ntray.led2.value        = msg.payload[2];\ntray.led3.value        = msg.payload[3];\n\ntray.watchdog.value = tray.watchdog.value + 1;\nif (tray.watchdog.value > 32760) tray.watchdog.value = 0;\n\nvar writeTrayMsg = null;\n\nreturn  [{topic:msg.topic, payload:newData},writeTrayMsg]\n",
+        "func": "var tray = global.get('tray');\nvar newData = true;\ntray.power.value       = msg.payload[1];\ntray.mode.value        = msg.payload[2];\ntray.fan.value         = msg.payload[3];\ntray.temperature.value = msg.payload[4];\ntray.hours.value       = msg.payload[5];\ntray.mins.value        = msg.payload[6];\n\ntray.watchdog.value = tray.watchdog.value + 1;\nif (tray.watchdog.value > 32760) tray.watchdog.value = 0;\n\nvar writeTrayMsg = null;\n\nreturn  [{topic:msg.topic, payload:newData},writeTrayMsg]\n",
         "outputs": 2,
         "noerr": 0,
         "initialize": "",
@@ -1664,7 +1588,7 @@
         "z": "85e21fcb925ef32f",
         "g": "24d6701c4857e25e",
         "name": "Create Setting",
-        "func": "var tray = global.get('tray');\nvar blinkyBusSettingMsg = \n{\n    topic : msg.topic, \n    payload : { value: msg.payload.value,  'address': -1  } \n}\nvar blinkyBusMessage = false;\nswitch(msg.payload.cube)\n{\n    case 'led1':\n        blinkyBusSettingMsg.payload.address = 1;\n        blinkyBusMessage = true;\n        break;\n    case 'led2':\n        blinkyBusSettingMsg.payload.address = 2;\n        blinkyBusMessage = true;\n        break;\n    case 'led3':\n        blinkyBusSettingMsg.payload.address = 3;\n        blinkyBusMessage = true;\n        break;\n    case 'nonblinkyBusSetting':\n        tray.nonblinkyBusSetting.value  = msg.payload.value;\n        blinkyBusMessage = false;\n        break;\n    default:\n        break;\n}\nvar msgArray = [null,null,null];\nif (blinkyBusMessage)\n{\n    global.set('settingInProgress',true);\n    var settingInProgressMsg = {topic:'settingInProgress', payload:true};\n    msgArray = [blinkyBusSettingMsg, settingInProgressMsg, null];\n    \n}\nelse\n{\n    global.set('settingInProgress',false);\n    msgArray = [null,null,{topic:'settingDone', payload:true}];\n}\nreturn msgArray;",
+        "func": "var tray = global.get('tray');\nvar blinkyBusSettingMsg = \n{\n    topic : msg.topic, \n    payload : { value: msg.payload.value,  'address': -1  } \n}\nvar blinkyBusMessage = false;\nswitch(msg.payload.cube)\n{\n    case 'power':\n        blinkyBusSettingMsg.payload.address = 1;\n        blinkyBusMessage = true;\n        tray.power.value = blinkyBusSettingMsg.payload.value;\n        break;\n    case 'mode':\n        blinkyBusSettingMsg.payload.address = 2;\n        blinkyBusMessage = true;\n        tray.mode.value = blinkyBusSettingMsg.payload.value;\n        if (tray.mode.value == 6)\n        {\n            tray.temperature.value = 10;\n            tray.fan.value = 0;\n        }\n        break;\n    case 'fan':\n        blinkyBusSettingMsg.payload.address = 3;\n        blinkyBusMessage = true;\n        tray.fan.value = blinkyBusSettingMsg.payload.value;\n        break;\n    case 'temperature':\n        blinkyBusSettingMsg.payload.address = 4;\n        blinkyBusMessage = true;\n        tray.temperature.value = blinkyBusSettingMsg.payload.value;\n        if (tray.mode.value != 6)\n        {\n            if (tray.temperature.value < 16) tray.temperature.value = 16;\n            if (tray.temperature.value > 30) tray.temperature.value = 30;\n        }\n        break;\n    case 'opState':\n        tray.opState.value  = msg.payload.value;\n        blinkyBusMessage = false;\n        break;\n    case 'startScheduleTime':\n        tray.startScheduleTime.value  = msg.payload.value;\n        blinkyBusMessage = false;\n        break;\n    case 'stopScheduleTime':\n        tray.stopScheduleTime.value  = msg.payload.value;\n        blinkyBusMessage = false;\n        break;\n    case 'maxRate':\n        tray.maxRate.value  = msg.payload.value;\n        blinkyBusMessage = false;\n        break;\n    default:\n        break;\n}\nvar msgArray = [null,null,null];\nif (blinkyBusMessage)\n{\n    global.set('settingInProgress',true);\n    var settingInProgressMsg = {topic:'settingInProgress', payload:true};\n    msgArray = [blinkyBusSettingMsg, settingInProgressMsg, null];\n    \n}\nelse\n{\n    global.set('settingInProgress',false);\n    msgArray = [null,null,{topic:'settingDone', payload:true}];\n}\nreturn msgArray;\n\n",
         "outputs": 3,
         "noerr": 0,
         "initialize": "",
@@ -1674,7 +1598,7 @@
         "y": 380,
         "wires": [
             [
-                "3744a97333f32473"
+                "c397b5be04f30d5a"
             ],
             [
                 "a66ef2e5b482662a"
@@ -1733,5 +1657,381 @@
         "x": 815,
         "y": 680,
         "wires": []
+    },
+    {
+        "id": "c397b5be04f30d5a",
+        "type": "function",
+        "z": "85e21fcb925ef32f",
+        "name": "Set Gizmo",
+        "func": "global.set('deviceInit', 1);\nlet tray = global.get('tray');\nlet now = new Date();\ntray.hours.value = now.getHours();\ntray.mins.value  = now.getMinutes();\nlet msgs = [];\nif(isNaN(tray.temperature.value)) tray.temperature.value = 18;\ntray.temperature.value = Math.round(tray.temperature.value);\n\nmsgs[0] = {\"address\":0,\"value\":0};\nmsgs[1] = {\"address\":1,\"value\":tray.power.value};\nmsgs[2] = {\"address\":2,\"value\":tray.mode.value};\nmsgs[3] = {\"address\":3,\"value\":tray.fan.value};\nmsgs[4] = {\"address\":4,\"value\":tray.temperature.value};\nmsgs[5] = {\"address\":5,\"value\":tray.hours.value};\nmsgs[6] = {\"address\":6,\"value\":tray.mins.value };\n//must be the last!\nmsgs[7] = {\"address\":-1,\"value\":0};\nreturn {topic : 'initDevice', payload: msgs};\n",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 410,
+        "y": 340,
+        "wires": [
+            [
+                "27871c3573c84e31"
+            ]
+        ]
+    },
+    {
+        "id": "27871c3573c84e31",
+        "type": "split",
+        "z": "85e21fcb925ef32f",
+        "name": "",
+        "splt": "\\n",
+        "spltType": "str",
+        "arraySplt": 1,
+        "arraySpltType": "len",
+        "stream": false,
+        "addname": "",
+        "x": 550,
+        "y": 340,
+        "wires": [
+            [
+                "b3b7b973e83f2827"
+            ]
+        ]
+    },
+    {
+        "id": "07962a4443f1d526",
+        "type": "function",
+        "z": "85e21fcb925ef32f",
+        "name": "Allow Readings",
+        "func": "if (msg.payload.address == -1)\n{\n    global.set('settingInProgress',false);\n    global.set('deviceInit', 0);\n}\nreturn msg;",
+        "outputs": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 680,
+        "y": 400,
+        "wires": []
+    },
+    {
+        "id": "b3b7b973e83f2827",
+        "type": "switch",
+        "z": "85e21fcb925ef32f",
+        "name": "",
+        "property": "payload.address",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "gte",
+                "v": "0",
+                "vt": "num"
+            },
+            {
+                "t": "eq",
+                "v": "-1",
+                "vt": "num"
+            }
+        ],
+        "checkall": "true",
+        "repair": false,
+        "outputs": 2,
+        "x": 670,
+        "y": 340,
+        "wires": [
+            [
+                "93758a55568a2f76"
+            ],
+            [
+                "8c2615e4baff36e5"
+            ]
+        ]
+    },
+    {
+        "id": "8c2615e4baff36e5",
+        "type": "delay",
+        "z": "85e21fcb925ef32f",
+        "name": "",
+        "pauseType": "delay",
+        "timeout": "2",
+        "timeoutUnits": "seconds",
+        "rate": "1",
+        "nbRateUnits": "1",
+        "rateUnits": "second",
+        "randomFirst": "1",
+        "randomLast": "5",
+        "randomUnits": "seconds",
+        "drop": false,
+        "allowrate": false,
+        "outputs": 1,
+        "x": 520,
+        "y": 400,
+        "wires": [
+            [
+                "07962a4443f1d526"
+            ]
+        ]
+    },
+    {
+        "id": "b9cdd2288a021d99",
+        "type": "link out",
+        "z": "85e21fcb925ef32f",
+        "name": "Set rheostatOff Pos",
+        "mode": "link",
+        "links": [
+            "4bddb9a0e424ebf4"
+        ],
+        "x": 655,
+        "y": 1560,
+        "wires": []
+    },
+    {
+        "id": "68de9223aee790b1",
+        "type": "inject",
+        "z": "85e21fcb925ef32f",
+        "name": "Every 1 min",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "10",
+        "crontab": "",
+        "once": true,
+        "onceDelay": "60",
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 130,
+        "y": 1560,
+        "wires": [
+            [
+                "6256212b34387f26"
+            ]
+        ]
+    },
+    {
+        "id": "6256212b34387f26",
+        "type": "switch",
+        "z": "85e21fcb925ef32f",
+        "name": "",
+        "property": "tray.opState.value",
+        "propertyType": "global",
+        "rules": [
+            {
+                "t": "eq",
+                "v": "1",
+                "vt": "num"
+            },
+            {
+                "t": "eq",
+                "v": "2",
+                "vt": "num"
+            }
+        ],
+        "checkall": "true",
+        "repair": false,
+        "outputs": 2,
+        "x": 270,
+        "y": 1560,
+        "wires": [
+            [
+                "d2145c73d8d0a956"
+            ],
+            [
+                "5df201913153bbc5"
+            ]
+        ]
+    },
+    {
+        "id": "d2145c73d8d0a956",
+        "type": "function",
+        "z": "85e21fcb925ef32f",
+        "name": "Schedule Relay Control",
+        "func": "var tray = global.get('tray');\nif (global.get('settingInProgress')) return null;\nif (global.get('deviceInit') != 0) return null;\nvar now = new Date();\nvar hours = now.getHours();\nvar power = 0;\nif (tray.startScheduleTime.value > tray.stopScheduleTime.value)\n{\n    if ((tray.startScheduleTime.value <= hours) && (minutes < 24) ) power = 1;\n    if ((0 <= hours) && (hours < tray.stopScheduleTime.value) )     power = 1;\n}\nelse\n{\n    if ((tray.startScheduleTime.value <= hours) && (hours < tray.stopScheduleTime.value) ) power = 1;\n}\nif (power ==  tray.power.value) return null;\nreturn {topic : \"setting\", payload : {cube :\"power\", value: power} };",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 470,
+        "y": 1540,
+        "wires": [
+            [
+                "b9cdd2288a021d99"
+            ]
+        ]
+    },
+    {
+        "id": "a2949d3a4a5d1c55",
+        "type": "inject",
+        "z": "85e21fcb925ef32f",
+        "name": "Every hour",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "0 0-23 * * *",
+        "once": false,
+        "onceDelay": "10",
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 130,
+        "y": 1780,
+        "wires": [
+            [
+                "38d5ae7a8528177a"
+            ]
+        ]
+    },
+    {
+        "id": "38d5ae7a8528177a",
+        "type": "delay",
+        "z": "85e21fcb925ef32f",
+        "name": "",
+        "pauseType": "delay",
+        "timeout": "2",
+        "timeoutUnits": "minutes",
+        "rate": "1",
+        "nbRateUnits": "1",
+        "rateUnits": "second",
+        "randomFirst": "1",
+        "randomLast": "5",
+        "randomUnits": "seconds",
+        "drop": false,
+        "allowrate": false,
+        "outputs": 1,
+        "x": 280,
+        "y": 1780,
+        "wires": [
+            [
+                "f9c29aa70cae4a3c"
+            ]
+        ]
+    },
+    {
+        "id": "7b2a5ddcf4874a90",
+        "type": "inject",
+        "z": "85e21fcb925ef32f",
+        "name": "Init+20sec",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": true,
+        "onceDelay": "5",
+        "topic": "",
+        "payloadType": "date",
+        "x": 130,
+        "y": 1720,
+        "wires": [
+            [
+                "f9c29aa70cae4a3c"
+            ]
+        ]
+    },
+    {
+        "id": "eb940ab13e024fab",
+        "type": "json",
+        "z": "85e21fcb925ef32f",
+        "name": "",
+        "property": "payload",
+        "action": "obj",
+        "pretty": false,
+        "x": 310,
+        "y": 1880,
+        "wires": [
+            [
+                "71565a81efb9fa21"
+            ]
+        ]
+    },
+    {
+        "id": "71565a81efb9fa21",
+        "type": "function",
+        "z": "85e21fcb925ef32f",
+        "name": "Save espotPrice",
+        "func": "global.set('espotPrice',msg.payload)\nreturn msg;",
+        "outputs": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 460,
+        "y": 1880,
+        "wires": []
+    },
+    {
+        "id": "f9c29aa70cae4a3c",
+        "type": "mqtt out",
+        "z": "85e21fcb925ef32f",
+        "name": "Spot Price Ping",
+        "topic": "$(SPOTPRICEPING)",
+        "qos": "0",
+        "retain": "false",
+        "respTopic": "",
+        "contentType": "",
+        "userProps": "",
+        "correl": "",
+        "expiry": "",
+        "broker": "79250bf3.365cc4",
+        "x": 460,
+        "y": 1720,
+        "wires": []
+    },
+    {
+        "id": "1ec941ed47664415",
+        "type": "mqtt in",
+        "z": "85e21fcb925ef32f",
+        "name": "Spot Price Reading",
+        "topic": "$(SPOTPRICEREADING)",
+        "qos": "0",
+        "datatype": "auto",
+        "broker": "79250bf3.365cc4",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 140,
+        "y": 1880,
+        "wires": [
+            [
+                "eb940ab13e024fab"
+            ]
+        ]
+    },
+    {
+        "id": "5df201913153bbc5",
+        "type": "function",
+        "z": "85e21fcb925ef32f",
+        "name": "Max Rate Relay Control",
+        "func": "var tray = global.get('tray');\nif (global.get('settingInProgress')) return null;\nif (global.get('deviceInit') != 0) return null;\nvar power = 0;\nif (tray.maxRate.value >= global.get('espotPrice').price.value)\n{\n    power = 1;\n}\nif (power ==  tray.power.value) return null;\nreturn {topic : \"setting\", payload : {cube :\"power\", value: power} };",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 470,
+        "y": 1580,
+        "wires": [
+            [
+                "b9cdd2288a021d99"
+            ]
+        ]
     }
 ]

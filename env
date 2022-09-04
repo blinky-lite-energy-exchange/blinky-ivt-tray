@@ -1,9 +1,11 @@
-MQTTSUBSCRIBE=blinky-lite-v4/blinky-bus/01/setting/#
-MQTTCLIENTID=blinky-bus-tray-01
+MQTTSUBSCRIBE=blinky-lite-v4/blinky-ivt/01/setting/#
+MQTTCLIENTID=blinky-ivt-tray-01
 MQTTSERVERIP=aaaa
 MQTTUSERNAME=bbb
 MQTTPASSWORD=ccc
 SERIALPORT=/dev/rfcomm0
-SERIALBUFSIZE=8
-PM2NAME=blinky-bus-01
+SERIALBUFSIZE=14
+PM2NAME=blinky-ivt-01
+SPOTPRICEPING=blinky-lite-v4/espotPrice/SE4/setting/ping
+SPOTPRICEREADING=blinky-lite-v4/espotPrice/SE4/reading
 NODEREDCONFIGSECRET=dddd
