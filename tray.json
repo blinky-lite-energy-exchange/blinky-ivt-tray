@@ -2,11 +2,11 @@
   "type": "blinky-ivt",
   "name": "01",
   "arcPeriod": 60000,
-  "timeStamp": 1662275248511,
+  "timeStamp": 1662357891842,
   "watchdog": {
     "action": "reading",
     "type": "scalar",
-    "value": 237,
+    "value": 7578,
     "unit": "",
     "alarm": {
       "value": 0,
@@ -26,7 +26,7 @@
   "linkQuality": {
     "action": "reading",
     "type": "scalar",
-    "value": 58,
+    "value": 61,
     "unit": "/70",
     "alarm": {
       "value": 0,
@@ -46,7 +46,7 @@
   "signalLevel": {
     "action": "reading",
     "type": "scalar",
-    "value": -52,
+    "value": -49,
     "unit": "dBm",
     "alarm": {
       "value": 0,
@@ -126,7 +126,7 @@
   "temperature": {
     "action": "setting",
     "type": "scalar",
-    "value": 22,
+    "value": 20,
     "unit": "C",
     "alarm": {
       "value": 2,
@@ -146,7 +146,7 @@
   "hours": {
     "action": "reading",
     "type": "scalar",
-    "value": 9,
+    "value": 7,
     "unit": "",
     "alarm": {
       "value": 0,
@@ -166,7 +166,7 @@
   "mins": {
     "action": "reading",
     "type": "scalar",
-    "value": 6,
+    "value": 52,
     "unit": "",
     "alarm": {
       "value": 0,
@@ -189,7 +189,7 @@
     "value": "0",
     "unit": "",
     "alarm": {
-      "value": 0,
+      "value": 2,
       "limits": {
         "lolo": -1,
         "low": -1,
@@ -246,7 +246,7 @@
   "maxRate": {
     "action": "setting",
     "type": "scalar",
-    "value": 0.3,
+    "value": 0.7,
     "unit": "SEK/kW-hr",
     "alarm": {
       "value": 0,
