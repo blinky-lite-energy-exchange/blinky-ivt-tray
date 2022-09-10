@@ -1,5 +1,6 @@
 # Blinky IVT Tray
-<img src="doc/blinkyIvt.png"/><br>
-The IVT Heat pump web interface API is closed so it is not possible to interface a spot price device directly to this heat pump. However, as with most heat pumps, this heat pump is controlled with a infra-red remote control. As a workaround, the an infra-red remote control can be substituted with an [Blinky-Lite cube](https://github.com/blinky-lite-energy-exchange/blinky-ivt-cube) that is equipped with a an infra-red diode that can send the appropriate bitstream to the heat pump. 
+The IVT Heat pump web interface API is closed so it is not possible to interface a spot price device directly to this heat pump. However, as with most heat pumps, this heat pump is controlled with a infra-red remote control. As a workaround, the an infra-red remote control can be substituted with an [Blinky IVT Cube](https://github.com/blinky-lite-energy-exchange/blinky-ivt-cube) that is equipped with a an infra-red diode that can send the appropriate pulse sequence to the heat pump. A list of different pulse sequences can be found at [ToniA/arduino-heatpumpir](https://github.com/ToniA/arduino-heatpumpir). The [ToniA/arduino-heatpumpir](https://github.com/ToniA/arduino-heatpumpir) project contains pulse sequences for 29 different models of heat pumps so it possible to easily extend the Blinky IVT Tray to many different models of heat pumps.
 
 This tray receives user input and the spot price from the Blinky-Lite application box server and uses the Blinky-Bus interface to communicate serially with the cube.The serial communication in this tray is done over Bluetooth. The tray code is derived from the [Blinky-Bus tray](https://github.com/Blinky-Lite-Exchange/blinky-bus-tray) project
+
+<img src="doc/blinkyIvt.png"/><br>
