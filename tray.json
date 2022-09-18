@@ -2,11 +2,26 @@
   "type": "blinky-ivt",
   "name": "01",
   "arcPeriod": 60000,
-  "timeStamp": 1662786375532,
+  "timeStamp": 1663523349317,
+  "priceArea": {
+    "action": "setting",
+    "type": "string",
+    "value": "SE4"
+  },
+  "alias": {
+    "action": "setting",
+    "type": "string",
+    "value": "Östersjögatan 66"
+  },
+  "timeZone": {
+    "action": "setting",
+    "type": "string",
+    "value": "Europe/Stockholm"
+  },
   "watchdog": {
     "action": "reading",
     "type": "scalar",
-    "value": 25171,
+    "value": 61,
     "unit": "",
     "alarm": {
       "value": 0,
@@ -26,7 +41,7 @@
   "linkQuality": {
     "action": "reading",
     "type": "scalar",
-    "value": 59,
+    "value": 56,
     "unit": "/70",
     "alarm": {
       "value": 0,
@@ -46,7 +61,7 @@
   "signalLevel": {
     "action": "reading",
     "type": "scalar",
-    "value": -51,
+    "value": -54,
     "unit": "dBm",
     "alarm": {
       "value": 0,
@@ -126,7 +141,7 @@
   "temperature": {
     "action": "setting",
     "type": "scalar",
-    "value": 24,
+    "value": 23,
     "unit": "C",
     "alarm": {
       "value": 2,
@@ -146,7 +161,7 @@
   "hours": {
     "action": "reading",
     "type": "scalar",
-    "value": 7,
+    "value": 19,
     "unit": "",
     "alarm": {
       "value": 0,
@@ -166,7 +181,7 @@
   "mins": {
     "action": "reading",
     "type": "scalar",
-    "value": 6,
+    "value": 49,
     "unit": "",
     "alarm": {
       "value": 0,
@@ -206,7 +221,7 @@
   "startScheduleTime": {
     "action": "setting",
     "type": "scalar",
-    "value": 7,
+    "value": 5,
     "unit": "hr",
     "alarm": {
       "value": 0,
@@ -226,7 +241,7 @@
   "stopScheduleTime": {
     "action": "setting",
     "type": "scalar",
-    "value": 17,
+    "value": 7,
     "unit": "hr",
     "alarm": {
       "value": 0,
@@ -246,7 +261,7 @@
   "maxRate": {
     "action": "setting",
     "type": "scalar",
-    "value": 0.7,
+    "value": 0.54,
     "unit": "SEK/kW-hr",
     "alarm": {
       "value": 0,
